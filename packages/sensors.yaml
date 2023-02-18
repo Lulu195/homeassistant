@@ -297,3 +297,24 @@ template:
               {%- endif %}
             {%- endif %}
           {%- endif %}
+
+# SENSOR - PLEX RECENTLY ADDED (BACKUP)
+    - unique_id: recently_added_backup
+      name: 'Recently Added (Offline)'
+      state: >
+        {% if not is_state('sensor.plex_recently_added', 'Online') %}
+          Active
+        {% else %}
+          Passive
+        {# Waiting for 'Recently Added' to fail #}
+        {% endif %}
+      attributes:
+        data: >
+          {% if this.state not in ['unavailable','undefined','unknown','none','null','0'] %}
+            {% set data = states('input_text.backup_plex_recently_added') %}
+            {% set return = namespace(state=[]) %}
+            {% set items = data.split("|") %}
+            {% for item in items %}
+              {% set object = item.split(":") %}
+              {% set return.state = return.state + [{object[0]:object[1]}] %}
+            {% endfor %}
