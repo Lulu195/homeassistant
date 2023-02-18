@@ -2,7 +2,7 @@ homeassistant:
   customize:
     # automation.tv_on_lights:
     #   friendly_name: Tänd Tv-lampa
-    media_player.samsung_qled55:
+    media_player.samsung_55:
       friendly_name: Samsung
       device_class: tv
     media_player.bedroom_tv:
@@ -12,6 +12,8 @@ homeassistant:
       friendly_name: Spotify
     # switch.ps5_635_power:
     #   friendly_name: PS5
+    media_player.plex_plex_htpc_for_windows_desktop_cd40kgt:
+      friendly_name: Plex W11
 
 # script:
 #   samsung_tv_energy_saving:
@@ -81,13 +83,11 @@ template:
           {% set recently_added = 'Last added' %}
           {% set paused_timeout_minutes = 15 %}
           {% set media_players = [
-            states.media_player.plex_plex_for_windows_desktop_030ipd1,
-            states.media_player.samsung_qled55,
+            states.media_player.samsung_55,
             states.media_player.plex_plex_for_samsung_tv_2018,
             states.media_player.bedroom_tv,
             states.media_player.node_8adc,
-            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgtvv,
-            states.media_player.spotify ] %}
+            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt ] %}
 
           {% macro media(state) %}
           {% set state = media_players | selectattr('state','eq',state) | list %}
@@ -113,13 +113,11 @@ template:
         options: >
           {% set recently_added = ['Last added'] %}
           {% set media_players = [
-            states.media_player.plex_plex_for_windows_desktop_030ipd1,
-            states.media_player.samsung_qled55,
+            states.media_player.samsung_55,
             states.media_player.plex_plex_for_samsung_tv_2018,
             states.media_player.bedroom_tv,
             states.media_player.node_8adc,
-            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
-            states.media_player.spotify ] %}
+            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt ] %}
           {{ recently_added + media_players | map(attribute='name') | list }}
         select_option:
           service: select.select_option

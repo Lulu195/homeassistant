@@ -40,26 +40,16 @@
         active: >
           <b>
           {% set lights = [
-            states.light.boob_light,
+            states.light.mushroom,
             states.switch.balcony_switch,
-            states.light.couch_light,
-            states.light.couch_lamp,
-            states.light.hue_huelight,
-            states.light.table_group,
-            states.ambient_kitchen,
+            states.light.couch,
+            states.light.ambient_kitchen
           ] %}
 
           {% set devices = [
-            states.switch.kitchen_led,
-            states.switch.speakers_switch,
-            states.switch.subwoofer_switch,
-            states.switch.bedroom_tv_switch,
-            states.switch.led_strip,
-            states.media_player.samsung_qled55,
-            states.media_player.bedroom_tv,
+            states.media_player.samsung_55,
             states.media_player.node_8adc,
-            states.media_player.spotify_lulu,
-            states.media_player.tanyas_laptop
+            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt
           ] %}
 
           {% set lights_on = lights | selectattr('state','eq','on') | list %}

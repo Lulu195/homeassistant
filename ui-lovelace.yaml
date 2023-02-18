@@ -18,7 +18,7 @@ views:
       mediaquery:
         #phone
         "(max-width: 800px)":
-          grid-gap: calc(var(--custom-layout-card-padding) * 1.7)
+          grid-gap: calc(var(--custom-layout-card-padding) * 0.7) #1.7
           grid-template-columns: 0 repeat(2, 1fr) 0
           grid-template-rows: 0 repeat(5, fit-content(100%)) 0fr
           grid-template-areas: |
@@ -115,7 +115,7 @@ views:
         columns: 2
         cards:
           - type: custom:button-card
-            entity: light.table_group
+            entity: light.dinning
             name: Table
             template:
               - light
@@ -126,33 +126,35 @@ views:
               #- icon_chandelier
 
           - type: custom:button-card
-            entity: light.couch_lamp
+            entity: light.mushroom
             name: Ambient
             template:
               - light
               - icon_shade
 
           - type: custom:button-card
-            entity: media_player.samsung_qled55
+            entity: media_player.samsung_55
             name: TV
-            state_display: >
-              [[[
-                if (variables.state === 'playing') {
-                    return 'ON';
-                }
-                if (variables.state === true) {
-                    return variables.translate_unknown;
-                }
-              ]]]
+            # state_display: >
+            #   [[[
+            #     if (variables.state === 'playing') {
+            #         return 'ON';
+            #     }
+            #     if (variables.state === true) {
+            #         return variables.translate_unknown;
+            #     }
+            #   ]]]
 #            double_tap_action: !include popup/vardagsrum_tv_matt.yaml #popup/living_room_tv.yaml
             template:
               #- base
               - media
+              - samsung_tv
+              # - media_volume
               - icon_tv
               #- loader
 
           - type: custom:button-card
-            entity: light.couch_light
+            entity: light.couch
             name: Couch
             template:
               - light
@@ -478,7 +480,7 @@ views:
                 cards:
 
                   - type: custom:button-card
-                    entity: light.boob_light
+                    entity: light.ikea_lamp_light
                     name: Ikea Lamp
                     template:
                       - light
@@ -493,39 +495,39 @@ views:
                   #     - icon_recessed
 
                   - type: custom:button-card
-                    entity: switch.led_strip
+                    entity: switch.led_strip_switch
                     name: LED
                     template:
                       - base
                       #- icon_ceiling_dining
-                      - icon_light_flush
+                      #- icon_light_flush
                       #- icon_downlight_kitchen
                       #- icon_light_flush
                       #icon_contact_sensor
 
-                  - type: custom:button-card
-                    entity: device_tracker.desktop_74tucr1_2 #sensor.w11_currentvolume #sensor.w11_audio_audio_sessions #switch.gosund_monitors_switch
-                    name: W11
-                    tap_action: toggle switch.wake_on_lan #button.w11_mediaplaypause
-                    #double_tap_action: !include popup/desktop_74tucr1.yaml
-                    template:
-                      - media
-                      #- base
-                      #- icon_monitors
-                      - icon_win_pc
-                      - circle
-                      - loader
-                    variables:
-                      circle_input: >
-                        [[[
-                          let volume = states['sensor.w11_audio_default_device_volume'];
-                          if (volume) return parseInt(volume.state);
-                        ]]]
-                      circle_input_unit: "%"   #sensor.w11_currentvolume
+                  # - type: custom:button-card
+                  #   entity: device_tracker.desktop_74tucr1_2 #sensor.w11_currentvolume #sensor.w11_audio_audio_sessions #switch.gosund_monitors_switch
+                  #   name: Laptop L.
+                  #   tap_action: toggle switch.wake_on_lan #button.w11_mediaplaypause
+                  #   #double_tap_action: !include popup/desktop_74tucr1.yaml
+                  #   template:
+                  #     - media
+                  #     #- base
+                  #     #- icon_monitors
+                  #     - icon_win_pc
+                  #     - circle
+                  #     - loader
+                  #   variables:
+                  #     circle_input: >
+                  #       [[[
+                  #         let volume = states['sensor.w11_audio_default_device_volume'];
+                  #         if (volume) return parseInt(volume.state);
+                  #       ]]]
+                  #     circle_input_unit: "%"   #sensor.w11_currentvolume
 
                   - type: custom:button-card
-                    entity: device_tracker.desktop_030ipd1 #sensor.desktop_030ipd1_audio_default_device_volume 
-                    name:  Laptop
+                    entity: device_tracker.desktop_030ipd1 #sensor.desktop_030ipd1_audio_default_device_volume
+                    name:  Laptop T.
                     #tap_action: toggle button.w11_mediaplaypause
                     #double_tap_action: !include popup/studio_monitorer_tanya.yaml
                     # variables:
@@ -620,19 +622,331 @@ views:
           #     - icon_spot
 
 
-      # - type: grid
-      #   columns: 2
-      #   cards:
-      #       - type: custom:button-card
-      #         entity: switch.led_strip
-      #         name: LED
-      #         template:
-      #           - light
-      #           - icon_silus_dome
-      #           #icon_contact_sensor
+              - type: grid
+                columns: 1
+                cards:
+                  # - type: custom:button-card
+                  #   entity: switch.led_strip
+                  #   name: LED
+                  #   template:
+                  #     - light
+                  #     - icon_silus_dome
+                  #     #icon_contact_sensor
+
+                  - type: custom:button-card
+                    view_layout:
+                      grid-area: seven
+                    template:
+                      - widgets
+                    name: BATTERIES
+                    styles:
+                      name:
+                        - font-size: 12PX #14px
+                        - font-weight: bold
+                        - top: 20px
+                        - left: 20px
+                        - position: absolute
+                      custom_fields:
+                        s7:
+                          - top: 40px
+                          - left: '-5px'
+                          - width: 110%
+                          - border-bottom: 1px solid rgb(255,255,255,0.1)
+                          - padding: 10px
+                          - position: absolute
+                          - font-size: 16px
+                          - text-shadow: 0px 0px 1px black
+                        s7battery:
+                          - top: 60px
+                          - right: 15px
+                          - position: absolute
+                          - font-size: 14px
+                        tempsensor:
+                          - top: 100px
+                          - left: '-5px'
+                          - width: 110%
+                          - border-bottom: 1px solid rgb(255,255,255,0.1)
+                          - padding: 10px
+                          - position: absolute
+                          - font-size: 16px
+                          - text-shadow: 0px 0px 1px black
+                        tempsensorbattery:
+                          - top: 120px
+                          - right: 15px
+                          - position: absolute
+                          - font-size: 14px
+                        motion:
+                          - top: 160px
+                          - left: '-5px'
+                          - width: 110%
+                          - border-bottom: 1px solid rgb(255,255,255,0.1)
+                          - padding: 10px
+                          - position: absolute
+                          - font-size: 16px
+                          - text-shadow: 0px 0px 1px black
+                        motionbattery:
+                          - top: 180px
+                          - right: 15px
+                          - position: absolute
+                          - font-size: 14px
+                        door:
+                          - top: 220px
+                          - left: '-5px'
+                          - width: 110%
+                          - border-bottom: 1px solid rgb(255,255,255,0.1)
+                          - padding: 10px
+                          - position: absolute
+                          - font-size: 16px
+                          - text-shadow: 0px 0px 1px black
+                        doorbattery:
+                          - top: 240px
+                          - right: 15px
+                          - position: absolute
+                          - font-size: 14px
+                    custom_fields:
+                      s7: |
+                        [[[
+                              return `<div align="left"> <ha-icon
+                                icon="mdi:cellphone"
+                                style="width: 20px; height: 20px; color:grey; padding: 10px;">
+                                </ha-icon>S7</div>`
+                            ]]]
+                      s7battery: |
+                        [[[
+                          if (states["sensor.s7_edge_battery_level"].state > 40) {
+                            let input = states["sensor.s7_edge_battery_level"].state / 3,
+                              state = states["sensor.s7_edge_battery_level"].state,
+                              color = '#08ff4e';
+                            return `
+                              <svg width="86" height="24">
+                                <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                                <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
+                                <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                            `;
+                          } if (states["sensor.s7_edge_battery_level"].state > 15) {
+                            let input = states["sensor.s7_edge_battery_level"].state / 3,
+                              state = states["sensor.s7_edge_battery_level"].state,
+                              color = 'orange';
+                            return `
+                              <svg width="86" height="24">
+                                <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                                <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
+                                <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                            `;
+                          } else {
+                            let state = states["sensor.s7_edge_battery_level"].state,
+                              color = 'red';
+                            return `
+                              <svg width="86" height="24">
+                                <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                                <rect x="43" y="4" rx="3" ry="3" width="5" height="12" fill="${color}" stroke-width="0"/>
+                                <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                            `;
+                          }
+                        ]]]
+                      tempsensor: |
+                        [[[
+                              return `<div align="left"> <ha-icon
+                                icon="mdi:cellphone"
+                                style="width: 20px; height: 20px; color:grey; padding: 10px;">
+                                </ha-icon>Lumi Bed</div>`
+                            ]]]
+                      tempsensorbattery: |
+                        [[[
+                          if (states["sensor.lumi_lumi_weather_battery"].state > 40) {
+                            let input = states["sensor.lumi_lumi_weather_battery"].state / 3,
+                              state = states["sensor.lumi_lumi_weather_battery"].state,
+                              color = '#08ff4e';
+                            return `
+                              <svg width="86" height="24">
+                                <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                                <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
+                                <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                            `;
+                          } if (states["sensor.lumi_lumi_weather_battery"].state > 15) {
+                            let input = states["sensor.lumi_lumi_weather_battery"].state / 3,
+                              state = states["sensor.lumi_lumi_weather_battery"].state,
+                              color = 'orange';
+                            return `
+                              <svg width="86" height="24">
+                                <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                                <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
+                                <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+
+                            `;
+                          } else {
+                            let state = states["sensor.lumi_lumi_weather_battery"].state,
+                              color = 'red';
+                            return `
+                              <svg width="86" height="24">
+                                <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                                <rect x="43" y="4" rx="3" ry="3" width="5" height="12" fill="${color}" stroke-width="0"/>
+                                <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                            `;
+                          }
+                        ]]]
+                      motion: |
+                        [[[
+                              return `<div align="left"> <ha-icon
+                                icon="mdi:tablet-android"
+                                style="width: 20px; height: 20px; color:grey; padding: 10px;">
+                                </ha-icon>Hallway</div>`
+                            ]]]
+                      motionbattery: |
+                        [[[
+                          if (states["sensor.samjin_motion_temperature"].state > 40) {
+                            let input = states["sensor.samjin_motion_temperature"].state / 3,
+                              state = states["sensor.samjin_motion_temperature"].state,
+                              color = '#08ff4e';
+                            return `
+                              <svg width="86" height="24">
+                                <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                                <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
+                                <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                            `;
+                          } if (states["sensor.samjin_motion_temperature"].state > 15) {
+                            let input = states["sensor.samjin_motion_temperature"].state / 3,
+                              state = states["sensor.samjin_motion_temperature"].state,
+                              color = 'orange';
+                            return `
+                              <svg width="86" height="24">
+                                <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                                <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
+                                <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                            `;
+                          } else {
+                            let state = states["sensor.samjin_motion_temperature"].state,
+                              color = 'red';
+                            return `
+                              <svg width="86" height="24">
+                                <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                                <rect x="43" y="4" rx="3" ry="3" width="5" height="12" fill="${color}" stroke-width="0"/>
+                                <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                            `;
+                          }
+                        ]]]
+                      door: |
+                        [[[
+                              return `<div align="left"> <ha-icon
+                                icon="mdi:tablet-android"
+                                style="width: 20px; height: 20px; color:grey; padding: 10px;">
+                                </ha-icon>Door</div>`
+                            ]]]
+                      doorbattery: |
+                        [[[
+                          if (states["sensor.samjin_multi_battery"].state > 40) {
+                            let input = states["sensor.samjin_multi_battery"].state / 3,
+                              state = states["sensor.samjin_multi_battery"].state,
+                              color = '#08ff4e';
+                            return `
+                              <svg width="86" height="24">
+                                <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                                <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
+                                <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                            `;
+                          } if (states["sensor.samjin_multi_battery"].state > 15) {
+                            let input = states["sensor.samjin_multi_battery"].state / 3,
+                              state = states["sensor.samjin_multi_battery"].state,
+                              color = 'orange';
+                            return `
+                              <svg width="86" height="24">
+                                <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                                <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
+                                <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                            `;
+                          } else {
+                            let state = states["sensor.samjin_multi_battery"].state,
+                              color = 'red';
+                            return `
+                              <svg width="86" height="24">
+                                <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                                <rect x="43" y="4" rx="3" ry="3" width="5" height="12" fill="${color}" stroke-width="0"/>
+                                <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                            `;
+                          }
+                        ]]]
+                      # entityname: |
+                      #   [[[
+                      #         return `<div align="left"> <ha-icon
+                      #           icon="mdi:tablet-android"
+                      #           style="width: 20px; height: 20px; color:grey; padding: 10px;">
+                      #           </ha-icon>Entityname</div>`
+                      #       ]]]
+                      # entitynamebattery: |
+                      #   [[[
+                      #     if (states["entityname_battery"].state > 40) {
+                      #       let input = states["entityname_battery"].state / 3,
+                      #         state = states["entityname_battery"].state,
+                      #         color = '#08ff4e';
+                      #       return `
+                      #         <svg width="86" height="24">
+                      #           <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                      #           <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
+                      #           <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                      #       `;
+                      #     } if (states["entityname_battery"].state > 15) {
+                      #       let input = states["entityname_battery"].state / 3,
+                      #         state = states["entityname_battery"].state,
+                      #         color = 'orange';
+                      #       return `
+                      #         <svg width="86" height="24">
+                      #           <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                      #           <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
+                      #           <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                      #       `;
+                      #     } else {
+                      #       let state = states["entityname_battery"].state,
+                      #         color = 'red';
+                      #       return `
+                      #         <svg width="86" height="24">
+                      #           <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                      #           <rect x="43" y="4" rx="3" ry="3" width="5" height="12" fill="${color}" stroke-width="0"/>
+                      #           <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                      #       `;
+                      #     }
+                      #   ]]]
+                      # entityname: |
+                      #   [[[
+                      #         return `<div align="left"> <ha-icon
+                      #           icon="mdi:tablet-android"
+                      #           style="width: 20px; height: 20px; color:grey; padding: 10px;">
+                      #           </ha-icon>Entityname</div>`
+                      #       ]]]
+                      # entitynamebattery: |
+                      #   [[[
+                      #     if (states["entityname_battery"].state > 40) {
+                      #       let input = states["entityname_battery"].state / 3,
+                      #         state = states["entityname_battery"].state,
+                      #         color = '#08ff4e';
+                      #       return `
+                      #         <svg width="86" height="24">
+                      #           <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                      #           <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
+                      #           <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                      #       `;
+                      #     } if (states["entityname_battery"].state > 15) {
+                      #       let input = states["entityname_battery"].state / 3,
+                      #         state = states["entityname_battery"].state,
+                      #         color = 'orange';
+                      #       return `
+                      #         <svg width="86" height="24">
+                      #           <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                      #           <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
+                      #           <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                      #       `;
+                      #     } else {
+                      #       let state = states["entityname_battery"].state,
+                      #         color = 'red';
+                      #       return `
+                      #         <svg width="86" height="24">
+                      #           <rect x="40" y="1" rx="5" ry="5" width="40" height="18" stroke="gray" fill="transparent" stroke-width="2"/>
+                      #           <rect x="43" y="4" rx="3" ry="3" width="5" height="12" fill="${color}" stroke-width="0"/>
+                      #           <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
+                      #       `;
+                      #     }
+                      #   ]]]
 
 
-          
           # - type: custom:button-card
           #   entity: weather.pirateweather
           #   name: Hvittingfoss
@@ -748,10 +1062,11 @@ views:
           - type: custom:button-card
             entity: sensor.lumi_lumi_weather_temperature #sensor.thermal_comfort_summer_simmer_perception #sensor.thermal_comfort_simmerzone
             name: Temp #[[[ return states.['sensor.thermal_comfort_summer_simmer_perception'].state ]]]
+            tap_action: none
             double_tap_action: !include popup/thermal_comfort.yaml
             template:
               - base
-              - climate_base
+              #- climate_base
               #- media
               - icon_climate
               #- extra_styles
@@ -759,13 +1074,18 @@ views:
             variables:
               circle_input: >
                 [[[
-                  if (entity) {
-                      return entity.state == 'slightly_cool'
-                          ? Math.round(entity.attributes.temperature).toString()
-                          : Math.round(entity.attributes.current_temperature).toString();
-                  }
+                  let humidity = states['sensor.lumi_lumi_weather_humidity'];
+                  if (humidity) return parseInt(humidity.state);
                 ]]]
-              circle_input_unit: "°C"
+
+#                [[[
+#                  if (entity) {
+#                      return entity.state == 'slightly_cool'
+#                          ? Math.round(entity.attributes.temperature).toString()
+#                          : Math.round(entity.attributes.current_temperature).toString();
+#                  }
+#                ]]]
+              circle_input_unit: "%"
 
           # - type: custom:button-card
           #   entity: switch.ps5_635_power
@@ -777,7 +1097,7 @@ views:
           #     - loader
 
           - type: custom:button-card
-            entity: switch.bedroom_tv_switch #media_player.bedroom_tv
+            entity: switch.bedroom_switch #media_player.bedroom_tv
             name: "Tv\u00B2"
             double_tap_action: !include popup/sovrum_tv2.yaml
             template:
@@ -786,7 +1106,7 @@ views:
               - loader
 
           - type: custom:button-card
-            entity: light.hue_huelight
+            entity: light.philips_1746547p7_huelight
             name: Hue
             template:
               - light
@@ -805,6 +1125,7 @@ views:
             variables:
               temp_min: sensor.weather_min_temp
               temp_max: sensor.weather_max_temp
+              precip: sensor.weather_precipitation_probability
               current_weather: weather.pirateweather #sensor.pirateweather_hourly_summary
 
       #################################################
@@ -832,6 +1153,7 @@ views:
 
                   - type: conditional
                     conditions:
+                      
                       - entity: select.conditional_media
                         state_not: Samsung
 
@@ -841,20 +1163,20 @@ views:
                       # - entity: select.conditional_media
                       #   state_not: Sovrum
 
-                      - entity: select.conditional_media
-                        state_not: Spotify
+                      # - entity: select.conditional_media
+                      #   state_not: Spotify
 
                       - entity: select.conditional_media
                         state_not: Tv²
 
                       - entity: select.conditional_media
-                        state_not: Node
-                      
+                        state_not: NODE-8ADC
+
+                      # - entity: select.conditional_media
+                      #   state_not: Plex (Plex for Windows - DESKTOP-030IPD1)
+
                       - entity: select.conditional_media
-                        state_not: Plex (Plex for Windows - DESKTOP-030IPD1)
-                      
-                      - entity: select.conditional_media
-                        state_not: Plex (Plex HTPC for Windows - DESKTOP-CD40KGT)
+                        state_not: Plex W11
 
                     card:
                       type: custom:button-card
@@ -872,12 +1194,18 @@ views:
                         state: Samsung
                     card:
                       type: custom:button-card
-                      entity: media_player.samsung_qled55
-                      #triggers_update: sensor.youtube_watching
+                      entity: media_player.samsung_55
+                      #triggers_update: media_player.samsung_55
                       template:
                         - conditional_media
-                        - icon_tv
+                        - media_volume
+                        #- icon_tv
                         - progress_bar
+                      variables:
+                        entity_picture: sensor.active_media_players
+                        volume_control: media_player.node_8adc
+                      triggers_update:
+                        - sensor.active_media_players
 
                   - type: conditional
                     conditions:
@@ -887,23 +1215,24 @@ views:
                       type: custom:button-card
                       entity: media_player.plex_plex_for_samsung_tv_2018
                       triggers_update: media_player.plex_plex_for_samsung_tv_2018
-                      name: Plex 
+                      name: Plex
                       template:
                         - conditional_media
-                        - icon_plex
+                        # - media_volume
+                        #- icon_plex
                         - progress_bar
 
-                  - type: conditional
-                    conditions:
-                      - entity: select.conditional_media
-                        state: Spotify
-                    card:
-                      type: custom:button-card
-                      entity: media_player.spotify
-                      template:
-                        - conditional_media
-                        - icon_spotify
-                        - progress_bar
+                  # - type: conditional
+                  #   conditions:
+                  #     - entity: select.conditional_media
+                  #       state: Spotify
+                  #   card:
+                  #     type: custom:button-card
+                  #     entity: media_player.spotify
+                  #     template:
+                  #       - conditional_media
+                  #       #- icon_spotify
+                  #       - progress_bar
 
                   - type: conditional
                     conditions:
@@ -914,13 +1243,13 @@ views:
                       entity: media_player.bedroom_tv
                       template:
                         - conditional_media
-                        - icon_tv
+                        #- icon_tv
                         - progress_bar
-                  
+
                   - type: conditional
                     conditions:
                       - entity: select.conditional_media
-                        state: Node
+                        state: NODE-8ADC
                     card:
                       type: custom:button-card
                       entity: media_player.node_8adc
@@ -929,32 +1258,32 @@ views:
                         - progress_bar
                   #       - icon_nest_mini
                         #- icon_amp
-                  
+
+                  # - type: conditional
+                  #   conditions:
+                  #     - entity: select.conditional_media
+                  #       state: Plex (Plex for Windows - DESKTOP-030IPD1)
+                  #   card:
+                  #     type: custom:button-card
+                  #     entity: media_player.plex_plex_for_windows_desktop_030ipd1
+                  #     template:
+                  #       - conditional_media
+                  #       #- icon_plex
+                  #       - progress_bar
+
                   - type: conditional
                     conditions:
                       - entity: select.conditional_media
-                        state: Plex (Plex for Windows - DESKTOP-030IPD1)
-                    card:
-                      type: custom:button-card
-                      entity: media_player.plex_plex_for_windows_desktop_030ipd1
-                      template:
-                        - conditional_media
-                        - icon_plex
-                        - progress_bar
-                  
-                  - type: conditional
-                    conditions:
-                      - entity: select.conditional_media
-                        state: Plex (Plex HTPC for Windows - DESKTOP-CD40KGT)
+                        state: Plex W11
                     card:
                       type: custom:button-card
                       entity: media_player.plex_plex_htpc_for_windows_desktop_cd40kgt
                       template:
                         - conditional_media
-                        - icon_plex
+                        #- icon_plex
                         - progress_bar
 
-                        
+
 
 ###################################
 ###### SWIPE CARD - 2nd PAGE ######
@@ -965,11 +1294,13 @@ views:
                 cards:
 
                   - type: custom:button-card
-                    entity: media_player.samsung_qled55
-                    triggers_update: media_player.samsung_qled55 #sensor.youtube_watching
+                    entity: media_player.samsung_55
+                    triggers_update: media_player.samsung_55 #sensor.youtube_watching
                     name: Samsung #Living Room
                     template:
                       - media
+                      - samsung_tv
+                      - media_volume
                       - icon_tv
 
                   - type: custom:button-card
@@ -1000,17 +1331,18 @@ views:
 ###################################
 ###### SWIPE CARD - 3nd PAGE ######
 ###################################
-              
-                  
+
+
               - type: grid
                 columns: 2
                 cards:
-                
+
                     - type: custom:button-card
                       entity: media_player.plex_plex_for_samsung_tv_2018
                       name: TV
                       template:
                         - media
+                        - progress_bar
                         - icon_tv
 
                     - type: custom:button-card
@@ -1069,7 +1401,7 @@ views:
                       # template:
                       #   - conditional_media_camera
                       #   #- icon_unifi_cam
-                      
+
                       type: custom:button-card
                       entity: camera.g3_instant_high
                       name: >
@@ -1078,7 +1410,7 @@ views:
                             return 'Online';
                           }
                         ]]]
-                        
+
 #                        [[[ return variables.state; ]]]
                       template:
                         #- base
@@ -1089,8 +1421,8 @@ views:
                       # tap_action:
                       #   !include popup/cameras.yaml
                       #state_display: >
-                        
-                  
+
+
                   #      [[[ return variables.state['sensor.g3_instant_last_motion_detected.last_changed']; ]]]
                   #     [[[ return relative_time['states.sensor.g3_instant_last_motion_detected.last_changed']; ]]]
                   #     states['sensor.g3_instant_last_motion_detected']
@@ -1106,7 +1438,7 @@ views:
 # {% endif %}
 
 # state_display: >
-#                         
+#
 
 
 #                         {% if is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "off") %}
@@ -1157,23 +1489,23 @@ views:
                   #     circle_input_unit: "%"
 
                   - type: custom:button-card
-                    entity: switch.speakers_switch #sensor.w11_audio_audio_sessions #switch.gosund_monitors_switch
-                    name: Speakers #📺 
+                    entity: switch.radio_switch #sensor.w11_audio_audio_sessions #switch.gosund_monitors_switch
+                    name: Speakers #📺
                     #tap_action: toggle button.w11_mediaplaypause
                     double_tap_action: !include popup/studio_monitorer_radio.yaml
                     template:
                       #- media
                       - base
                       - icon_monitors
-                      - circle
+                      #- circle
                       - loader
-                    variables: ### let volume = states['sensor.w11_currentvolume'];
-                      circle_input: >
-                       {{ state_attr("media_player.node_8adc", "volume_level") *100 }}
-                      circle_input_unit: "%"
+                    # variables: ### let volume = states['sensor.w11_currentvolume'];
+                    #   circle_input: >
+                    #    {{ state_attr("media_player.node_8adc", "volume_level") *100 }}
+                    #   circle_input_unit: "%"
 
                       # [[[
-                        #   let volume = states['media_player.node_8adc'];  
+                        #   let volume = states['media_player.node_8adc'];
                         #   if (volume) return parseInt(volume.state);
                         # ]]]
 
@@ -1206,7 +1538,7 @@ views:
                       - loader
 
                   - type: custom:button-card
-                    entity: light.ambient_kitchen
+                    entity: switch.kitchen_led_switch
                     name: Kitchen
                     template:
                       - base
@@ -1215,18 +1547,18 @@ views:
                       - loader
 
 
-                      
+
 
 ###################################
 ###### SWIPE CARD - 3rd PAGE ######
 ###################################
 
-                  
+
               # - type: grid
               #   columns: 2
               #   cards:
-                
-      
+
+
 
       # - type: custom:button-card
       #   entity: light.balcony

@@ -6,7 +6,7 @@ template:
       name: 'Weather Min Temp'
       state: >-
         {% set today = states.sensor.date.state %}
-        {% set forecasts = state_attr('weather.smhi_home', 'forecast') %}
+        {% set forecasts = state_attr('weather.pirateweather', 'forecast') %}
         {% for forecast in forecasts %}
           {%- set date = forecast.datetime | replace('T23:00:00+00:00', '') %}
           {%- if date == today %}

@@ -6,7 +6,7 @@ tablet:
   ha-card-box-shadow: none
   ha-card-background: none
 
-  grid-card-gap: 3.5% #ADJUSTED FROM 5%
+  grid-card-gap: 3.5%  #from 5%
   masonry-view-card-margin: 0px
   state-icon-color: '#9da0a2'
   state-icon-active-color: '#3182b7'
@@ -69,7 +69,7 @@ tablet:
   rgb-state-vacuum-color: var(--rgb-state-default-color)
 
   #font
-  primary-font-family: SF Pro Text, Roboto, system-ui
+  primary-font-family: Poppins Regular, Roboto, system-ui #SF Pro Text, Roboto, system-ui
   paper-font-common-base_-_font-family: var(--primary-font-family)
   paper-font-common-code_-_font-family: var(--primary-font-family)
   paper-font-body1_-_font-family: var(--primary-font-family)
@@ -84,7 +84,7 @@ tablet:
   #custom variables
   ha-card-background-color: rgba(34,38,39,0.9)
   ha-card-header-background-color: rgba(48,52,52,0.8)
-  custom-layout-card-padding: 2.5vw # ADJUSTED FROM 3.3vw
+  custom-layout-card-padding: 3.3vw # ADJUSTED initially to 2.5vw
   
   sidebar-time-font-size: 5.2vw
   sidebar-time-line-height: 4.3vw

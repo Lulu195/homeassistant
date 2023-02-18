@@ -2,8 +2,8 @@ notify:
   - name: all_devices
     platform: group
     services:
-      - service: mobile_app_iphone
-      - service: mobile_app_mattias_imac
+      - service: mobile_app_s7
+      - service: mobile_app_s7_edge
       - service: mobile_app_sanja_iphone
 
 homeassistant:

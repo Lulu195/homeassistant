@@ -8,11 +8,12 @@
     variables:
       temp_min: ''
       temp_max: ''
+      precip: ''
       current_weather: ''
     aspect_ratio: 1/1
     show_icon: false
     show_entity_picture: true
-    show_name: true
+    show_name: true #false
     show_state: false
     show_label: true 
     tap_action:
@@ -21,14 +22,18 @@
       grid:
         - grid-template-areas: |
             "n"
-            "temp"
+            "temp" 
+            "wind"
             "i"
             "s"
             "l"
         - grid-template-columns: 1fr
-        - grid-template-rows: min-content repeat(2, 1fr) repeat(2, min-content)
+        - grid-template-rows: min-content repeat(3, 1fr) repeat(2, min-content)
         - gap: 0%
       card:
+        - border-radius: var(--button-card-border-radius)
+        - border-width: 0
+        - padding: 10.9% 9.9% 8.9% 10.9% 
         - color: > #rgba(157, 160, 162, 1) #rgba(84, 85, 85, 1) #rgba(85, 86, 86, 1)
             [[[
               if (states['sun.sun'].state == 'below_horizon'){
@@ -49,34 +54,34 @@
         - text-transform: uppercase
         - font-weight: 400
         - margin-top: none
-        # - padding: 11.5% 10.5% 10.5% 11.5% #sagaland93
       img_cell:
         - justify-content: start
       icon:
-        - width: 35%
-        #- margin-left: 5px #none
-        #- width: 37%
+        - width: 37% #37%
+        - margin-left: none
       label:
-        - place-self: start
-        - margin-left: -5px 
+        - place-self: center
+        - margin-left: -10px 
       custom_fields:
         temp:
           - place-self: start
-          #- margin-top: -10px
+          # - margin-top: none
+        wind:
+          - place-self: start
     label: >   
       [[[
         return `
-          <ha-icon icon="mdi:arrow-up-thin" style="width: 1.1em; height: 1.1em; margin-right: -0.3em;"></ha-icon>
+          <ha-icon icon="mdi:arrow-up-thin" style="width: 1em; height: 1em; margin-right: -0.5em;"></ha-icon>
           <span> ${states[variables.temp_max].state}°</span>
-          <ha-icon icon="mdi:arrow-down-thin" style="width: 1.1em; height: 1.1em; margin-right: -0.3em;"></ha-icon>
+          <ha-icon icon="mdi:arrow-down-thin" style="width: 1em; height: 1em; margin-right: -0.5em;"></ha-icon>
           <span> ${states[variables.temp_min].state}°</span>
-          <ha-icon icon="mdi:eye-outline" style="width: 1.1em; height: 1.1em; margin-right: -0.3em;"></ha-icon>
-          <span> ${states[variables.temp_min].state}°</span>
+          <ha-icon icon="mdi:water-percent-alert" style="width: 1em; height: 1em; margin-right: -0.2em;"></ha-icon>
+          <span> ${states[variables.precip].state}%</span>
         `
       ]]]
     custom_fields:
       temp: >
-        [[[ return entity.attributes.temperature + "°C" ; ]]]
+        [[[ return entity.attributes.temperature + "°c" ; ]]]
       wind: >  
         [[[ 
           if (entity.attributes.wind_speed > 60) 
@@ -130,27 +135,33 @@
             font-size: 0.9vw;
           }
           #temp {
-            font-size: 1.7vw;
+            font-size: 1.3vw;
+          }
+          #wind {
+            font-size: 1.2vw;
           }
           #state {
             font-size: 0.8vw;
           }  
           #label {
-            font-size: 0.9vw;
+            font-size: 1.1vw;
           }                    
           /* portrait */
-          @media screen and (max-width: 2000px) {
+          @media screen and (max-width: 1200px) {
             #name {
-              font-size: 0.7vw !important;
+              font-size: 1.2vw !important;
             }
             #temp {
-              font-size: 1.8vw !important;
+              font-size: 2.8vw !important;
+            }
+            #wind {
+            font-size: 1.3vw; !important;
             }
             #state {
               font-size: 0.7vw !important;
             }  
             #label {
-              font-size: 0.7vw !important;
+              font-size: 1.4vw !important;
             }  
           }
           /* phone */
@@ -159,13 +170,16 @@
               font-size: 2vw !important;
             }              
             #temp {
-              font-size: 4.5vw !important;
+              font-size: 3.0vw !important;
+            }
+            #wind {
+            font-size: 2.3vw; !important;
             }    
             #state {
               font-size: 2vw !important;
             }   
             #label {
-              font-size: 2vw !important;
+              font-size: 2.6vw !important;
             }                        
           }
           @keyframes card_bounce {

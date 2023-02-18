@@ -1,54 +1,15 @@
+#################################################
+#                                               #
+#                     LIGHT                     #
+#         WITH HOMEKIT INSPIRED POPUP           #
+#                                               #
+#################################################
+
 light:
   template:
     - base
     - circle
     - loader
-  double_tap_action:
-    action: fire-dom-event
-    browser_mod:
-      service: browser_mod.popup
-      data:
-        title: >
-          [[[
-            return !entity || entity.attributes.friendly_name;
-          ]]]
-        card_mod:
-          style:
-            #popup header
-            .:
-        content:
-          type: entities
-          card_mod:
-            style: |
-              #states {
-                padding-top: 0.5em;
-              }
-          entities: >
-            [[[
-              if (entity) {
-                  let lights = [],
-                      id = Boolean(entity.attributes.entity_id)
-                          ? [entity.entity_id].concat(entity.attributes.entity_id)
-                          : [entity.entity_id];
-
-                  for (let i = 0; i < id.length; i++) {
-                      lights.push({
-                          "type": "custom:mushroom-light-card",
-                          "entity": id[i],
-                          "fill_container": false,
-                          "primary_info": "name",
-                          "secondary_info": "state",
-                          "icon_type": "icon",
-                          "show_brightness_control": true,
-                          "use_light_color": true,
-                          "show_color_temp_control": true,
-                          "show_color_control": true,
-                          "collapsible_controls": true
-                      });
-                  }
-                  return lights;
-              }
-            ]]]
   variables:
     circle_input: >
       [[[
@@ -64,3 +25,223 @@ light:
         }
       ]]]
     circle_input_unit: '%'
+  double_tap_action:
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        title: >
+          [[[
+            return !entity || entity.attributes.friendly_name;
+          ]]]
+        style: >
+          --popup-background-color: transparent;
+        card_mod:
+          style:
+            .: |
+              ha-header-bar {
+                display: none !important;
+              }
+              @media screen and (max-width: 800px) {
+                ha-header-bar {
+                  display: block !important;
+                }
+              }
+        content:
+          type: custom:mod-card
+          card_mod:
+            style: | #0.5em;
+              #states {
+                padding-top: 0.2em;
+              }
+          card:
+            type: custom:light-popup-card
+            entity: >
+              [[[ return entity.entity_id ]]]
+            icon: none
+            fullscreen: false
+            brightnessWidth: 130px
+            brightnessHeight: 360px
+            borderRadius: 1.7em
+            sliderColor: '#c7c7c7'
+            sliderTrackColor: rgba(25, 25, 25, 0.9)
+            displayType: slider
+            actionSize: 4.5em
+            actionsInARow: 2
+            actions:
+              - action: call-service
+                service: light.turn_on
+                color: '#d8d9e1'
+                service_data:
+                  entity_id: >
+                    [[[ return entity.entity_id ]]]
+                  color_temp: 153
+              - action: call-service
+                service: light.turn_on
+                color: '#d5b08d'
+                service_data:
+                  entity_id: >
+                    [[[ return entity.entity_id ]]]
+                  color_temp: 326
+              - action: call-service
+                service: light.turn_on
+                color: '#ce944b'
+                service_data:
+                  entity_id: >
+                    [[[ return entity.entity_id ]]]
+                  color_temp: 500
+              - action: fire-dom-event
+                image: >-
+                  data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
+                  50 50"%3E%3Cstyle%3Esvg%7Bbackground:radial-gradient(circle,rgba(255,255,
+                  255,1) 0%25,rgba(255,255,255,0) 80%25),conic-gradient(%237827e6,%23e622e7,
+                  %23e40588,%23e41919,%23e5691e,%23e8e22e,%237de629,%2334e828,%2333e75c,
+                  %2334e8e0,%23207de5,%231227e5,%237827e6)%7D%3C/style%3E%3C/svg%3E
+                browser_mod:
+                  command: popup
+                  title: >
+                    [[[ return entity.attributes.friendly_name ]]]
+                  card:
+                    type: custom:light-entity-card
+                    entity: >
+                      [[[ return entity.entity_id ]]]
+                    brightness: true
+                    color_temp: true
+                    full_width_sliders: false
+                    hide_header: true
+                    show_slider_percent: true
+                    smooth_color_wheel: true
+                    persist_features: true
+                    consolidate_entities: false
+
+
+#################################################
+#                                               #
+#                 LIGHT GROUP                   #
+#                                               #
+#################################################
+
+room_group:
+  template:
+    - base
+  variables:
+    light_entity: ''
+    circle_input: >
+      [[[ return entity === undefined || Math.round(entity.attributes.brightness / 2.54); ]]]
+  state_display: >
+    [[[
+      if (variables.state == 'no') {
+        return 'Off';
+      }
+      else if (variables.state == 'yes') {
+        return 'On';
+      }
+    ]]]
+  hold_action:
+    action: call-service
+    service: light.toggle
+    service_data:
+      entity_id: '[[[ return variables.light_entity; ]]]'
+  double_tap_action:
+    action: fire-dom-event
+    browser_mod:
+      service: browser_mod.popup
+      data:
+        title: >
+          [[[
+            return states[variables.light_entity].attributes.friendly_name;
+          ]]]
+        style: >
+          --popup-background-color: transparent;
+        content:
+          type: custom:mod-card
+          card_mod:
+            style: |
+              #states {
+                padding-top: 0.5em;
+              }
+          card:
+            type: custom:light-popup-card
+            entity: >
+              [[[ return variables.light_entity; ]]]
+            icon: none
+            fullscreen: false
+            brightnessWidth: 130px
+            brightnessHeight: 360px
+            borderRadius: 1.7em
+            sliderColor: '#c7c7c7'
+            sliderTrackColor: rgba(25, 25, 25, 0.9)
+            displayType: slider
+            actionSize: 4.5em
+            actionsInARow: 2
+
+
+
+
+
+# light:
+#   template:
+#     - base
+#     - circle
+#     - loader
+#   double_tap_action:
+#     action: fire-dom-event
+#     browser_mod:
+#       service: browser_mod.popup
+#       data:
+#         title: >
+#           [[[
+#             return !entity || entity.attributes.friendly_name;
+#           ]]]
+#         card_mod:
+#           style:
+#             #popup header
+#             .:
+#         content:
+#           type: entities
+#           card_mod:
+#             style: |
+#               #states {
+#                 padding-top: 0.5em;
+#               }
+#           entities: >
+#             [[[
+#               if (entity) {
+#                   let lights = [],
+#                       id = Boolean(entity.attributes.entity_id)
+#                           ? [entity.entity_id].concat(entity.attributes.entity_id)
+#                           : [entity.entity_id];
+
+#                   for (let i = 0; i < id.length; i++) {
+#                       lights.push({
+#                           "type": "custom:mushroom-light-card",
+#                           "entity": id[i],
+#                           "fill_container": false,
+#                           "primary_info": "name",
+#                           "secondary_info": "state",
+#                           "icon_type": "icon",
+#                           "show_brightness_control": true,
+#                           "use_light_color": true,
+#                           "show_color_temp_control": true,
+#                           "show_color_control": true,
+#                           "collapsible_controls": true
+#                       });
+#                   }
+#                   return lights;
+#               }
+#             ]]]
+#   variables:
+#     circle_input: >
+#       [[[
+#         if (entity) {
+#             // if light group get brightness from child to remove bounce
+#             let child = entity.attributes.entity_id,
+#                 brightness = child && states[child[0]].attributes.brightness
+#                     ? Math.round(states[child[0]].attributes.brightness / 2.54)
+#                     : Math.round(entity.attributes.brightness / 2.54);
+#             return brightness === 0 && entity.state !== 'off'
+#                 ? 1
+#                 : brightness
+#         }
+#       ]]]
+#     circle_input_unit: '%'

@@ -142,7 +142,8 @@ automation:
       entity_id:
         # - media_player.vardagsrum
         # - media_player.sovrum
-        - media_player.plex_plex_for_windows_desktop_030ipd1
+        - media_player.samsung_55
+        - media_player.bedroom_tv
       to: playing
     condition: >
       {{ is_state_attr(trigger.entity_id, 'app_id', 'com.google.ios.youtube') and

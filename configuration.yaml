@@ -6,14 +6,14 @@ homeassistant:
       initial_state: true
   allowlist_external_dirs:
     - /config
-  x
+
 default_config:
 
 frontend:
   extra_module_url:
     - /hacsfiles/lovelace-card-mod/card-mod.js
   themes: !include_dir_merge_named themes
-template ui: !include sidebar.yaml
+template: !include sidebar.yaml
 #secrets: !include secrets.yaml
 
 automation ui: !include automations.yaml
@@ -36,7 +36,9 @@ lovelace:
       { url: /hacsfiles/lovelace-xiaomi-vacuum-map-card/xiaomi-vacuum-map-card.js,  type: module },
       { url: /hacsfiles/swipe-card/swipe-card.js,                                   type: module },
       { url: /hacsfiles/tabbed-card/tabbed-card.js,                                 type: module },
-
+      { url: /hacsfiles/media_player-popup-card/media_player-popup-card.js,         type: module },
+      { url: /hacsfiles/light-popup-card/light-popup-card.js,                       type: module },
+      
       { url: '/local/marked.min.js?v=4.2.5',                                        type: module },
       { url: '/local/vanilla-tilt.min.js?v=1.8.0',                                  type: module },
       { url: '/local/browser_mod_icon.js?v=0.5',                                    type: module },
@@ -54,17 +56,23 @@ logger:
     homeassistant.components.mqtt: warning
 
 sensor:
-  - platform: time_date
+  - platform: time_date  # Example configuration.yaml entry Needed for Wake Up Alarm
     display_options:
-      - time
-      - date
+      - 'time'
+      - 'date'
+      - 'date_time'
+      - 'date_time_utc'
+      - 'date_time_iso'
+      - 'time_date'
+      - 'time_utc'
+      - 'beat'
 
 
   - platform: plex_recently_added
     name: Plex Recently Added
-    token: !secret plex_token
-    host: !secret plex_host
-    port: !secret plex_port
+    token: !secret plex_token_2
+    host: !secret plex_host_2
+    port: !secret plex_port_2
     max: 1
     image_resolution: 800
 
@@ -102,31 +110,8 @@ media_player:
       - host: 192.168.1.121
 
 
-template:
-  - sensor:
-    - name: "Electricity Cost"
-      unique_id: electricity_cost
-      device_class: monetary
-      unit_of_measurement: "kr/kWh"
-      state: >
-        {{ 1.25 * (float(states('sensor.eloverblik_tariff_sum')) + float(states('sensor.nordpool'))) }}
-      attributes:
-        today: >
-          {% if state_attr('sensor.eloverblik_tariff_sum', 'hourly') and state_attr('sensor.nordpool', 'today') %}
-            {% set ns = namespace (prices=[]) %}
-            {% for h in range(24) %}
-              {% set ns.prices = ns.prices + [(1.25 * (float(state_attr('sensor.eloverblik_tariff_sum', 'hourly')[h]) + float(state_attr('sensor.nordpool', 'today')[h]))) | round(5)] %}
-            {% endfor %}
-            {{ ns.prices }}
-          {% endif %}
-        tomorrow: >
-          {% if state_attr('sensor.eloverblik_tariff_sum', 'hourly') and state_attr('sensor.nordpool', 'tomorrow') %}
-            {% set ns = namespace (prices=[]) %}
-            {% for h in range(24) %}
-              {% set ns.prices = ns.prices + [(1.25 * (float(state_attr('sensor.eloverblik_tariff_sum', 'hourly')[h]) + float(state_attr('sensor.nordpool', 'tomorrow')[h]))) | round(5)] %}
-            {% endfor %}
-            {{ ns.prices }}
-          {% endif %}
+# PYTHON
+python_script:
 
 # DATABASE
 recorder:

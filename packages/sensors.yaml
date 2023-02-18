@@ -1,0 +1,299 @@
+template:
+  sensor:
+
+  # SENSOR - SYSTEM - SEASON CALCULATOR
+    - unique_id: current_season
+      name: 'Current Season'
+      state: >
+        {% set month = now().month %}
+        {% if month in [1, 2, 12] %}
+          winter
+        {% elif month in [3, 4, 5] %}
+          spring
+        {% elif month in [6, 7, 8] %}
+          summer
+        {% elif month in [9, 10, 11] %}
+          autumn
+        {% endif %}
+      icon: >
+        {% if is_state("sensor.current_season", "winter") %}
+          mdi:snowflake
+        {% elif is_state("sensor.current_season", "spring") %}
+          mdi:sprout
+        {% elif is_state("sensor.current_season", "summer") %}
+          mdi:sunglasses
+        {% elif is_state("sensor.current_season", "autumn") %}
+          mdi:leaf-maple
+        {% endif %}
+  # SENSOR - DARK MONTHS
+    - unique_id: dark_month
+      name: 'Dark Month'
+      state: >
+        {% set month = now().month %}
+        {% if month in [1, 2, 3, 11, 12] %} yes
+        {% else %} no
+        {% endif %}
+  # SENSOR - SYSTEM - SPECIAL OCCASIONS
+    - unique_id: special_occasions
+      name: 'Special Occasions'
+      state: >
+        {% set hours = now().strftime('%H') %}
+        {% set minutes = now().strftime('%M') %}
+        {% set date = now().strftime('%D') %}
+        {% if "01/01" in date %}
+          New year
+        {% elif "12/24" in date %}
+          Christmas
+        {% elif "12/25" in date %}
+          First Christmas day
+        {% elif "12/26" in date %}
+          Second Christmas day
+        {% elif "01/30" in date %}
+          Mamma
+        {% elif "02/12" in date %}
+          Mother's day
+        {% elif "02/14" in date %}
+          Valentine's day
+        {% elif "05/17" in date %}
+          Constitution Day
+        {% elif "05/20" in date %}
+          Birthday
+        {% elif "09/02" in date %}
+          Pappa
+        {% elif "11/12" in date %}
+          Father's day
+        {% else %}
+          nothing
+        {% endif %}
+      icon: >
+        {% set state = states.sensor.special_occasions.state %}
+        {% if state == "New year" %}
+          mdi:party-popper
+        {% elif state == "Christmas" %}
+          phu:christmas-tree-v2
+        {% elif state == "Constitution Day" %}
+          mdi:flag-variant
+        {% elif state == "Birthday" %}
+          mdi:cake-variant
+        {% elif state == "Mamma" %}
+          mdi:cake-variant
+        {% elif state == "Pappa" %}
+          mdi:cake-variant
+        {% else %}
+          mdi:calendar-star
+        {% endif %}
+        
+  # SENSOR - SYSTEM - UNAVAILABLE ENTITIES
+    - unique_id: unavailable_entities
+      name: 'Unavailable Entities'
+      unit_of_measurement: entities
+      state: >
+        {% if state_attr('sensor.unavailable_entities','entities')|lower not in ['unknown','unavailable','none'] %}
+          {{ state_attr('sensor.unavailable_entities','entities')|count }}
+        {% endif %}
+      attributes:
+        entities: >
+          {% set ignore_sec = 60 %}
+          {% set unavail = namespace(entities=[]) %}
+          {% set entities = states|rejectattr('domain','eq','group')
+            |rejectattr('entity_id','in',state_attr('group.ignored_entities','entity_id'))
+            |selectattr('state','in',['unavailable','unknown','none'])|map(attribute='entity_id')|list %}
+          {% for item in entities %}
+            {% if not 'browser_' in item and not 'scene.' in item and not 'media_player.plex_' in item %}
+              {% if states[item].last_changed < now() - timedelta(seconds=ignore_sec) %}
+                {% set unavail.entities = unavail.entities + [item] %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          {{ unavail.entities }}
+
+# SENSOR - HOME OCCUPIED
+    - unique_id: home_occupied
+      name: 'Home Occupied'
+      state: >
+        {% set state = 'no' %}
+        {% if is_state('person.lulu', 'home') %}
+          {% set state = 'yes' %}
+        {% elif is_state('sensor.office_pc_real_session_state', 'Active') %}
+          {% set state = 'yes' %}
+        {% endif %}
+        {{ state }}
+      icon: >
+        {% if is_state('sensor.home_occupied', 'yes') %}
+          mdi:home-variant
+        {% else %}
+          mdi:home-variant-outline
+        {%- endif %}
+
+# SENSOR - HOME COMFORT LIGHTING
+    - unique_id: home_comfort_lighting
+      name: 'Home Comfort Lighting'
+      state: >
+        {%- set time = now().hour | int %}
+        {%- set offset = 0 | int %}
+        {%- set sunset = as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom ('%H') | int %}
+        {%- set sunrise = as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom ('%H') | int %}
+        {% if is_state('sensor.home_state', 'evening') %} yes
+        {% elif is_state('sensor.home_state', 'night') %} yes
+        {% elif is_state('sensor.home_state', 'morning') %} yes
+        {% elif time >= sunset + offset %} yes
+        {% elif time <= sunrise + offset %} yes
+        {% else %} no
+        {% endif %}
+
+# # SENSOR - SLEEPING
+#     - unique_id: home_sleep_mode
+#       name: 'Home Sleep Mode'
+#       state: >
+#         {% set state = 'off' %}
+#         {% if states('sensor.saga_sin_iphone_battery_state') in ["Charging", "Full"] %} 
+#           {% if not is_state('media_player.denon_receiver', 'on') %}
+#             {% if not is_state('sensor.office_pc_real_session_state', 'Active') %}
+#               {% set state = 'on' %}
+#             {% endif %}
+#           {% endif %}
+#         {% endif %}
+#         {{ state }}
+
+
+# SENSOR - MODES
+    - unique_id: home_mode
+      name: 'Home Mode'
+      state: >
+        {% set sleep = states('sensor.home_sleep_mode') %}
+        {% set mood = states('sensor.home_comfort_lighting') %}
+        {% set occupied = states('sensor.home_occupied') %}
+        {% set mute = states('sensor.home_mute_mode') %}
+        {% set party = states('sensor.home_party_mode') %}
+        {% set guest = states('input_boolean.guest_mode') %}
+        {% if occupied == 'no' %} Unoccupied
+        {% elif party == 'on' %} Party
+        {% elif sleep == 'on' %} Sleep
+        {% elif mute == 'on' %} Mute
+        {% elif guest == 'on' %} Guest
+        {% elif mood == 'yes' %} Comfort
+        {% else %} Normal
+        {% endif %}
+      icon: >
+        {% set state = states.sensor.home_mode.state %}
+        {% if state not in ['unknown','unavailable','none','off'] %}
+          {% if state == 'Normal' %} mdi:home
+          {% elif state == 'Sleep' %} mdi:sleep
+          {% elif state == 'Comfort' %} hue:scene-relax
+          {% elif state == 'Party' %} mdi:liquor
+          {% elif state == 'Mute' %} mdi:volume-mute
+          {% elif state == 'Unoccupied' %} mdi:home-outline
+          {% elif state == 'Guest' %} ios:person-2-circle-fill
+          {% else %} mdi:home
+          {% endif %}
+        {% else %} mdi:alert-circle-outline
+        {% endif %}
+
+
+  # SENSOR - CONDITIONAL MEDIA BACKGROUND
+    - unique_id: active_media_players
+      name: 'Active Media Players'
+      state: >
+        {% set media_players = [
+          states.media_player.samsung_55,
+          states.media_player.plex_plex_for_samsung_tv_2018,
+          states.media_player.bedroom_tv,
+          states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt
+        ] %}
+        {{ media_players | selectattr('state','search','(playing|paused)') | list | count }}
+      attributes:
+        active: >
+          {% set media_players = [
+            states.media_player.samsung_55,
+            states.media_player.plex_plex_for_samsung_tv_2018,
+            states.media_player.bedroom_tv,
+            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt
+          ] %}
+          {%- set media_players_playing = media_players | selectattr('state','eq','playing') | list %}
+          {%- set media_player_id_playing = media_players_playing | map(attribute='entity_id') | join(', ') %}
+          {%- set media_players_paused = media_players | selectattr('state','eq','paused') | list %}
+          {%- set media_player_id_paused = media_players_paused | map(attribute='entity_id') | join(', ') %}
+          {%- if (media_players_playing | length > 0) -%}
+            {{ media_player_id_playing }}
+          {%- elif (media_players_paused | length > 0) -%}
+            {{ media_player_id_paused }}
+          {%- endif -%}
+        app: >
+          {%- if this.state not in ['unavailable','undefined','unknown','none','null','0'] %}
+            {% set players = (state_attr('sensor.active_media_players', 'active')).split(', ') %}
+            {% if players[0] is defined %}
+              {% if 'plex' in players[0] %}
+                plex
+              {% else %}
+                {% set app = state_attr(players[0], 'app_name') | lower %}
+                {% if app not in ['unavailable','undefined','unknown','none','null'] %}
+                  {{ app }}
+                {% else %}
+                  {% set app = state_attr(players[0], 'app_id') | lower %}
+                  {% if app not in ['unavailable','undefined','unknown','none','null'] %}
+                    {{ app }}
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        media_title: >
+          {%- if this.state not in ['unavailable','undefined','unknown','none','null','0'] %}
+            {% set players = (state_attr('sensor.active_media_players', 'active')).split(', ') %}
+            {% if players[0] is defined %}
+              {% if 'plex' in players[0] or state_attr('sensor.active_media_players', 'app') == 'plex' %}
+                {% if state_attr(players[0], 'media_content_type') == 'video' %}
+                  Next media screen
+                {% elif state_attr(players[0], 'media_content_type') == 'tvshow' %}
+                  {% if state_attr(players[0], 'media_season') | replace('S','') | int(0) >= 10 %}
+                    {{state_attr(players[0], 'media_series_title')}} · S{{state_attr(players[0], 'media_season')}}E{{state_attr(players[0], 'media_episode')}}
+                  {% else %}
+                    {{state_attr(players[0], 'media_series_title')}} · S0{{state_attr(players[0], 'media_season')}}E{{state_attr(players[0], 'media_episode')}}
+                  {% endif %}
+                {% else %}
+                  {{state_attr(players[0], 'media_title')}}
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        media_content_type: >
+          {% if this.state not in ['unavailable','undefined','unknown','none','null','0'] %}
+            {% set players = (state_attr('sensor.active_media_players', 'active')).split(', ') %}
+            {% if players[0] is defined %}
+              {% if 'plex' in players[0] or state_attr('sensor.active_media_players', 'app') == 'plex' %}
+                {% if state_attr(players[0], 'media_content_type') %}
+                  {{ state_attr(players[0], 'media_content_type') }}
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        entity_picture: >
+          {%- if this.state not in ['unavailable','undefined','unknown','none','null','0'] %}
+            {%- set players = (state_attr('sensor.active_media_players', 'active')).split(', ') %}
+            {% if players[0] is defined %}
+              {%- set entitypic = state_attr(players[0],'entity_picture') %}
+              {%- set app = state_attr('sensor.active_media_players','app') | lower %}
+              {%- if app is defined %}
+                {% if 'plex' in app %} /local/images/Plex_bg.png
+                {% elif 'infuse' in app %} /local/images/Plex_bg.png
+                {% elif 'com.apple.tvwatchlist' in app %} /local/images/ATVPlus_bg.jpg
+                {% elif 'airplay' in app %} /local/images/AirPlay_bg.jpg
+                {% elif 'com.amazon' in app %} /local/images/AmazonPrime_bg.jpg
+                {% elif 'disneyplus' in app %} /local/images/dp_bg.jpg
+                {% elif 'youtube' in app %} /local/images/yt_bg.jpg
+                {% elif 'tv2' in app %} /local/images/tv2play_bg.jpg
+                {% elif 'hbo' in app %} /local/images/HBOMax_bg.jpg
+                {% elif 'netflix' in app %} /local/images/netflix_bg.jpg
+                {% elif 'nrk' in app %} /local/images/nrk_bg.jpg
+                {% elif 'viasat' in app %} /local/images/ViaPlay_bg.jpg
+                {% elif 'viaplay' in app %} /local/images/ViaPlay_bg.jpg
+                {% elif 'viafree' in app %} /local/images/ViaFree_bg.jpg
+                {% elif 'kanal5' in app %} /local/images/discovery_bg.jpg
+                {% elif 'twitch' in app %} /local/images/twitch_bg.jpg
+                {% else %} null
+                {% endif %}
+              {%- elif 'plex' in players %}
+                {{ '/local/images/Plex_bg.png' }}
+              {%- endif %}
+            {%- endif %}
+          {%- endif %}
