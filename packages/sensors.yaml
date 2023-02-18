@@ -83,29 +83,29 @@ template:
           mdi:calendar-star
         {% endif %}
         
-  # SENSOR - SYSTEM - UNAVAILABLE ENTITIES
-    - unique_id: unavailable_entities
-      name: 'Unavailable Entities'
-      unit_of_measurement: entities
-      state: >
-        {% if state_attr('sensor.unavailable_entities','entities')|lower not in ['unknown','unavailable','none'] %}
-          {{ state_attr('sensor.unavailable_entities','entities')|count }}
-        {% endif %}
-      attributes:
-        entities: >
-          {% set ignore_sec = 60 %}
-          {% set unavail = namespace(entities=[]) %}
-          {% set entities = states|rejectattr('domain','eq','group')
-            |rejectattr('entity_id','in',state_attr('group.ignored_entities','entity_id'))
-            |selectattr('state','in',['unavailable','unknown','none'])|map(attribute='entity_id')|list %}
-          {% for item in entities %}
-            {% if not 'browser_' in item and not 'scene.' in item and not 'media_player.plex_' in item %}
-              {% if states[item].last_changed < now() - timedelta(seconds=ignore_sec) %}
-                {% set unavail.entities = unavail.entities + [item] %}
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-          {{ unavail.entities }}
+  # # SENSOR - SYSTEM - UNAVAILABLE ENTITIES
+  #   - unique_id: unavailable_entities
+  #     name: 'Unavailable Entities'
+  #     unit_of_measurement: entities
+  #     state: >
+  #       {% if state_attr('sensor.unavailable_entities','entities')|lower not in ['unknown','unavailable','none'] %}
+  #         {{ state_attr('sensor.unavailable_entities','entities')|count }}
+  #       {% endif %}
+  #     attributes:
+  #       entities: >
+  #         {% set ignore_sec = 60 %}
+  #         {% set unavail = namespace(entities=[]) %}
+  #         {% set entities = states|rejectattr('domain','eq','group')
+  #           |rejectattr('entity_id','in',state_attr('group.ignored_entities','entity_id'))
+  #           |selectattr('state','in',['unavailable','unknown','none'])|map(attribute='entity_id')|list %}
+  #         {% for item in entities %}
+  #           {% if not 'browser_' in item and not 'scene.' in item and not 'media_player.plex_' in item %}
+  #             {% if states[item].last_changed < now() - timedelta(seconds=ignore_sec) %}
+  #               {% set unavail.entities = unavail.entities + [item] %}
+  #             {% endif %}
+  #           {% endif %}
+  #         {% endfor %}
+  #         {{ unavail.entities }}
 
 # SENSOR - HOME OCCUPIED
     - unique_id: home_occupied
@@ -198,8 +198,10 @@ template:
           states.media_player.samsung_55,
           states.media_player.plex_plex_for_samsung_tv_2018,
           states.media_player.bedroom_tv,
-          states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt
-        ] %}
+          states.media_player.node_8adc,
+          states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
+          states.media_player.spotify_lulu 
+          ] %}
         {{ media_players | selectattr('state','search','(playing|paused)') | list | count }}
       attributes:
         active: >
@@ -207,7 +209,9 @@ template:
             states.media_player.samsung_55,
             states.media_player.plex_plex_for_samsung_tv_2018,
             states.media_player.bedroom_tv,
-            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt
+            states.media_player.node_8adc,
+            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
+            states.media_player.spotify_lulu 
           ] %}
           {%- set media_players_playing = media_players | selectattr('state','eq','playing') | list %}
           {%- set media_player_id_playing = media_players_playing | map(attribute='entity_id') | join(', ') %}
@@ -299,7 +303,7 @@ template:
           {%- endif %}
 
 # SENSOR - PLEX RECENTLY ADDED (BACKUP)
-    - unique_id: recently_added_backup
+    - unique_id: plex_recently_added_backup
       name: 'Recently Added (Offline)'
       state: >
         {% if not is_state('sensor.plex_recently_added', 'Online') %}
@@ -318,3 +322,36 @@ template:
               {% set object = item.split(":") %}
               {% set return.state = return.state + [{object[0]:object[1]}] %}
             {% endfor %}
+            {{ return.state }}
+          {% endif %}
+        title: >
+          {% if this.state not in ['unavailable','undefined','unknown','none','null','0'] %}
+            {% set data = this.attributes.data %}
+            {% set year = data[0].aired.split('-')[0] %}
+            {% if data | count == 4 %}
+              {% set title = data[1].title + ' (' + year + ')' %}
+            {% else %}
+              {% set title = data[1].title + ' · ' + data[2].number %}
+            {% endif %}
+            {{ title }}
+          {% endif %}
+        poster: >
+          {% if this.state not in ['unavailable','undefined','unknown','none','null','0'] %}
+            {% set data = this.attributes.data %}
+            {% if data | count == 4 %}
+              {% set poster = data[3].poster %}
+            {% else %}
+              {% set poster = data[4].poster %}
+            {% endif %}
+            {{ poster }}
+          {% endif %}
+        fanart: >
+          {% if this.state not in ['unavailable','undefined','unknown','none','null','0'] %}
+            {% set data = this.attributes.data %}
+            {% if data | count == 4 %}
+              {% set fanart = data[2].fanart %}
+            {% else %}
+              {% set fanart = data[3].fanart %}
+            {% endif %}
+            {{ fanart }}
+          {% endif %}

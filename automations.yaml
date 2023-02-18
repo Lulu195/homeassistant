@@ -109,3 +109,44 @@
       person_entity: person.tanya
       zone_entity: zone.home
       notify_device: 2d5fc0e59ac365b406795e6114b6a24b
+- id: '1676497123736'
+  alias: wake up test
+  description: ''
+  use_blueprint:
+    path: sbyx/wake-up-light-alarm-with-sunrise-effect.yaml
+    input:
+      manual_time: 07:00:00
+      light_entity: light.couch
+      timestamp_sensor: sensor.s7_edge_next_alarm
+      check_entity: device_tracker.s7_edge
+- id: '1676695352325'
+  alias: System - Plex Recently Added
+  description: Sensor attribute backup
+  trigger:
+  - platform: state
+    entity_id:
+    - sensor.plex_recently_added
+    to: Online
+  condition:
+  - condition: template
+    value_template: '{{ trigger.to_state.state not in [trigger.from_state.state, ''cannot
+      be reached'', ''unavailable'', ''undefined'',''unknown'',''none'',''null'']
+      }}'
+  action:
+  - service: input_text.set_value
+    data:
+      value: "{% if not states('sensor.plex_recently_added') in ['unavailable','undefined','unknown','none','null','0']
+        %}\n  {% set state = namespace(return='') %}\n  {% set data = state_attr('sensor.plex_recently_added','data')
+        %}\n  {%- for value in data %}\n    {%- if not loop.first and value is defined
+        and state.return == '' %}\n      {%- if not value.number is defined %}\n        {%
+        set state.return = \n          \"aired:\" + value.aired + \"|\" +\n          \"title:\"
+        + value.title  + \"|\" +\n          \"fanart:\" + value.fanart + \"|\" +\n
+        \         \"poster:\" + value.poster\n        %}\n      {%- else %}\n        {%
+        set state.return = \n          \"aired:\" + value.aired + \"|\" +\n          \"title:\"
+        + value.title  + \"|\" +\n          \"number:\" + value.number  + \"|\" +\n
+        \         \"fanart:\" + value.fanart + \"|\" +\n          \"poster:\" + value.poster\n
+        \       %}\n      {%- endif %}\n    {%- endif %}\n  {%- endfor %}\n  {{ state.return
+        }}\n{% endif %}"
+    target:
+      entity_id: input_text.backup_plex_recently_added
+  mode: single

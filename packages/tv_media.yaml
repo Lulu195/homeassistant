@@ -81,19 +81,24 @@ template:
       - name: conditional_media
         state: >
           {% set recently_added = 'Last added' %}
+          {% set plex_recently_added_backup = 'Recently Added (Offline)' %}
           {% set paused_timeout_minutes = 15 %}
           {% set media_players = [
             states.media_player.samsung_55,
             states.media_player.plex_plex_for_samsung_tv_2018,
             states.media_player.bedroom_tv,
             states.media_player.node_8adc,
-            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt ] %}
+            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
+            states.media_player.spotify_lulu
+            ] %}
 
           {% macro media(state) %}
           {% set state = media_players | selectattr('state','eq',state) | list %}
           {% set last_changed = recently_added if state | length == 0 else state | map(attribute='last_changed') | list | max %}
             {{ state | selectattr('last_changed','eq', last_changed) | map(attribute='name') | list | join }}
           {% endmacro %}
+
+          {% set recently_added = recently_added_backup if is_state('sensor.recently_added_offline','Active') else recently_added %}
 
           {% set playing = media_players | selectattr('state','eq','playing') | list %}
           {% set timeout_playing = False if playing | length == 0 else
@@ -112,13 +117,16 @@ template:
           {% endif %}
         options: >
           {% set recently_added = ['Last added'] %}
+          {% set plex_recently_added_backup = ['Recently Added (Offline)'] %}
           {% set media_players = [
             states.media_player.samsung_55,
             states.media_player.plex_plex_for_samsung_tv_2018,
             states.media_player.bedroom_tv,
             states.media_player.node_8adc,
-            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt ] %}
-          {{ recently_added + media_players | map(attribute='name') | list }}
+            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
+            states.media_player.spotify_lulu 
+            ] %}
+          {{ recently_added + plex_recently_added_backup + media_players | map(attribute='name') | list }}
         select_option:
           service: select.select_option
           target:

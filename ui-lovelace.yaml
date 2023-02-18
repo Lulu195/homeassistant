@@ -1155,26 +1155,21 @@ views:
                     conditions:
                       
                       - entity: select.conditional_media
+                        state_not: Recently Added (Offline)
+                      - entity: select.conditional_media
                         state_not: Samsung
-
                       - entity: select.conditional_media
                         state_not: Plex (Plex for Samsung - TV 2018)
-
                       # - entity: select.conditional_media
                       #   state_not: Sovrum
-
                       # - entity: select.conditional_media
                       #   state_not: Spotify
-
                       - entity: select.conditional_media
                         state_not: Tv²
-
                       - entity: select.conditional_media
                         state_not: NODE-8ADC
-
                       # - entity: select.conditional_media
                       #   state_not: Plex (Plex for Windows - DESKTOP-030IPD1)
-
                       - entity: select.conditional_media
                         state_not: Plex W11
 
@@ -1184,6 +1179,20 @@ views:
                       name: Last added
                       tap_action:
                         action: none
+                      template:
+                        - conditional_media
+                        - icon_plex
+
+
+                    # RECENTLY ADDED (BACKUP)
+                  - type: conditional
+                    conditions:
+                      - entity: select.conditional_media
+                        state: Recently Added (Offline)
+                    card:
+                      type: custom:button-card
+                      entity: sensor.recently_added_offline
+                      name: Recently Added (Offline)
                       template:
                         - conditional_media
                         - icon_plex

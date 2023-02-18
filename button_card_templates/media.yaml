@@ -7,7 +7,7 @@
 base_media:
   variables:
     media_on: >
-      [[[ return !entity || ['playing', 'paused'].indexOf(entity.state) !== -1; ]]]
+      [[[ return !entity || ['on', 'playing', 'paused', 'idle'].indexOf(entity.state) !== -1; ]]]
     media_off: >
       [[[ return !entity || ['off', 'idle', 'standby', 'unknown', 'unavailable'].indexOf(entity.state) !== -1; ]]]
   tap_action:
@@ -29,26 +29,41 @@ base_media:
     card:
       - color: >
           [[[
-            if (variables.is_youtube) {
-                return `#efefef`;
-            } else {
-                return variables.media_on && variables.entity_picture === undefined
-                    ? 'rgba(0, 0, 0, 0.6)'
-                    : variables.media_off
-                        ? '#97989c'
-                        : '#efefef';
+            let entity_picture = entity === undefined || entity.attributes.entity_picture;
+            if (variables.state === 'off' || variables.state === 'idle' || variables.state === 'standby' ||
+              variables.state === 'unknown' || variables.state === 'unavailable' || entity === undefined) {
+              return 'rgba(255, 255, 255, 0.3)';
             }
+            return (variables.state != 'off' && variables.state != 'idle' && variables.state != 'standby') && (entity_picture == null) ? 'rgba(0, 0, 0, 0.6)' : '#efefef';
           ]]]
+#          [[[
+#            if (variables.is_youtube) {
+#                return `#efefef`;
+#            } else {
+#                return variables.media_on && variables.entity_picture === undefined
+#                    ? 'rgba(0, 0, 0, 0.6)'
+#                    : variables.media_off
+#                        ? '#97989c'
+#                        : '#efefef';
+#            }
+#          ]]]
       - text-shadow: >
           [[[
-            if (variables.is_youtube) {
-                return `1px 1px 5px rgba(18, 22, 23, 0.9)`;
-            } else {
-                return variables.media_off || variables.entity_picture === undefined
-                    ? 'none'
-                    : '1px 1px 5px rgba(18, 22, 23, 0.9)';
+            let entity_picture = entity === undefined ? null : entity.attributes.entity_picture;
+            if (variables.state === 'off' || variables.state === 'idle' || variables.state === 'standby' || variables.state === 'unknown' || variables.state === 'unavailable') {
+              return entity_picture == null ? 'none' : '1px 1px 5px rgba(18, 22, 23, 0)';
             }
+            return entity_picture == null ? 'none' : '1px 1px 5px rgba(18, 22, 23, 0.9)';
           ]]]
+#          [[[
+#            if (variables.is_youtube) {
+#                return `1px 1px 5px rgba(18, 22, 23, 0.9)`;
+#            } else {
+#                return variables.media_off || variables.entity_picture === undefined
+#                    ? 'none'
+#                    : '1px 1px 5px rgba(18, 22, 23, 0.9)';
+#            }
+#          ]]]
 
 #################################################
 #                                               #
@@ -68,31 +83,209 @@ media:
         - fill: '#9da0a2'
         - display: >
             [[[
-            if (variables.is_youtube) {
-                return `none`;
-            }
-            else {
-                return variables.media_off || variables.entity_picture === undefined
-                    ? 'initial'
-                    : 'none';
-            }
+              return variables.media_off || variables.entity_picture === undefined
+                  ? 'initial'
+                  : 'none';
             ]]]
+#            [[[
+#            if (variables.is_youtube) {
+#                return `none`;
+#            }
+#            else {
+#                return variables.media_off || variables.entity_picture === undefined
+#                    ? 'initial'
+#                    : 'none';
+#            }
+#            ]]]
     card:
       - background-color: none
       - background-size: cover
       - background-position: center
       - background-image: >
           [[[
-            if (variables.is_youtube) {
-                return `linear-gradient(0deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,0) 100%), url(${states[this._config?.triggers_update].state})`;
-            } else {
-                return variables.media_on && variables.entity_picture === undefined
-                    ? 'linear-gradient(0deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%)'
-                    : variables.media_off
-                        ? 'linear-gradient(0deg, rgba(115, 115, 115, 0.2) 0%, rgba(115, 115, 115, 0.2) 100%)'
-                        : `linear-gradient(0deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,0) 100%), url(${variables.entity_picture})`;
+            let entity_picture = entity === undefined || entity.attributes.entity_picture;
+            if (variables.state === 'off' || variables.state === 'idle' || variables.state === 'standby' ||
+              variables.state === 'unknown' || variables.state === 'unavailable' || entity === undefined) {
+              return 'linear-gradient(0deg, rgba(115, 115, 115, 0.2) 0%, rgba(115, 115, 115, 0.2) 100%)';
             }
+            return (variables.state != 'off' && variables.state != 'idle' && variables.state != 'standby') && (entity_picture == null) ? 
+              'linear-gradient(0deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%)' : 
+              'linear-gradient(0deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,0) 100%), url(' + entity_picture + ')';
           ]]]
+#          [[[
+#            if (variables.is_youtube) {
+#                return `linear-gradient(0deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,0) 100%), url(${states[this._config?.triggers_update].state})`;
+#            } else {
+#                return variables.media_on && variables.entity_picture === undefined
+#                    ? 'linear-gradient(0deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%)'
+#                    : variables.media_off
+#                        ? 'linear-gradient(0deg, rgba(115, 115, 115, 0.2) 0%, rgba(115, 115, 115, 0.2) 100%)'
+#                        : `linear-gradient(0deg, rgba(0,0,0,.8) 0%, rgba(0,0,0,0) 100%), url(${variables.entity_picture})`;
+#            }
+#          ]]]
+
+
+#Samsung TV try
+samsung_tv:
+  variables:
+    media_on: >
+      [[[ return !entity || ['playing', 'paused', 'idle'].indexOf(entity.state) !== -1; ]]]
+    media_off: >
+      [[[ return !entity || ['off', 'standby', 'unknown', 'unavailable'].indexOf(entity.state) !== -1; ]]]
+  state_display: >
+    [[[ 
+      if (entity.state === 'standby') {
+        return 'Off';
+      }
+    ]]]
+
+#################################################
+#                                               #
+#                 MEDIA VOLUME                  #
+#                                               #
+#################################################
+
+media_volume:
+  variables:
+    media_on: >
+      [[[ return !entity || ['on', 'playing', 'paused', 'idle'].indexOf(entity.state) !== -1; ]]]
+    media_off: >
+      [[[ return !entity || ['off', 'standby', 'unknown', 'unavailable'].indexOf(entity.state) !== -1; ]]]
+    volume_control: '[[[ return entity.entity_id; ]]]'
+    player: '[[[ return entity.entity_id; ]]]'
+  tap_action:
+    action: >
+      [[[
+        return variables.media_on
+            ? 'fire-dom-event'
+            : 'call-service';
+      ]]]
+    service: >
+      [[[
+        return variables.media_on
+            ? 'none'
+            : 'media_player.turn_on';
+      ]]]
+    service_data:
+      entity_id: >
+        [[[
+          return variables.entity_id;
+        ]]]
+    browser_mod:
+      service: >
+        [[[
+          return variables.media_on
+              ? 'browser_mod.popup'
+              : 'none';
+        ]]]
+      data:
+        title: >
+          [[[ return entity.attributes.friendly_name; ]]]
+        style: >
+          --popup-background-color: transparent;
+        content:
+          type: custom:mod-card
+          card:
+            type: custom:media_player-popup-card
+            #entity: media_player.denon_receiver
+            entity: '[[[ return variables.volume_control; ]]]' # IF something, then receiver, else current entity
+            icon: none
+            fullscreen: false
+            sliderWidth: 130px
+            sliderHeight: 360px
+            borderRadius: 1.7em
+            sliderColor: '#c7c7c7'
+            sliderTrackColor: rgba(25, 25, 25, 0.9)
+            displayType: slider
+            actionsInARow: 3
+            actions:
+              - service: media_player.media_previous_track
+                service_data:
+                  entity_id: '[[[ return variables.player; ]]]'
+                #name: previous
+                icon: mdi:skip-previous
+              - service: media_player.media_play_pause
+                service_data:
+                  entity_id: '[[[ return variables.player; ]]]'
+                #name: play/pause
+                icon: mdi:play-pause
+              - service: media_player.media_next_track
+                service_data:
+                  entity_id: '[[[ return variables.player; ]]]'
+                #name: next
+                icon: mdi:skip-next
+
+
+#################################################
+#                                               #
+#                 PROGRESS BAR                  #
+#                                               #
+#################################################
+
+progress_bar:
+  styles:
+    custom_fields:
+      progress:
+        - background-color: var(--progress-bar-background-color)
+        - position: absolute
+        - left: 0%
+        - top: 73.4%
+        - height: var(--progress-bar-height)
+        - width: 100%
+      bar:
+        - background-color: var(--progress-bar-color)
+        - position: absolute
+        - left: 0%
+        - top: 73.4%
+        - height: var(--progress-bar-height)
+        - z-index: 1
+  custom_fields:
+    bar: >
+      [[[
+        if (entity.attributes.media_position !== undefined) {
+        setTimeout(() => {
+          let elt = this.shadowRoot,
+              card = elt.getElementById('card'),
+              container = elt.getElementById('container'),
+              bar = elt.getElementById('bar');
+        
+          if (elt && card && container && bar) {
+              card.insertBefore(bar, container);
+                function update() {
+                    let mediaPositionUpdatedAt = entity.attributes.media_position_updated_at;
+                    let mediaPosition = entity.attributes.media_position;
+                    let mediaDuration = entity.attributes.media_duration;
+                
+                    let percentage = entity.state === 'playing'
+                      ? (((Date.now() / 1000) - (new Date(mediaPositionUpdatedAt).getTime() / 1000) + mediaPosition) / mediaDuration * 100)
+                      : entity.state === 'paused'
+                        ? (mediaPosition / mediaDuration * 100)
+                        : 0;
+        
+                    bar.style.width = percentage.toFixed(1) + '%';
+                    requestAnimationFrame(update);
+                }
+                requestAnimationFrame(update);
+          }
+        }, 0);
+        return ' ';}
+      ]]]
+    progress: >
+      [[[
+        if (entity.attributes.media_position !== undefined) {
+        setTimeout(() => {
+            let elt = this.shadowRoot,
+                card = elt.getElementById('card'),
+                container = elt.getElementById('container'),
+                progress = elt.getElementById('progress');
+            if (elt && card && container && progress) {
+                card.insertBefore(progress, container);
+            }
+          }, 0);
+        return ' ';}
+      ]]]
+      
+
 
 #################################################
 #                                               #
@@ -107,11 +300,12 @@ conditional_media:
     - base_media
     - icon_play_pause
   variables:
+    entity_picture: ''
     i: >
       [[[
         if (entity) {
-            let data = entity.attributes.data;
-            return data === undefined || Math.floor(Math.random() * (data.length - 1)) + 1;
+          let data = entity.attributes.data;
+          return data === undefined || Math.floor(Math.random() * (data.length - 1)) + 1;
         }
       ]]]
   state_display: >
@@ -133,33 +327,40 @@ conditional_media:
       });
 
       if (entity) {
-          let elt = this.shadowRoot,
-              await = setTimeout(marquee, 100),
-              data = entity.attributes.data,
-              artist = entity.attributes.media_artist,
-              title = entity.attributes.media_title;
-
-            if (data !== undefined) {
-                var number = data[variables.i].number === undefined && data[variables.i].aired !== undefined
-                    ? `(${data[variables.i].aired.split("-")[0]})`
-                    : data[variables.i].number === undefined && data[variables.i].aired === undefined
-                        ? ' '
-                        : data[variables.i].number,
-                output = `${data[variables.i].title} ${number}`;
-            } else {
-                var output = artist === undefined && title !== undefined
-                    ? title
-                    : title === undefined && artist !== undefined
-                        ? artist
-                        : title !== undefined && artist !== undefined
-                            ? `${artist} - ${title}`
-                            : variables.translate_idle;
-            }
-
+        let elt = this.shadowRoot,
+            await = setTimeout(marquee, 100),
+            data = entity.attributes.data,
+            title = entity.attributes.title,
+            poster = entity.attributes.poster,
+            fanart = entity.attributes.fanart,
+            s_e = entity.attributes.number,
+            media_artist = entity.attributes.media_artist,
+            media_title = entity.attributes.media_title;
+          if (entity.state === "Active") {
+            var number = s_e === undefined && title !== undefined
+                ? ' '
+                : '· ' + s_e,
+            output = `${title} ${number}`;
+          }
+          else if (data !== undefined) {
+            var number = data[variables.i].number === undefined && data[variables.i].aired !== undefined
+                ? `(${data[variables.i].aired.split("-")[0]})`
+                : data[variables.i].number === undefined && data[variables.i].aired === undefined
+                    ? ' '
+                    : '· ' + data[variables.i].number,
+            output = `${data[variables.i].title} ${number}`;
+          } else {
+            var output = media_artist === undefined && media_title !== undefined
+                ? media_title
+                : media_title === undefined && media_artist !== undefined
+                    ? media_artist
+                    : media_title !== undefined && media_artist !== undefined
+                        ? `${media_artist} - ${media_title}`
+                        : variables.translate_idle;
+          }
           function marquee() {
               let state = elt.getElementById("state"),
                   container = elt.getElementById("container");
-
               if (state && container) {
                   state.innerHTML = output;
                   let ro = new ResizeObserver(entries => {
@@ -170,7 +371,6 @@ conditional_media:
                               c && c.contentRect &&
                               s.contentRect.width !== 0 &&
                               c.contentRect.width !== 0;
-
                       if (r && s.contentRect.width < c.contentRect.width) {
                           state.classList.remove("marquee");
                       }
@@ -187,12 +387,7 @@ conditional_media:
       }
       return variables.translate_unknown;
     ]]]
-  tap_action:
-    action: call-service
-    service: media_player.media_play_pause
-    service_data:
-      entity_id: >
-        [[[ return variables.entity_id; ]]]
+    
   styles:
     grid:
       - gap: 0.65%
@@ -210,21 +405,30 @@ conditional_media:
       - background-image: &media_background_image >
           [[[
             if (entity) {
-              if (variables.is_youtube) {
-                  return `url(${states[this._config?.triggers_update].state})`;
-              } else {
-                let data = entity.attributes.data;
-                return data && (data[variables.i].fanart || data[variables.i].poster)
-                    ? `url("${data[variables.i].fanart}"), url("${data[variables.i].poster}")`
-                    : `url("${variables.entity_picture}")`;
+              if (entity.state === "Active") {
+                return entity.attributes.data !== undefined
+                  ? `url("${entity.attributes.fanart}"), url("${entity.attributes.poster}")`
+                  : `url("${states[variables.entity_picture].attributes.entity_picture}")`;
+              }
+              else {
+                return entity.attributes.data !== undefined
+                  ? `url("${entity.attributes.data[variables.i].fanart}"), url("${entity.attributes.data[variables.i].poster}")`
+                  : `url("${states[variables.entity_picture].attributes.entity_picture}")`;
               }
             }
           ]]]
       - color: >
           [[[
-            return entity === undefined
-                ? '#97989c'
-                : '#efefef';
+            if (entity.state === "Active") {
+              return entity === undefined
+                  ? '#97989c'
+                  : 'rgba(239, 239, 239, 0.5)';
+            }
+            else {
+              return entity === undefined
+                  ? '#97989c'
+                  : '#efefef';
+            }
           ]]]
       - text-shadow: >
           [[[
@@ -244,7 +448,7 @@ conditional_media:
       blur_overlay:
         - display: block
         - position: absolute
-        - width: 103.1%
+        - width: 102.9%
         - height: 103.1%
         - filter: var(--blur-intensity)
         - clip-path: >
@@ -261,10 +465,316 @@ conditional_media:
                 card = elt.getElementById('card'),
                 container = elt.getElementById('container'),
                 blur_overlay = elt.getElementById('blur_overlay');
-
             if (elt && card && container && blur_overlay) {
                 card.insertBefore(blur_overlay, container);
             }
           }, 0);
+        return ' ';
+      ]]]
+
+
+
+
+# #################################################
+# #                                               #
+# #               CONDITIONAL MEDIA               #
+# #                                               #
+# #################################################
+
+# conditional_media:
+#   aspect_ratio: 1000/996
+#   template:
+#     - base
+#     - base_media
+#     - icon_play_pause
+#   variables:
+#     i: >
+#       [[[
+#         if (entity) {
+#             let data = entity.attributes.data;
+#             return data === undefined || Math.floor(Math.random() * (data.length - 1)) + 1;
+#         }
+#       ]]]
+#   state_display: >
+#     [[[
+#       let horizontalStack = this.getRootNode().host,
+#           swipeCard = horizontalStack.getRootNode().host,
+#           gridTitle = swipeCard.getRootNode().querySelector("h1");
+
+#       swipeCard.swiper.on("slideChange", () => {
+#           if (swipeCard.swiper.realIndex === 0) {
+#               gridTitle.textContent = "Media";
+#           }
+#           else if (swipeCard.swiper.realIndex === 1) {
+#               gridTitle.textContent = "Players";
+#           }
+#           else if (swipeCard.swiper.realIndex === 2) {
+#               gridTitle.textContent = "Plex";
+#           }
+#       });
+
+#       if (entity) {
+#           let elt = this.shadowRoot,
+#               await = setTimeout(marquee, 100),
+#               data = entity.attributes.data,
+#               artist = entity.attributes.media_artist,
+#               title = entity.attributes.media_title;
+
+#             if (data !== undefined) {
+#                 var number = data[variables.i].number === undefined && data[variables.i].aired !== undefined
+#                     ? `(${data[variables.i].aired.split("-")[0]})`
+#                     : data[variables.i].number === undefined && data[variables.i].aired === undefined
+#                         ? ' '
+#                         : data[variables.i].number,
+#                 output = `${data[variables.i].title} ${number}`;
+#             } else {
+#                 var output = artist === undefined && title !== undefined
+#                     ? title
+#                     : title === undefined && artist !== undefined
+#                         ? artist
+#                         : title !== undefined && artist !== undefined
+#                             ? `${artist} - ${title}`
+#                             : variables.translate_idle;
+#             }
+
+#           function marquee() {
+#               let state = elt.getElementById("state"),
+#                   container = elt.getElementById("container");
+
+#               if (state && container) {
+#                   state.innerHTML = output;
+#                   let ro = new ResizeObserver(entries => {
+#                       let spacer = "&nbsp;".repeat(3),
+#                           s = entries[0],
+#                           c = entries[1],
+#                           r = s && s.contentRect &&
+#                               c && c.contentRect &&
+#                               s.contentRect.width !== 0 &&
+#                               c.contentRect.width !== 0;
+
+#                       if (r && s.contentRect.width < c.contentRect.width) {
+#                           state.classList.remove("marquee");
+#                       }
+#                       else if (r && s.contentRect.width >= c.contentRect.width) {
+#                           state.innerHTML = `${output} ${spacer} ${output} ${spacer}&nbsp;`;
+#                           state.classList.add("marquee");
+#                       }
+#                   });
+#                   ro.observe(state);
+#                   ro.observe(container);
+#               }
+#           }
+#           return output;
+#       }
+#       return variables.translate_unknown;
+#     ]]]
+#   tap_action:
+#     action: call-service
+#     service: media_player.media_play_pause
+#     service_data:
+#       entity_id: >
+#         [[[ return variables.entity_id; ]]]
+#   styles:
+#     grid:
+#       - gap: 0.65%
+#     name:
+#       - padding: 0.2vw
+#       - margin: -0.2vw
+#     state:
+#       - padding-bottom: 5.25%
+#       - max-width: unset
+#       - overflow: visible
+#     card:
+#       - padding: 5.75% 5.25% 0 5.75%
+#       - border-radius: calc(var(--button-card-border-radius) / 2)
+#       - background: rgba(115, 115, 115, 0.2) center center/cover no-repeat
+#       - background-image: &media_background_image >
+#           [[[
+#             if (entity) {
+#               if (variables.is_youtube) {
+#                   return `url(${states[this._config?.triggers_update].state})`;
+#               } else {
+#                 let data = entity.attributes.data;
+#                 return data && (data[variables.i].fanart || data[variables.i].poster)
+#                     ? `url("${data[variables.i].fanart}"), url("${data[variables.i].poster}")`
+#                     : `url("${variables.entity_picture}")`;
+#               }
+#             }
+#           ]]]
+#       - color: >
+#           [[[
+#             return entity === undefined
+#                 ? '#97989c'
+#                 : '#efefef';
+#           ]]]
+#       - text-shadow: >
+#           [[[
+#             return entity === undefined
+#                 ? 'none'
+#                 : '1px 1px 5px rgba(18, 22, 23, 0.9)';
+#           ]]]
+#     custom_fields:
+#       icon:
+#         - width: 30%
+#         - fill: >
+#             [[[
+#               return entity && variables.media_on
+#                   ? 'rgba(255, 255, 255, 0.8)'
+#                   : '#9da0a2';
+#             ]]]
+#       blur_overlay:
+#         - display: block
+#         - position: absolute
+#         - width: 103.1%
+#         - height: 103.1%
+#         - filter: var(--blur-intensity)
+#         - clip-path: >
+#             inset(74.5% 1.45% 1.45% 1.45% round 0 0 calc(var(--button-card-border-radius) / 2) calc(var(--button-card-border-radius) / 2))
+#         - background: center center/cover no-repeat
+#         - background-image: *media_background_image
+#         - left: -1.5%
+#         - bottom: -1.6%
+#   custom_fields:
+#     blur_overlay: >
+#       [[[
+#         setTimeout(() => {
+#             let elt = this.shadowRoot,
+#                 card = elt.getElementById('card'),
+#                 container = elt.getElementById('container'),
+#                 blur_overlay = elt.getElementById('blur_overlay');
+
+#             if (elt && card && container && blur_overlay) {
+#                 card.insertBefore(blur_overlay, container);
+#             }
+#           }, 0);
+#         return ' ';
+#       ]]]
+
+
+
+
+#################################################
+#                                               #
+#                    CAMERA                     #
+#                                               #
+#################################################
+
+camera:
+  template:
+    - base
+    - base_camera
+  state_display: >
+      [[[ if (variables.state == 'idle' || variables.state == 'recording') return ' '; ]]]
+  styles:
+    custom_fields:
+      icon:
+        - width: 70%
+        - fill: '#9da0a2'
+        - opacity: >
+            [[[
+              let entity_picture = entity === undefined ? null : entity.attributes.entity_picture;
+              if (entity.state !== 'unavailable' && entity.state !== 'standby') {
+                return entity_picture == null ? 1 : 0;
+              }
+            ]]]
+    card:
+      #- align-self: middle
+      - background-color: none
+      - background-size: cover #137% 101%
+      - background-position: center
+      - background-repeat: no-repeat
+      - background-image: >
+          [[[
+            let entity_picture = entity === undefined || entity.attributes.entity_picture;
+            if (variables.state === 'off' || variables.state === 'standby' ||
+              variables.state === 'unknown' || variables.state === 'unavailable' || entity === undefined) {
+              return 'linear-gradient(0deg, rgba(115, 115, 115, 0.2) 0%, rgba(115, 115, 115, 0.2) 100%)';
+            }
+            return (variables.state != 'off' && variables.state != 'standby') && (entity_picture == null) ? 
+              'linear-gradient(0deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%)' : 
+              'linear-gradient(0deg, rgba(0,0,0,.1) 0%, rgba(0,0,0,0) 100%), url(' + entity_picture + ')';
+          ]]]
+
+
+#################################################
+#                                               #
+#               CONDITIONAL CAMERA              #
+#                                               #
+#################################################
+
+conditional_camera:
+  aspect_ratio: 1000/996
+  template:
+    - camera
+  variables:
+    i: >
+      [[[
+        let data = entity.attributes.data;
+        if (entity && data) {
+          return Math.floor(Math.random() * (data.length - 1)) + 1;
+        }
+      ]]]
+  state_display: >
+    [[[
+      if (entity.attributes.online === 'false') {
+        return 'No cameras online';
+      }
+      return entity.attributes.online === 'true' && variables.state === 'recording' ? 'No title' : entity.attributes.last_tripped_time;
+    ]]]
+  tap_action:
+    action: none
+  styles:
+    grid:
+      - gap: 0.65%
+    name:
+      - padding: 0.2vw
+      - margin: -0.2vw
+      - width: 100%
+    state:
+      - padding-bottom: 5.25%
+      - max-width: unset
+      - overflow: visible
+    card:
+      - padding: 5.75% 5.25% 0 5.75%
+      - border-radius: calc(var(--custom-button-card-border-radius) / 2)
+      - color: >
+          [[[
+            return entity === undefined
+              ? 'rgba(255, 255, 255, 0.3)'
+              : '#efefef';
+          ]]]
+      - text-shadow: >
+          [[[
+            return entity === undefined
+              ? 'none'
+              : '1px 1px 5px rgba(18, 22, 23, 0.9)';
+          ]]]
+    custom_fields:
+      media_image:
+        - z-index: 1
+        - top: 0
+        - left: 0
+        - width: 100%
+        - height: 100%
+        - position: absolute
+        - background-size: cover
+        - background-position: center
+        - background-repeat: no-repeat
+        - background-image: >
+            [[[
+              return entity.attributes.entity_picture === undefined ? 'none' : `url(${entity.attributes.entity_picture})`;
+            ]]]
+  custom_fields:
+    blur_overlay: >
+      [[[
+        setTimeout(() => {
+          let elt = this.shadowRoot,
+            card = elt.getElementById('card'),
+            container = elt.getElementById('container'),
+            blur_overlay = elt.getElementById('blur_overlay');
+          if (elt && card && container && blur_overlay) {
+            card.insertBefore(blur_overlay, container);
+          }
+        }, 0);
         return ' ';
       ]]]
