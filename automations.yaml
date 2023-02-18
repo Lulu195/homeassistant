@@ -1,0 +1,111 @@
+- id: '1675371731836'
+  alias: Remote - office
+  description: ''
+  use_blueprint:
+    path: EPMatt/ikea_e1743.yaml
+    input:
+      integration: ZHA
+      controller_device: c50534a46a69819899bb017cf8a173b5
+      action_button_up_short:
+      - service: light.turn_on
+        data: {}
+        target:
+          device_id: 34f3a2ff40e728c2c518d87ea9de74f2
+      action_button_down_short:
+      - service: light.turn_off
+        data: {}
+        target:
+          device_id: 34f3a2ff40e728c2c518d87ea9de74f2
+- id: '1675650842209'
+  alias: Remote - Living room
+  description: ''
+  use_blueprint:
+    path: EPMatt/ikea_e1524_e1810.yaml
+    input:
+      controller_device: 2d40199eb308c0b8485a578eb71d0ae6
+      action_button_center_long: []
+      integration: ZHA
+      action_button_up_short:
+      - service: light.turn_on
+        data:
+          color_temp: 500
+        target:
+          entity_id: light.table_group
+      action_button_down_short: []
+- id: '1675706978863'
+  alias: Remote - Living Room
+  description: ''
+  use_blueprint:
+    path: niro1987/zha_ikea_tradfri_5button_remote_color.yaml
+    input:
+      remote: 2d40199eb308c0b8485a578eb71d0ae6
+      light: light.table_group
+      speed: 700
+- id: '1675712102921'
+  alias: Snapthot camera on motion
+  description: ''
+  use_blueprint:
+    path: Stan-Gobien/CriticalCollapseOptionNotHomeMotionCameraSnapshotWithClickAction.yaml
+    input:
+      motion_sensor: binary_sensor.hallway_motion_iaszone
+      camera: camera.g3_instant_high
+      notify_device: 2d5fc0e59ac365b406795e6114b6a24b
+      blocker_entity: zone.home
+      delay: 2
+      is_ios: false
+- id: '1676051186006'
+  alias: Remote On/Off Media
+  description: Speakers Sub and volume control
+  use_blueprint:
+    path: EPMatt/ikea_e1743.yaml
+    input:
+      integration: ZHA
+      controller_device: ad4998a1565e19ef225ab63c7f5fecb7
+      action_button_up_short:
+      - type: turn_on
+        device_id: 0182288c04ac68aa5525e3a5b92c2b0d
+        entity_id: switch.speakers_switch
+        domain: switch
+      - type: turn_on
+        device_id: a381c9daa65b06ad6880514155d14369
+        entity_id: switch.subwoofer_switch
+        domain: switch
+      action_button_up_long:
+      - service: media_player.volume_up
+        data: {}
+        target:
+          area_id: living_room
+      action_button_down_short:
+      - type: turn_off
+        device_id: 0182288c04ac68aa5525e3a5b92c2b0d
+        entity_id: switch.speakers_switch
+        domain: switch
+      - type: turn_off
+        device_id: a381c9daa65b06ad6880514155d14369
+        entity_id: switch.subwoofer_switch
+        domain: switch
+      helper_last_controller_event: input_text.helper_last_controller_event
+      action_button_up_double:
+      - service: media_player.media_next_track
+        data: {}
+        target:
+          area_id: living_room
+      action_button_down_long:
+      - service: media_player.volume_down
+        data: {}
+        target:
+          area_id: living_room
+      action_button_down_double:
+      - service: media_player.media_pause
+        data: {}
+        target:
+          area_id: living_room
+- id: '1676345626300'
+  alias: Zone notification
+  description: ''
+  use_blueprint:
+    path: homeassistant/notify_leaving_zone.yaml
+    input:
+      person_entity: person.tanya
+      zone_entity: zone.home
+      notify_device: 2d5fc0e59ac365b406795e6114b6a24b

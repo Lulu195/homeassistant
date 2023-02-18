@@ -1,0 +1,168 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    title: Laptop Tanya
+    card_mod:
+      style:
+        #popup header
+        .:
+    content:
+      type: vertical-stack
+      cards:
+        - type: entities
+          state_color: true
+          card_mod:
+            class: content
+          entities:
+            - entity: button.desktop_030ipd1_publishallsensors
+              secondary_info: last-changed
+            - entity: sensor.desktop_030ipd1_battery_charge_remaining_percentage
+              name: Battery Level
+            - entity: sensor.desktop_030ipd1_gputemperature
+              name: GPU Temp
+            # - entity: sensor.desktop_030ipd1_audio_audio_sessions
+            #   name: Audio Sessions
+            # - type: attribute
+            #   entity: sensor.desktop_030ipd1_audio_audio_sessions
+            #   attribute: AudioSessions
+            #   name: Audio Session
+              # prefix: "~"
+              # suffix: Units
+            - entity: sensor.desktop_030ipd1_battery_charge_remaining_percentage
+              name: Battery Level
+            - entity: sensor.desktop_030ipd1_audio_default_device_muted
+              name: Muted?
+            - type: custom:slider-entity-row
+              entity: media_player.desktop_030ipd1
+              name: Volume
+            # - type: custom:slider-entity-row
+            #   entity: button.desktop_030ipd1_brightnessup
+            #   name: Input Volume
+
+            # - type: conditional
+            #   conditions:
+            #     - entity: media_player.desktop_030ipd1 #media_player.plex_plex_for_windows_desktop_030ipd1
+            #       state: playing
+            #   row:
+            #     entity: media_player.plex_plex_for_windows_desktop_030ipd1
+            #     type: attribute
+            #     attribute: media_title
+            #     name: Plex
+
+            #############################
+            #     MINI MEDIA PLAYER     #
+            #      KINDA USELESS        #
+            #############################
+
+            # - type: custom:mini-media-player
+            #   entity: media_player.desktop_030ipd1
+            #   #icon: plex
+            #   artwork: cover
+            #   hide:
+            #     volume: false
+            #     controls: false
+            #     source: false
+            #     power_state: true
+
+            # - type: custom:more-info-card
+            #   entity: media_player.desktop_030ipd1 #media_player.plex_plex_for_windows_desktop_030ipd1
+            #   card_mod:
+            #     style:
+            #       # hide everything but ha-select
+            #       .: |
+            #         h1, state-card-content {
+            #           display: none;
+            #         }
+            #         .card-content {
+            #           padding: {{ is_state(config.entity, 'off') | iif('0', '1.2em 0 0.5em 0') }};
+            #         }
+            #       more-info-media_player$:
+            #         .: |
+            #           div.volume, div.controls {
+            #             display: none;
+            #           }
+            #         ha-select$:
+            #           # fix transparent menu background color
+            #           mwc-menu$: |
+            #             mwc-list {
+            #               background: var(--card-background-color);
+            #             }
+
+            - type: custom:slider-entity-row #### in here maybe add other entities such as Screen brightness, volume, etc. see http://192.168.1.97:8123/hacs/repository/144899700
+              entity: media_player.desktop_030ipd1 #media_player.plex_plex_for_windows_desktop_030ipd1
+              card_mod:
+                style:
+                  # icon color mute and max
+                  .: |
+                    :host {
+                      --paper-item-icon-color:
+                        {% if is_state('sensor.desktop_030ipd1_audio_default_device_muted', 'True') %}
+                          #FFFFFF20
+                        {% elif states(config.entity) | int == 0 %}
+                          #9da0a2
+                        {% elif states(config.entity) | int < 60 %}
+                          initial
+                        {% else %}
+                          red
+                        {% endif %};
+                      }
+                  # full width slider
+                  hui-generic-entity-row$: |
+                    div {
+                      flex: auto !important;
+                    }
+        #              entity: input_number.monitors_volume
+        #              hide_state: false
+
+        #            - entity: automation.monitors_turn_off
+
+        #            - entity: automation.monitors_calibration
+
+        - type: custom:mod-card
+          card_mod:
+            style:
+              hui-horizontal-stack-card$: |
+                #root {
+                  justify-content: space-evenly !important;
+                  padding: var(--tablet-popup-button-padding);
+                }
+          card:
+            type: horizontal-stack
+            cards:
+
+              - type: custom:button-card
+                entity: button.desktop_030ipd1_mediaplaypause #switch.monitors_mute
+                icon: mdi:play-pause
+                tap_action:
+                  action:
+                    - service: button.press
+                      target: button.desktop_030ipd1_mediaplaypause #switch.w11_mediamute
+                template: icon_only
+
+              - type: custom:button-card
+                entity: switch.w11_mediamute #switch.monitors_mute
+                icon: mdi:volume-mute
+                tap_action:
+                  action:
+                    - service: button.press
+                      target: button.desktop_030ipd1_mediamute #switch.w11_mediamute
+                template: icon_only
+
+              - type: custom:button-card
+                icon: mdi:volume-minus
+                tap_action:
+                  action: call-service
+                  service: button.press #input_number.decrement
+                  service_data:
+                    entity_id: button.desktop_030ipd1_mediavolumedown #input_number.monitors_volume
+                template: icon_only
+
+              - type: custom:button-card
+                icon: mdi:volume-plus
+                tap_action:
+                  action: call-service
+                  service: button.press #input_number.increment
+                  service_data:
+                    entity_id: button.desktop_030ipd1_mediavolumeup #input_number.monitors_volume
+                template: icon_only

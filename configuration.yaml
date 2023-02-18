@@ -1,28 +1,24 @@
 homeassistant:
-  name: Hem
-  latitude: !secret homeassistant_latitude
-  longitude: !secret homeassistant_longitude
-  elevation: !secret homeassistant_elevation
-  unit_system: metric
-  temperature_unit: C
-  time_zone: Europe/Stockholm
-  country: SE
-  currency: SEK
+  name: Home
   packages: !include_dir_named packages
   customize_domain:
     automation:
       initial_state: true
   allowlist_external_dirs:
     - /config
-
+  x
 default_config:
 
 frontend:
   extra_module_url:
     - /hacsfiles/lovelace-card-mod/card-mod.js
   themes: !include_dir_merge_named themes
+template ui: !include sidebar.yaml
+#secrets: !include secrets.yaml
 
-template: !include sidebar.yaml
+automation ui: !include automations.yaml
+automation manual: !include_dir_merge_list automations/
+
 
 lovelace:
   mode: yaml
@@ -32,6 +28,7 @@ lovelace:
       { url: /hacsfiles/bar-card/bar-card.js,                                       type: module },
       { url: /hacsfiles/button-card/button-card.js,                                 type: module },
       { url: /hacsfiles/custom-icons/custom-icons.js,                               type: module },
+      { url: /hacsfiles/thermal_comfort_icons/thermal_comfort_icons.js,             type: module },
       { url: /hacsfiles/lovelace-layout-card/layout-card.js,                        type: module },
       { url: /hacsfiles/lovelace-more-info-card/more-info-card.js,                  type: module },
       { url: /hacsfiles/lovelace-mushroom/mushroom.js,                              type: module },
@@ -46,18 +43,15 @@ lovelace:
       { url: '/local/fonts.css?v=2.1',                                              type: css }
     ]
 
-recorder:
-  db_url: !secret recorder_db_url
-  exclude:
-    entity_globs:
-      - sensor.browser_*
-
 logger:
   default: warning
   logs:
     homeassistant.components.websocket_api: fatal
     custom_components.monitor_docker.helpers: error
     homeassistant.setup: error
+    pyeloverblik.eloverblik: debug
+    homeassistant.core: fatal
+    homeassistant.components.mqtt: warning
 
 sensor:
   - platform: time_date
@@ -65,10 +59,119 @@ sensor:
       - time
       - date
 
-calendar:
-  - platform: caldav
-    username: !secret caldav2_username
-    password: !secret caldav2_password
-    url: https://caldav.icloud.com
-    calendars:
-      - !secret caldav2_calendar
+
+  - platform: plex_recently_added
+    name: Plex Recently Added
+    token: !secret plex_token
+    host: !secret plex_host
+    port: !secret plex_port
+    max: 1
+    image_resolution: 800
+
+  - platform: nordpool
+    region: "DK1"           # Country/region to get the energy prices for.
+    currency: "DKK"         # Override HA local currency used to fetch the prices from the API.
+    VAT: false               # Add Value Added Taxes (VAT)?
+    precision: 3            # Energy price rounding precision.
+                            # Percentage of average price to set the low price attribute
+                            # low_price = hour_price < average * low_price_cutoff
+    low_price_cutoff: 0.95
+    price_in_cents: false   # Display price in cents in stead of (for example) Euros.
+    price_type: kWh         # Price displayed for MWh, kWh or Wh
+                            # Template to specify additional cost to be added to the tariff.
+                            # The template price is in EUR, DKK, NOK or SEK (not in cents).
+                            # For example: "{{ current_price * 0.19 + 0.023 | float}}" 
+    additional_costs: "{{0.0|float}}"
+  - platform: statistics
+    entity_id: sensor.eloverblik_energy_total
+    name: Eloverblik Monthly Statistics
+    sampling_size: 50
+    state_characteristic: mean
+    max_age:
+        days: 30
+
+spotcast:
+  sp_dc: !secret sp_dc
+  sp_key: !secret sp_key
+  country: DK #optional, added in 3.6.24
+
+# Example configuration.yaml
+media_player:
+  - platform: bluesound
+    hosts:
+      - host: 192.168.1.121
+
+
+template:
+  - sensor:
+    - name: "Electricity Cost"
+      unique_id: electricity_cost
+      device_class: monetary
+      unit_of_measurement: "kr/kWh"
+      state: >
+        {{ 1.25 * (float(states('sensor.eloverblik_tariff_sum')) + float(states('sensor.nordpool'))) }}
+      attributes:
+        today: >
+          {% if state_attr('sensor.eloverblik_tariff_sum', 'hourly') and state_attr('sensor.nordpool', 'today') %}
+            {% set ns = namespace (prices=[]) %}
+            {% for h in range(24) %}
+              {% set ns.prices = ns.prices + [(1.25 * (float(state_attr('sensor.eloverblik_tariff_sum', 'hourly')[h]) + float(state_attr('sensor.nordpool', 'today')[h]))) | round(5)] %}
+            {% endfor %}
+            {{ ns.prices }}
+          {% endif %}
+        tomorrow: >
+          {% if state_attr('sensor.eloverblik_tariff_sum', 'hourly') and state_attr('sensor.nordpool', 'tomorrow') %}
+            {% set ns = namespace (prices=[]) %}
+            {% for h in range(24) %}
+              {% set ns.prices = ns.prices + [(1.25 * (float(state_attr('sensor.eloverblik_tariff_sum', 'hourly')[h]) + float(state_attr('sensor.nordpool', 'tomorrow')[h]))) | round(5)] %}
+            {% endfor %}
+            {{ ns.prices }}
+          {% endif %}
+
+# DATABASE
+recorder:
+  db_url: !secret recorder_db_url
+  commit_interval: 30
+  exclude:
+    entity_globs:
+      - sensor.browser_*
+      - sensor.*_last_update_trigger
+      - sensor.*_last_notification
+      - sensor.*_last_removed_notification
+      - sensor.*_volume_level_music
+      - sensor.*_volume_level_call
+    domains:
+      - automation
+      - updater
+    entities:
+      - sun.sun
+
+
+# TEXT TO SPEECH
+tts:
+  - platform: google_translate
+    service_name: google_say
+
+# WEATHER
+weather:
+  - platform: pirateweather
+    api_key: !secret pirateweather_api
+    # Additional optional values:
+    # latitude: "REDACTED"
+    # longitude: "REDACTED"
+    mode: daily
+    name: pirateweather
+
+fuelprices_dk: # Optional entries
+  update_interval: 30 # Bypass the default update interval (60 minutes)
+  companies: # possible values are: circlek, f24, goon, ingo, oil, ok, q8 and shell
+    - ok
+    - circlek
+    - shell
+    - ingo
+    - q8
+    - oil
+  fueltypes:   # Possible values are: oktan 95, oktan 95+, oktan 100, diesel, diesel+ and electric
+    - oktan 95
+    - oktan 95+
+    #- diesel

@@ -125,7 +125,10 @@ conditional_media:
               gridTitle.textContent = "Media";
           }
           else if (swipeCard.swiper.realIndex === 1) {
-              gridTitle.textContent = "Spelare";
+              gridTitle.textContent = "Players";
+          }
+          else if (swipeCard.swiper.realIndex === 2) {
+              gridTitle.textContent = "Plex";
           }
       });
 

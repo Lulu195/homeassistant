@@ -1,78 +1,92 @@
 homeassistant:
   customize:
-    automation.tv_on_lights:
-      friendly_name: Tänd Tv-lampa
-    media_player.sony_bravia_tv:
-      friendly_name: Tv
+    # automation.tv_on_lights:
+    #   friendly_name: Tänd Tv-lampa
+    media_player.samsung_qled55:
+      friendly_name: Samsung
       device_class: tv
-    media_player.samsung:
+    media_player.bedroom_tv:
       friendly_name: "Tv\u00B2"
       device_class: tv
     media_player.spotify:
       friendly_name: Spotify
-    switch.ps5_635_power:
-      friendly_name: PS5
+    # switch.ps5_635_power:
+    #   friendly_name: PS5
 
-script:
-  samsung_tv_energy_saving:
-    alias: Eko-läge
-    icon: mdi:leaf
-    sequence:
-      - service: browser_mod.notification
-        data:
-          duration: 8000
-          message: Ställer in eko-läge på Tv i sovrummet...
-      - service: media_player.play_media
-        target:
-          entity_id: media_player.samsung
-        data:
-          media_content_type: send_key
-          media_content_id: >
-            {% set sequence = [
-              'KEY_MENU', '1600',
-              'KEY_DOWN', '400',
-              'KEY_DOWN', '400',
-              'KEY_DOWN', '400',
-              'KEY_ENTER', '900',
-              'KEY_DOWN', '400',
-              'KEY_DOWN', '400',
-              'KEY_DOWN', '400',
-              'KEY_ENTER', '900',
-              'KEY_ENTER', '400',
-              'KEY_DOWN', '400',
-              'KEY_DOWN', '400',
-              'KEY_ENTER', '400',
-              'KEY_HOME', '400',
-              'KEY_HOME'
-            ] %}
+# script:
+#   samsung_tv_energy_saving:
+#     alias: Eko-läge
+#     icon: mdi:leaf
+#     sequence:
+#       - service: browser_mod.notification
+#         data:
+#           duration: 8000
+#           message: Setting eco mode on TV in the bedroom... #Ställer in eko-läge på Tv i sovrummet...
+#       - service: media_player.play_media
+#         target:
+#           entity_id: media_player.samsung
+#         data:
+#           media_content_type: send_key
+#           media_content_id: >
+#             {% set sequence = [
+#               'KEY_MENU', '1600',
+#               'KEY_DOWN', '400',
+#               'KEY_DOWN', '400',
+#               'KEY_DOWN', '400',
+#               'KEY_ENTER', '900',
+#               'KEY_DOWN', '400',
+#               'KEY_DOWN', '400',
+#               'KEY_DOWN', '400',
+#               'KEY_ENTER', '900',
+#               'KEY_ENTER', '400',
+#               'KEY_DOWN', '400',
+#               'KEY_DOWN', '400',
+#               'KEY_ENTER', '400',
+#               'KEY_HOME', '400',
+#               'KEY_HOME'
+#             ] %}
 
-            {{ sequence | join('+') }}
+#             {{ sequence | join('+') }}
 
-  bedroom_tv_night:
-    alias: Nattläge
-    icon: mdi:bed
-    sequence:
-      - service: media_player.volume_set
-        data:
-          volume_level: 0.1
-        target:
-          entity_id: media_player.samsung
-      - service: light.turn_off
-        data:
-          transition: 10
-        target:
-          area_id: sovrum
-      - service: script.samsung_tv_energy_saving
-
+#   bedroom_tv_night:
+#     alias: Nattläge
+#     icon: mdi:bed
+#     sequence:
+#       - service: media_player.volume_set
+#         data:
+#           volume_level: 0.1
+#         target:
+#           entity_id: media_player.samsung
+#       - service: light.turn_off
+#         data:
+#           transition: 10
+#         target:
+#           area_id: sovrum
+#       - service: script.samsung_tv_energy_saving
+#
+      # - name: conditional_media
+      #   state: >
+      #     {% set recently_added = 'Last added' %}
+      #     {% set paused_timeout_minutes = 15 %}
+      #     {% set media_players = [
+      #       states.media_player.vardagsrum,
+      #       states.media_player.sovrum,
+      #       states.media_player.plex_plex_for_windows_desktop_030ipd1,
+      #       states.media_player.node,
+      #       states.media_player.spotify ] %}
 template:
   - select:
       - name: conditional_media
         state: >
-          {% set recently_added = 'Senast tillagt' %}
+          {% set recently_added = 'Last added' %}
           {% set paused_timeout_minutes = 15 %}
           {% set media_players = [
-            states.media_player.vardagsrum,
-            states.media_player.sovrum,
+            states.media_player.plex_plex_for_windows_desktop_030ipd1,
+            states.media_player.samsung_qled55,
+            states.media_player.plex_plex_for_samsung_tv_2018,
+            states.media_player.bedroom_tv,
+            states.media_player.node_8adc,
+            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgtvv,
             states.media_player.spotify ] %}
 
           {% macro media(state) %}
@@ -97,10 +111,14 @@ template:
             {{ recently_added }}
           {% endif %}
         options: >
-          {% set recently_added = ['Senast tillagt'] %}
+          {% set recently_added = ['Last added'] %}
           {% set media_players = [
-            states.media_player.vardagsrum,
-            states.media_player.sovrum,
+            states.media_player.plex_plex_for_windows_desktop_030ipd1,
+            states.media_player.samsung_qled55,
+            states.media_player.plex_plex_for_samsung_tv_2018,
+            states.media_player.bedroom_tv,
+            states.media_player.node_8adc,
+            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
             states.media_player.spotify ] %}
           {{ recently_added + media_players | map(attribute='name') | list }}
         select_option:
@@ -111,84 +129,84 @@ template:
             option: >
               {{ option }}
 
-automation:
-  - alias: tv_on_lights
-    id: '6657050215613'
-    trigger:
-      platform: state
-      entity_id: media_player.sony_bravia_tv
-      from: 'off'
-      to: 'on'
-    action:
-      service: light.turn_on
-      target:
-        entity_id: light.vardagsrum_tv
+# automation:
+#   - alias: tv_on_lights
+#     id: '6657050215613'
+#     trigger:
+#       platform: state
+#       entity_id: media_player.sony_bravia_tv
+#       from: 'off'
+#       to: 'on'
+#     action:
+#       service: light.turn_on
+#       target:
+#         entity_id: light.vardagsrum_tv
 
-  - alias: turn_on_bravia_flow
-    id: '1398295084286'
-    trigger:
-      platform: event
-      event_type: call_service
-      event_data:
-        domain: media_player
-        service: turn_on
-        service_data:
-          entity_id: media_player.sony_bravia_tv
-    action:
-      - service: media_player.turn_on
-        target:
-          entity_id: media_player.vardagsrum
-      - service: remote.send_command
-        target:
-          entity_id: remote.vardagsrum
-        data:
-          command: wakeup
+#   - alias: turn_on_bravia_flow
+#     id: '1398295084286'
+#     trigger:
+#       platform: event
+#       event_type: call_service
+#       event_data:
+#         domain: media_player
+#         service: turn_on
+#         service_data:
+#           entity_id: media_player.sony_bravia_tv
+#     action:
+#       - service: media_player.turn_on
+#         target:
+#           entity_id: media_player.vardagsrum
+#       - service: remote.send_command
+#         target:
+#           entity_id: remote.vardagsrum
+#         data:
+#           command: wakeup
 
-  - alias: turn_on_samsung_flow
-    id: '6837619598284'
-    trigger:
-      - platform: event
-        event_type: call_service
-        event_data:
-          domain: media_player
-          service: turn_on
-          service_data:
-            entity_id: media_player.samsung
-    condition:
-      not:
-        condition: state
-        entity_id: switch.ps5_635_power
-        state: 'on'
-    action:
-      - service: media_player.turn_on
-        target:
-          entity_id: media_player.sovrum
-      - service: remote.send_command
-        target:
-          entity_id: remote.sovrum
-        data:
-          command: wakeup
+#   - alias: turn_on_samsung_flow
+#     id: '6837619598284'
+#     trigger:
+#       - platform: event
+#         event_type: call_service
+#         event_data:
+#           domain: media_player
+#           service: turn_on
+#           service_data:
+#             entity_id: media_player.samsung
+#     condition:
+#       not:
+#         condition: state
+#         entity_id: switch.ps5_635_power
+#         state: 'on'
+#     action:
+#       - service: media_player.turn_on
+#         target:
+#           entity_id: media_player.sovrum
+#       - service: remote.send_command
+#         target:
+#           entity_id: remote.sovrum
+#         data:
+#           command: wakeup
 
-  - alias: turn_on_ps5_flow
-    id: '7987953784547'
-    trigger:
-      - platform: event
-        event_type: call_service
-        event_data:
-          domain: switch
-          service: turn_on
-          service_data:
-            entity_id: switch.ps5_635_power
-    action:
-      - service: media_player.turn_on
-        target:
-          entity_id: media_player.samsung
-      - wait_template: >
-          {{ is_state('media_player.samsung', 'on') }}
-        timeout: 120
-        continue_on_timeout: false
-      - service: media_player.select_source
-        target:
-          entity_id: media_player.samsung
-        data:
-          source: PS5
+#   - alias: turn_on_ps5_flow
+#     id: '7987953784547'
+#     trigger:
+#       - platform: event
+#         event_type: call_service
+#         event_data:
+#           domain: switch
+#           service: turn_on
+#           service_data:
+#             entity_id: switch.ps5_635_power
+#     action:
+#       - service: media_player.turn_on
+#         target:
+#           entity_id: media_player.samsung
+#       - wait_template: >
+#           {{ is_state('media_player.samsung', 'on') }}
+#         timeout: 120
+#         continue_on_timeout: false
+#       - service: media_player.select_source
+#         target:
+#           entity_id: media_player.samsung
+#         data:
+#           source: PS5

@@ -6,7 +6,7 @@ tablet:
   ha-card-box-shadow: none
   ha-card-background: none
 
-  grid-card-gap: 5%
+  grid-card-gap: 3.5% #ADJUSTED FROM 5%
   masonry-view-card-margin: 0px
   state-icon-color: '#9da0a2'
   state-icon-active-color: '#3182b7'
@@ -84,7 +84,7 @@ tablet:
   #custom variables
   ha-card-background-color: rgba(34,38,39,0.9)
   ha-card-header-background-color: rgba(48,52,52,0.8)
-  custom-layout-card-padding: 3.3vw
+  custom-layout-card-padding: 2.5vw # ADJUSTED FROM 3.3vw
   
   sidebar-time-font-size: 5.2vw
   sidebar-time-line-height: 4.3vw
@@ -127,6 +127,22 @@ tablet:
   tablet-popup-align-dialog: center
   tablet-popup-margin-top: 0px
 
+ # WEATHER card
+  weather-icon-clear-night: url("/local/svg/weather/static/clear-night.svg")
+  weather-icon-clear-day: url("/local/svg/weather/static/clear-day.svg")
+  weather-icon-cloudy: url("/local/svg/weather/static/cloudy.svg")
+  weather-icon-fog: url("/local/svg/weather/static/fog.svg")
+  weather-icon-lightning: url("/local/svg/weather/static/thunderstorms.svg")
+  weather-icon-lightning-rainy: url("/local/svg/weather/static/thunderstorms-rain.svg")
+  weather-icon-partlycloudy: url("/local/svg/weather/static/partly-cloudy-day.svg")
+  weather-icon-pouring: url("/local/svg/weather/static/rain.svg")
+  weather-icon-rainy: url("/local/svg/weather/static/rain.svg")
+  weather-icon-hail: url("/local/svg/weather/static/hail.svg")
+  weather-icon-snowy: url("/local/svg/weather/static/snow.svg")
+  weather-icon-snowy-rainy: url("/local/svg/weather/static/sleet.svg")
+  weather-icon-sunny: url("/local/svg/weather/static/clear-day.svg")
+  weather-icon-windy: url("/local/svg/weather/static/wind.svg")
+  weather-icon-windy-alert: url("/local/svg/weather/static/wind-alert.svg")  
   ####################################################
   #                                                  #
   #                     CARD-MOD                     #

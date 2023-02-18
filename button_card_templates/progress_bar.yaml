@@ -1,0 +1,63 @@
+progress_bar:
+  styles:
+    custom_fields:
+      progress:
+        - background-color: var(--progress-bar-background-color)
+        - position: absolute
+        - left: 0%
+        - top: 73.4%
+        - height: var(--progress-bar-height)
+        - width: 100%
+      bar:
+        - background-color: var(--progress-bar-color)
+        - position: absolute
+        - left: 0%
+        - top: 73.4%
+        - height: var(--progress-bar-height)
+        - z-index: 1
+  custom_fields:
+    bar: >
+      [[[
+        if (entity.attributes.media_position !== undefined) {
+        setTimeout(() => {
+          let elt = this.shadowRoot,
+              card = elt.getElementById('card'),
+              container = elt.getElementById('container'),
+              bar = elt.getElementById('bar');
+        
+          if (elt && card && container && bar) {
+              card.insertBefore(bar, container);
+                function update() {
+                    let mediaPositionUpdatedAt = entity.attributes.media_position_updated_at;
+                    let mediaPosition = entity.attributes.media_position;
+                    let mediaDuration = entity.attributes.media_duration;
+                
+                    let percentage = entity.state === 'playing'
+                      ? (((Date.now() / 1000) - (new Date(mediaPositionUpdatedAt).getTime() / 1000) + mediaPosition) / mediaDuration * 100)
+                      : entity.state === 'paused'
+                        ? (mediaPosition / mediaDuration * 100)
+                        : 0;
+        
+                    bar.style.width = percentage.toFixed(1) + '%';
+                    requestAnimationFrame(update);
+                }
+                requestAnimationFrame(update);
+          }
+        }, 0);
+        return ' ';}
+      ]]]
+    progress: >
+      [[[
+        if (entity.attributes.media_position !== undefined) {
+        setTimeout(() => {
+            let elt = this.shadowRoot,
+                card = elt.getElementById('card'),
+                container = elt.getElementById('container'),
+                progress = elt.getElementById('progress');
+
+            if (elt && card && container && progress) {
+                card.insertBefore(progress, container);
+            }
+          }, 0);
+        return ' ';}
+      ]]]

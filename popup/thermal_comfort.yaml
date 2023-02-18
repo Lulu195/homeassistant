@@ -1,0 +1,102 @@
+action: fire-dom-event
+browser_mod:
+  service: browser_mod.popup
+  data:
+    title: Thermal Comfort
+    card_mod:
+      style:
+        #popup header
+        .:
+    content:
+      type: vertical-stack
+      cards:
+
+        - type: entities
+          card_mod:
+            class: content
+            style: |
+              #states {
+                padding-top: 0.5em;
+                padding-bottom: 0em;
+              }
+          entities:
+            - entity: sensor.thermal_comfort_absolute_humidity
+              name: Absolute Humidity
+            - entity: sensor.lumi_lumi_weather_humidity
+              name: Humidity
+            - entity: sensor.thermal_comfort_dew_point_perception #sensor.thermal_comfort_perception
+              name: Thermal Perception
+            - entity: sensor.thermal_comfort_dew_point
+              name: Dew Point
+            - entity: sensor.thermal_comfort_frostpoint
+              name: Frost Point
+            - entity: sensor.thermal_comfort_frostrisk
+              name: Frost Risk
+            - entity: sensor.thermal_comfort_heatindex
+              name: Heat Index
+            - entity: sensor.thermal_comfort_simmerindex
+              name: Simmer Index
+            - entity: sensor.thermal_comfort_simmerzone
+              name: Simmer Zone
+            - entity: sensor.thermal_comfort_humidex_perception
+              name: Humidex perception
+            - entity: sensor.lumi_lumi_weather_pressure
+              name: Pressure
+            - entity: sensor.lumi_lumi_weather_battery
+              name: Battery Level
+            - entity: sensor.lumi_lumi_weather_temperature
+              name: Temperature
+
+        - type: custom:apexcharts-card
+          layout: minimal
+          locale: se
+          graph_span: 8h
+          show:
+            loading: false
+          apex_config:
+            plotOptions:
+              area:
+                fillTo: end
+            grid:
+              padding:
+                top: -15
+            fill:
+              type: gradient
+              gradient:
+                type: vertical
+                opacityFrom: 0.8
+                opacityTo: 0
+                stops:
+                  - 0
+                  - 99
+                  - 100
+            stroke:
+              width: 4
+            tooltip:
+              style:
+                fontSize: 14px
+              x:
+                format: dddd HH:mm
+            chart:
+              height: 140px
+              offsetY: -20px
+            xaxis:
+              crosshairs:
+                show: false
+          series:
+            - entity: sensor.lumi_lumi_weather_temperature
+              name: Temp
+              color: '#385581'
+              type: area
+              fill_raw: last
+              group_by:
+                func: avg
+                duration: 1h
+            - entity: sensor.lumi_lumi_weather_humidity
+              name: Temp
+              color: '#385581'
+              type: area
+              fill_raw: last
+              group_by:
+                func: avg
+                duration: 1h

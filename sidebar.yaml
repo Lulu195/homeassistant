@@ -11,60 +11,55 @@
         date: >
           <font color='#6a7377'><b>
           {% if strptime(states('sensor.date'), '%Y-%m-%d').day != None %}
-          {% set days = ['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag'] %}
-          {% set months = ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni',
-          'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December'] %}
-            {{ days[now().weekday()] }}<br>
+          {% set days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
+          {% set months = ['January', 'February', 'March', 'April', 'May', 'June',
+          'Juli', 'August', 'September', 'October', 'November', 'December'] %}
+            {{ days[now().weekday()] }} - 
             {{ strptime(states('sensor.date'), '%Y-%m-%d').day }} {{ months[now().month-1] }}
           {% endif %}
           </b></font>
-        greet: >
-          <b>
-          {% set time = now().hour %}
-          {% if time <= 1 %} God natt {{'\U0001F611'}}
-          {% elif time <= 3 %} God natt {{'\U0001F62A'}}
-          {% elif time <= 5 %} God natt {{'\U0001F634'}}
-          {% elif time <= 7 %} God morgon {{'\U0001F4A9'}}
-          {% elif time <= 9 %} God morgon {{'\u2615\uFE0F'}}
-          {% elif time <= 10 %} God morgon {{'\U0001F642'}}
-          {% elif time <= 13 %} God dag {{'\U0001F60A'}}
-          {% elif time <= 15 %} God dag {{'\U0001F60E'}}
-          {% elif time <= 17 %} God dag {{'\U0001F44B\U0001F3FB'}}
-          {% elif time <= 19 %} God kväll {{'\U0001F44B\U0001F3FB'}}
-          {% elif time <= 22 %} God kväll {{'\U0001F60C'}}
-          {% elif time <= 23 %} God kväll {{'\U0001F974'}}
-          {% else %} God kväll {{'\U0001F974'}}
-          {% endif %}
-          </b>
+        # greet: >
+        #   <b>
+        #   {% set time = now().hour %}
+        #   {% if time <= 1 %} Good night {{'\U0001F611'}}
+        #   {% elif time <= 3 %} Good night {{'\U0001F62A'}}
+        #   {% elif time <= 5 %} Good night {{'\U0001F634'}}
+        #   {% elif time <= 7 %} Good morning {{'\U0001F4A9'}}
+        #   {% elif time <= 9 %} Good morning {{'\u2615\uFE0F'}}
+        #   {% elif time <= 10 %} Good morning {{'\U0001F642'}}
+        #   {% elif time <= 13 %} Good day {{'\U0001F60A'}}
+        #   {% elif time <= 15 %} Good day {{'\U0001F60E'}}
+        #   {% elif time <= 17 %} Good day {{'\U0001F44B\U0001F3FB'}}
+        #   {% elif time <= 19 %} Good evening {{'\U0001F44B\U0001F3FB'}}
+        #   {% elif time <= 22 %} Good evening {{'\U0001F60C'}}
+        #   {% elif time <= 23 %} Good evening {{'\U0001F974'}}
+        #   {% else %} God evening {{'\U0001F974'}}
+        #   {% endif %}
+        #   </b>
+
         active: >
           <b>
           {% set lights = [
-            states.light.vardagsrum_tv,
-            states.light.vardagsrum_golv,
-            states.light.vardagsrum_horna,
-            states.light.studio_dator,
-            states.light.badrum_vask_2,
-            states.light.badrum_vask_1,
-            states.light.sovrum_tv,
-            states.light.garderob_lampa,
-            states.light.hall_spot_1,
-            states.light.hall_spot_2,
-            states.light.hall_spot_3,
-            states.light.sovrum_mattias,
-            states.light.sovrum_sanja,
-            states.light.studio_spot_1,
-            states.light.studio_spot_2,
-            states.switch.deltaco_sh_p01_socket
+            states.light.boob_light,
+            states.switch.balcony_switch,
+            states.light.couch_light,
+            states.light.couch_lamp,
+            states.light.hue_huelight,
+            states.light.table_group,
+            states.ambient_kitchen,
           ] %}
 
           {% set devices = [
-            states.switch.imac,
-            states.switch.ps5_635_power,
-            states.switch.gosund_monitors_switch,
-            states.switch.gosund_fan_switch,
-            states.media_player.samsung,
-            states.media_player.sony_bravia_tv,
-            states.climate.ac
+            states.switch.kitchen_led,
+            states.switch.speakers_switch,
+            states.switch.subwoofer_switch,
+            states.switch.bedroom_tv_switch,
+            states.switch.led_strip,
+            states.media_player.samsung_qled55,
+            states.media_player.bedroom_tv,
+            states.media_player.node_8adc,
+            states.media_player.spotify_lulu,
+            states.media_player.tanyas_laptop
           ] %}
 
           {% set lights_on = lights | selectattr('state','eq','on') | list %}
@@ -74,83 +69,186 @@
           {% set devices_name = devices_on | map(attribute='name') | join(', ') %}
 
           {% if (lights_on | length == 0) and (devices_on | length > 0) %}
-            {{ devices_name | regex_replace(',([^,]*)$',' och\\1') }} är på
+            {{ devices_name | regex_replace(',([^,]*)$',' and\\1') }} is on
 
           {% elif (lights_on | length == 1) and (devices_on | length == 1) %}
-            {{ lights_name }} och {{devices_name }} är på
+            {{ lights_name }} and {{devices_name }} is on
 
           {% elif (lights_on | length == 1) and (devices_on | length > 1) %}
-            {{ lights_name }}, {{ devices_name | regex_replace(',([^,]*)$',' och\\1') }} är på
+            {{ lights_name }}, {{ devices_name | regex_replace(',([^,]*)$',' and\\1') }} is on
 
           {% elif (lights_on | length > 1) and (devices_on | length == 1) %}
-            {{ lights_on | length }} lampor och {{ devices_name }} är på
+            {{ lights_on | length }} lights and {{ devices_name }} is on
 
           {% elif (lights_on | length > 1) and (devices_on | length > 1) %}
-            {{ lights_on | length }} lampor, {{ devices_name | regex_replace(',([^,]*)$',' och\\1') }} är på
+            {{ lights_on | length }} lights, {{ devices_name | regex_replace(',([^,]*)$',' and\\1') }} is on
 
           {% elif (lights_on | length == 1) and (devices_on | length == 0) %}
-            {{ lights_name }} är på
+            {{ lights_name }} is on
 
           {% elif (lights_on | length > 1) and (devices_on | length == 0) %}
-            {{ lights_on | length }} lampor är på
+            {{ lights_on | length }} lights are on
 
           {% else %}
-            <font color='#6a7377'>Allt är avstängt</font>
           {% endif %}
           </b>
-        mailbox: >
-          {% set mailbox = states('sensor.mailbox') %}
-          {% if mailbox | int(default=0) > 0 %}
-            {{ '\U0001F4EC' }} <font color='#6a7377'><b>Brevlåda ({{ mailbox }})</b></font>
-          {% endif %}
-        vacuum: >
-          {% set entity_id = 'vacuum.morty' %}
-          {% if is_state(entity_id, 'cleaning') %}
-            <b>Morty dammsuger</b>
-          {% elif is_state(entity_id, 'returning') %}
-            <b>Morty är färdig</b>
-          {% endif %}
-        weather: >
-          {% set entity = 'weather.smhi_home' %}
-          {% if not is_state(entity, 'unknown') %}
-            {% set temp = state_attr(entity, 'temperature') | round %}
-            {% set precip = state_attr(entity, 'forecast')[0]['precipitation'] | round %}
-              Känns som {{ temp }}° med {{ 'ingen risk för regn' if precip == 0
-              else precip | string + 'mm regn \u2614\uFE0F' }}
-          {% else %}
-            Kan inte läsa in väder...
-          {% endif %}
-        laundry: >
-          {% set start_time = state_attr('calendar.tvatta', 'start_time') %}
-          {% if start_time != None %}
-            {% set time = as_timestamp(start_time) | timestamp_custom('%H:%M') %}
-            {% set hours = as_timestamp(start_time) | timestamp_custom('%H') | int(default=0) / 24 %}
-            {% set count = (as_timestamp(start_time) - as_timestamp(now())) / 86400 - hours %}
-            {% set day = strptime(start_time, '%Y-%m-%d %H:%M:%S').strftime('%A')
-            | replace('Monday', 'Måndag')
-            | replace('Tuesday', 'Tisdag')
-            | replace('Wednesday', 'Onsdag')
-            | replace('Thursday', 'Torsdag')
-            | replace('Friday', 'Fredag')
-            | replace('Saturday', 'Lördag')
-            | replace('Sunday', 'Söndag') %}
-            {% if count <= 0.0 %}
-              {{'\U0001F4A6'}} Tvätt idag {{ time }}
-            {% elif count <= 1.0 %}
-              Tvätt imorgon klockan {{ time }}
-            {% elif count <= 2.0 %}
-              Tvätt i övermorgon klockan {{ time }}
-            {% else %}
-              Tvätt om {{ (count + hours) | round }} dagar på {{ day }} kl {{ time }}
-            {% endif %}
-          {% endif %}
+# <font color='#6a7377'>Everything is turned off</font>
+        # mailbox: >
+        #   {% set mailbox = states('sensor.mailbox') %}
+        #   {% if mailbox | int(default=0) > 0 %}
+        #     {{ '\U0001F4EC' }} <font color='#6a7377'><b>Brevlåda ({{ mailbox }})</b></font>
+        #   {% endif %}
+        # vacuum: >
+        #   {% set entity_id = 'vacuum.morty' %}
+        #   {% if is_state(entity_id, 'cleaning') %}
+        #     <b>Morty dammsuger</b>
+        #   {% elif is_state(entity_id, 'returning') %}
+        #     <b>Morty är färdig</b>
+        #   {% endif %}
+
+        # weather: >
+        #   {% set entity = 'weather.smhi_home' %}
+        #   {% if not is_state(entity, 'unknown') %}
+        #     {% set temp = state_attr(entity, 'temperature') | round %}
+        #     {% set precip = state_attr(entity, 'forecast')[0]['precipitation'] | round %}
+        #     {% set snow = temp | float(default=0) <= 0.0 -%}
+        #       Feels like {{ temp }}° with {{ 'no risk of rain' if precip == 0 and snow == false  
+        #       else precip | string + 'mm rain \u2614\uFE0F' if snow == false else precip | string + 'mm snow \u2744\uFE0F' }}
+        #   {% else %}
+        #     Can't read weather...
+        #   {% endif %}
+
+        # laundry: >
+        #   {% set start_time = state_attr('calendar.tvatta', 'start_time') %}
+        #   {% if start_time != None %}
+        #     {% set time = as_timestamp(start_time) | timestamp_custom('%H:%M') %}
+        #     {% set hours = as_timestamp(start_time) | timestamp_custom('%H') | int(default=0) / 24 %}
+        #     {% set count = (as_timestamp(start_time) - as_timestamp(now())) / 86400 - hours %}
+        #     {% set day = strptime(start_time, '%Y-%m-%d %H:%M:%S').strftime('%A')
+        #     | replace('Monday', 'Måndag')
+        #     | replace('Tuesday', 'Tisdag')
+        #     | replace('Wednesday', 'Onsdag')
+        #     | replace('Thursday', 'Torsdag')
+        #     | replace('Friday', 'Fredag')
+        #     | replace('Saturday', 'Lördag')
+        #     | replace('Sunday', 'Söndag') %}
+        #     {% if count <= 0.0 %}
+        #       {{'\U0001F4A6'}} Tvätt idag {{ time }}
+        #     {% elif count <= 1.0 %}
+        #       Tvätt imorgon klockan {{ time }}
+        #     {% elif count <= 2.0 %}
+        #       Tvätt i övermorgon klockan {{ time }}
+        #     {% else %}
+        #       Tvätt om {{ (count + hours) | round }} dagar på {{ day }} kl {{ time }}
+        #     {% endif %}
+        #   {% endif %}
+
         battery: >
           {% set entities = states.sensor 
             | selectattr('entity_id', 'search', 'battery')
             | rejectattr('entity_id', 'search', 'iphone')
+            | rejectattr('entity_id', 'search', '_battery_power')
+            | rejectattr('entity_id', 'search', '_battery_health')
+            | rejectattr('entity_id', 'search', '_battery_state')
+            | rejectattr('entity_id', 'search', 'desktop_030ipd1')
             | map(attribute = 'entity_id') | list %}
           {% for sensor in entities if states(sensor) != 'unknown' and states(sensor) !=
           'unavailable' and states(sensor) != 'None' and states(sensor) | int(default=0) <= 5 %}
-            {% if loop.first %} {{'\u26A0\uFE0F'}} Batteri {% else %}, {% endif %}
+            {% if loop.first %} {{'\u26A0\uFE0F'}} Battery {% else %}, {% endif %}
             {{ state_attr(sensor, 'friendly_name') }} {{ states(sensor) }}%
           {% endfor %}
+
+        door: |
+          {% if is_state('binary_sensor.door_iaszone', 'on') %}
+              {{-'\u26A0\uFE0F'}} 🏠 <b><font color='#6a7377'>Door</font></b> is open
+          {% endif %}
+
+        # plexstatus: |
+        #   {% if is_state('media_player.plex_plex_for_windows_desktop_030ipd1', 'playing') and is_state_attr('media_player.plex_plex_for_windows_desktop_030ipd1', 'media_content_type',  "movie") %}
+        #       💻 playing - {{ state_attr('media_player.plex_plex_for_windows_desktop_030ipd1', 'media_title') }}
+        #   {% elif is_state('media_player.plex_plex_for_windows_desktop_030ipd1', 'playing') and not is_state_attr('media_player.plex_plex_for_windows_desktop_030ipd1', 'media_content_type',  "movie") %}
+        #       💻 is {{ states('media_player.plex_plex_for_windows_desktop_030ipd1') }} S{{ state_attr('media_player.plex_plex_for_windows_desktop_030ipd1', 'media_season') }}E{{ state_attr('media_player.plex_plex_for_windows_desktop_030ipd1', 'media_episode') }} - {{ state_attr('media_player.plex_plex_for_windows_desktop_030ipd1', 'media_series_title') }} - {{ state_attr('media_player.plex_plex_for_windows_desktop_030ipd1', 'media_title') }}
+        #   {% elif is_state('media_player.plex_plex_for_android_mobile_sm_g935f', 'playing') %}
+        #       📱<b><font color='#6a7377'>Lulu</font></b> is {{ states('media_player.plex_plex_for_android_mobile_sm_g935f') }} S{{ state_attr('media_player.plex_plex_for_android_mobile_sm_g935f', 'media_season') }}E{{ state_attr('media_player.plex_plex_for_android_mobile_sm_g935f', 'media_episode') }} - {{ state_attr('media_player.plex_plex_for_android_mobile_sm_g935f', 'media_series_title') }} - {{ state_attr('media_player.plex_plex_for_android_mobile_sm_g935f', 'media_title') }}
+        #   {% elif is_state('media_player.plex_plex_for_android_mobile_oneplus_tanya', 'playing') %}
+        #       📱<b><font color='#6a7377'>Tanya</font></b> is {{ states('media_player.plex_plex_for_android_mobile_oneplus_tanya') }}  S{{ state_attr('media_player.plex_plex_for_android_mobile_oneplus_tanya', 'media_season') }}E{{ state_attr('media_player.plex_plex_for_android_mobile_oneplus_tanya', 'media_episode') }} - {{ state_attr('media_player.plex_plex_for_android_mobile_oneplus_tanya', 'media_series_title') }} - {{ state_attr('media_player.plex_plex_for_android_mobile_oneplus_tanya', 'media_title') }}
+        #   {% elif is_state('sensor.95lulu_state', 'playing') %}
+        #       Plex is {{ states('sensor.95lulu_state')}} {{ states('sensor.95lulu_full_title') }}<b><font color='#6a7377'> ({{ states('sensor.95lulu_progress') }}%) </font></b>
+        #   {% endif %}
+        vrstatus: |
+          {{ "<b><font color='#6a7377'>Quest</font></b> is in use..." if is_state('binary_sensor.quest2_in_use', "on")  else "" }}
+
+        # lastmotion: |
+        #     {% set time =  relative_time(states.binary_sensor.all_motion_sensors.last_changed) %}    
+        #     {% if is_state('binary_sensor.all_motion_sensors', 'off') %}
+        #         Last motion: {{ time }} ago
+        #     {% elif is_state('binary_sensor.all_motion_sensors', 'on') %}
+        #       {{-'\u26A0\uFE0F'}}  🏠 <b><font color='#6a7377'>Motion Detected</font></b>
+        #     {% endif %} 
+          
+
+#                         {% if is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "off") %}
+#                             No Motion Detected for {{ relative_time(states.sensor.g3_instant_last_motion_detected.last_changed) }}
+#                         {% elif is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "on") %}
+#                            {{-'\u26A0\uFE0F'}}  🏠 <b><font color='#6a7377'>Motion Detected</font></b>
+#                         {% else %} {{-'\u26A0\uFE0F'}}<b><font color='#6a7377'>Camera is Offline</font></b>
+#                         {% endif %}          
+
+        # occasion: >
+        #   {%- set occasion = states.sensor.special_occasions.state %}
+        #   {%- if occasion == "New year" -%} {{'🎉'}} <b>Happy new year!!</b>
+        #   {%- elif occasion == "Christmas" -%} {{'🎄'}} <b>Merry Christmas!</b> {{'🎅🏼'}}
+        #   {%- elif "Tata" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>dad's</strong> birthday <strong>today</strong>! He turns {{now().strftime('%Y') | round(0) - 1967}}</b> {{'👴'}}
+        #   {%- elif "Mama" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>mom's</strong> birthday <strong>today</strong>! She turns {{now().strftime('%Y') | round(0) - 1968}}</b> {{'👵'}}
+        #   {%- elif "Tanya" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>Tanya's</strong> birthday <strong>today</strong>! She turns {{now().strftime('%Y') | round(0) - 1996}}</b> {{'👵'}}
+        #   {%- elif "Tanyas dad" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>dad's</strong> birthday <strong>today</strong>! He turns {{now().strftime('%Y') | round(0) - 1967}}</b> {{'👴'}}
+        #   {%- elif "Tanyas mother" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>mom's</strong> birthday <strong>today</strong>! She turns {{now().strftime('%Y') | round(0) - 1968}}</b> {{'👵'}}
+        #   {%- elif "21 May" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>Lulu's</strong> name day <strong>today</strong>! He turns on the BBQ</b> {{'♨️'}}
+        #   {%- elif "Birthday" in occasion -%} {{'🎂'}} <b>Happy birthday, Lulu!!</b>
+        #   {%- elif "Constitution" in occasion -%} {{'🤝🏼'}} <b>Happy birthday, Norway!</b>
+        #   {%- elif "Mother" in occasion -%} {{'🎖️'}} <b>Remember Mother's day's today!</b>
+        #   {%- elif "Father" in occasion -%} {{'🎖️'}} <b>Remember Father's day's today!</b>
+        #   {%- endif %}
+
+
+
+              
+# #        unique_id: sidebar_uptime
+# # FROM https://community.home-assistant.io/t/a-different-take-on-designing-a-lovelace-ui/162594/4274
+#         state: > 
+#             System Uptime: 
+#             {% set up_time =  as_timestamp(now()) - as_timestamp(states('sensor.uptime')) %}
+
+#             {% if up_time == 0 %}
+#               Just restarted...
+#             {% else %}
+#               {% set minutes = (up_time // 60) | int %}
+#               {% set hours = (minutes // 60) %}
+#               {% set days = (hours // 24) %}
+#               {% set weeks = (days // 7) %}
+
+#               {% set minutes = (minutes % 60) %}
+#               {% set hours =  (hours % 24) %}
+#               {% set days = (days % 7) %}
+
+#               {% macro phrase(value, name) %}
+#                         {%- set value = value %}
+#                         {%- set end = 's' if value > 1 else '' %}
+#                         {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
+#               {%- endmacro %}
+
+#               {% if weeks > 0 %}
+#                 {% set text = [ phrase(weeks, 'week'), phrase(days, 'day') ] | select('!=','') | list | join(', ') %}
+#               {% elif days > 0 %}
+#                 {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hour') ] | select('!=','') | list | join(', ') %}
+#               {% else %}
+#                 {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hour'), phrase(minutes, 'min') ] | select('!=','') | list | join(', ') %}
+#                 {% set last_comma = text.rfind(',') %}
+#                 {% if last_comma != -1 %}
+#                   {% set text = text[:last_comma] + ' and' + text[last_comma + 1:] %}
+#                 {% endif %}
+#               {% endif %}
+
+#             {{ text }}
+
+#             {% endif %}

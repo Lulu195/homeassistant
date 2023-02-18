@@ -1,34 +1,34 @@
 homeassistant:
-  customize:
-    person.matte:
-      entity_picture: /local/mattias.png
-    device_tracker.iphone:
-      entity_picture: /local/device_tracker.svg
-    person.sanja:
-      entity_picture: /local/sanja.png
+#   customize:
+#     # person.lulu:
+#     #   entity_picture: /local/lulu.png
+#     device_tracker.iphone:
+#       entity_picture: /local/device_tracker.svg
+#     # person.tanya:
+#     #   entity_picture: /local/tanya.png
 
-person:
-  - name: Matte
-    id: matte
-    device_trackers:
-      - device_tracker.mattias_iphone_unifi
-      - device_tracker.iphone #ios
+# person:
+#   - name: Lulu 
+#     id: lulu
+#     device_trackers:
+#       - device_tracker.galaxy_s7_edge #device_tracker.mattias_iphone_unifi
+#       - device_tracker.lulus_phone #ios
 
-  - name: Sanja
-    id: sanja
-    device_trackers:
-      - device_tracker.sanjas_iphone_unifi
-      - device_tracker.sanja_iphone_13 #ios
+#   - name: Tanya
+#     id: tanya
+#     device_trackers:
+#       - device_tracker.tanyas_phone #device_tracker.tanyas_iphone_unifi
+#       - device_tracker.oneplus_nord_ce_2 #device_tracker.tanya_iphone_13 #ios
 
 mqtt:
   sensor:
-    - name: matte_last_changed
-      state_topic: homeassistant/persistence/matte
+    - name: lulu_last_changed
+      state_topic: homeassistant/persistence/lulu
       value_template: >
         {{ value | replace(' ', 'T') }}
 
-    - name: sanja_last_changed
-      state_topic: homeassistant/persistence/sanja
+    - name: tanya_last_changed
+      state_topic: homeassistant/persistence/tanya
       value_template: >
         {{ value | replace(' ', 'T') }}
 
@@ -39,8 +39,8 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - person.matte
-        - person.sanja
+        - person.lulu
+        - person.tanya
       from:
         - home
         - not_home

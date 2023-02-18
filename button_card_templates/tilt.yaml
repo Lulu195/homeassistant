@@ -8,7 +8,7 @@ tilt:
         if (window.navigator.userAgent.match(/Macintosh; Intel Mac OS X/i)) {
             return true;
         }
-        return false;
+        return false; 
       ]]]
     tilt_options: >
       [[[

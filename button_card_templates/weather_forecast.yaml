@@ -1,0 +1,192 @@
+  #################################################
+  #                                               #
+  #                   FORECAST                    #
+  #                                               #
+  #################################################
+
+  weather_forecast:
+    variables:
+      temp_min: ''
+      temp_max: ''
+      current_weather: ''
+    aspect_ratio: 1/1
+    show_icon: false
+    show_entity_picture: true
+    show_name: true
+    show_state: false
+    show_label: true 
+    tap_action:
+      action: more-info
+    styles:
+      grid:
+        - grid-template-areas: |
+            "n"
+            "temp"
+            "i"
+            "s"
+            "l"
+        - grid-template-columns: 1fr
+        - grid-template-rows: min-content repeat(2, 1fr) repeat(2, min-content)
+        - gap: 0%
+      card:
+        - color: > #rgba(157, 160, 162, 1) #rgba(84, 85, 85, 1) #rgba(85, 86, 86, 1)
+            [[[
+              if (states['sun.sun'].state == 'below_horizon'){
+                return 'rgba(157, 160, 162, 1)';
+              } else
+                return 'rgba(71, 71, 71, 1)';
+            ]]]  
+        - background: > # else linear-gradient(to top, rgba(123,168,197,0.8) 0%, rgba(61,132,176,0.8) 100%)
+            [[[
+              if (states['sun.sun'].state == 'below_horizon'){
+                return 'linear-gradient(to top, rgba(53,59,83,0.8) 0%, rgba(10,14,34,0.8) 100%)';
+              } else
+                return 'linear-gradient(to top, rgb(123 168 197) 0%, rgba(61,132,176,0.8) 100%)';
+            ]]]
+          # return 'linear-gradient(to top, rgb(123 168 197) 0%, #b0c5d3 100%)'; --- rgb(213, 215, 216)
+      name:
+        - place-self: start
+        - text-transform: uppercase
+        - font-weight: 400
+        - margin-top: none
+        # - padding: 11.5% 10.5% 10.5% 11.5% #sagaland93
+      img_cell:
+        - justify-content: start
+      icon:
+        - width: 35%
+        #- margin-left: 5px #none
+        #- width: 37%
+      label:
+        - place-self: start
+        - margin-left: -5px 
+      custom_fields:
+        temp:
+          - place-self: start
+          #- margin-top: -10px
+    label: >   
+      [[[
+        return `
+          <ha-icon icon="mdi:arrow-up-thin" style="width: 1.1em; height: 1.1em; margin-right: -0.3em;"></ha-icon>
+          <span> ${states[variables.temp_max].state}°</span>
+          <ha-icon icon="mdi:arrow-down-thin" style="width: 1.1em; height: 1.1em; margin-right: -0.3em;"></ha-icon>
+          <span> ${states[variables.temp_min].state}°</span>
+          <ha-icon icon="mdi:eye-outline" style="width: 1.1em; height: 1.1em; margin-right: -0.3em;"></ha-icon>
+          <span> ${states[variables.temp_min].state}°</span>
+        `
+      ]]]
+    custom_fields:
+      temp: >
+        [[[ return entity.attributes.temperature + "°C" ; ]]]
+      wind: >  
+        [[[ 
+          if (entity.attributes.wind_speed > 60) 
+            return `<span style="color: red">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>`;
+          else if (entity.attributes.wind_speed > 40) 
+            return `<span style="color: orange">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>`;
+          else if (entity.attributes.wind_speed > 20) 
+            return `<span style="color: yellow">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>`;
+          else 
+            return `${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit}`;
+        ]]]
+
+  ### OR The other code using ternary operator
+#   [[[ entity.attributes.wind_speed > 60 ?
+#       `<span style="color: red">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>` :
+#     entity.attributes.wind_speed > 40 ?
+#       `<span style="color: orange">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>` :
+#     entity.attributes.wind_speed > 20 ?
+#       `<span style="color: yellow">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>` :
+#     `${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit}`
+# ]]]
+      
+    entity_picture: |
+      [[[
+        let weather = states[variables.current_weather].state.toLowerCase();
+        if ((weather == 'sunny') && (states['sun.sun'].state == 'above_horizon'))
+          return "/local/svg/weather/clear-day.svg";
+          if ((weather == 'sunny') || (weather == 'clear-night') && (states['sun.sun'].state == 'below_horizon'))
+            return "/local/svg/weather/clear-night.svg";
+              if (weather == 'fog')
+                return "/local/svg/weather/fog.svg";
+                  if ((weather == 'partlycloudy') && (states['sun.sun'].state == 'above_horizon'))
+                    return "/local/svg/weather/partly-cloudy-day.svg";
+                      if ((weather == 'partlycloudy') && (states['sun.sun'].state == 'below_horizon'))
+                        return "/local/svg/weather/partly-cloudy-night.svg";
+                          if (weather == 'rainy')
+                            return "/local/svg/weather/rain.svg";
+                              if (weather == 'sleet')
+                                return "/local/svg/weather/sleet.svg";
+                                  if (weather == 'snow')
+                                    return "/local/svg/weather/snow.svg";
+                                      if (weather == 'cloudy')
+                                        return "/local/svg/weather/cloudy.svg";
+        else (weather == 'wind')
+          return "/local/svg/weather/wind.svg";
+      ]]]
+    extra_styles: |
+      [[[
+        return `
+          #name {
+            font-size: 0.9vw;
+          }
+          #temp {
+            font-size: 1.7vw;
+          }
+          #state {
+            font-size: 0.8vw;
+          }  
+          #label {
+            font-size: 0.9vw;
+          }                    
+          /* portrait */
+          @media screen and (max-width: 2000px) {
+            #name {
+              font-size: 0.7vw !important;
+            }
+            #temp {
+              font-size: 1.8vw !important;
+            }
+            #state {
+              font-size: 0.7vw !important;
+            }  
+            #label {
+              font-size: 0.7vw !important;
+            }  
+          }
+          /* phone */
+          @media screen and (max-width: 800px) {
+            #name {
+              font-size: 2vw !important;
+            }              
+            #temp {
+              font-size: 4.5vw !important;
+            }    
+            #state {
+              font-size: 2vw !important;
+            }   
+            #label {
+              font-size: 2vw !important;
+            }                        
+          }
+          @keyframes card_bounce {
+            0% {
+              transform: scale(1);
+            }
+            15% {
+              transform: scale(0.9);
+            }
+            25% {
+              transform: scale(1);
+            }
+            30% {
+              transform: scale(0.98);
+            }
+            100% {
+              transform: scale(1);
+            }
+          }
+        `
+      ]]]
+
+
+  
