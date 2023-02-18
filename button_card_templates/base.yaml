@@ -4,16 +4,20 @@ base:
     - tilt
     - extra_styles
   variables:
-    state_on: >
-      [[[ return ['on', 'home', 'cool', 'fan_only', 'playing', 'unlocked'].indexOf(!entity || entity.state) !== -1; ]]]
+    state_on: > ##was  [[[ return ['on', 'home', 'cool', 'fan_only', 'playing', 'unlocked'].indexOf(!entity || entity.state) !== -1; ]]]
+      [[[ return ['on', 'home', 'cool', 'fan_only', 'heat', 'heat_cool', 'InUse', 'Locked', 'playing', 'cleaning', 'open', 'opening', 'closing', 'unlocked', '0', 'healthy', '0 Issues', 'yes'].indexOf(entity === undefined || entity.state) !== -1; ]]]
     state: >
       [[[ return !entity || entity.state; ]]]
     entity_id: >
       [[[ return !entity || entity.entity_id; ]]]
-    entity_picture: >
-      [[[ return !entity || entity.attributes.entity_picture; ]]]
-    timeout: >
-      [[[ return !entity || Date.now() - Date.parse(entity.last_changed); ]]]
+    # entity_picture: >
+    #   [[[ return !entity || entity.attributes.entity_picture; ]]]
+    # timeout: >
+    #   [[[ return !entity || Date.now() - Date.parse(entity.last_changed); ]]]
+    entity_picture: > #sagaland93
+      [[[ return entity === undefined || entity.attributes.entity_picture; ]]]
+    timeout: > #sagaland93
+        [[[ return entity === undefined || Date.now() - Date.parse(entity.last_changed); ]]]
     is_youtube: >
       [[[
         let is_youtube = entity?.attributes?.app_id === 'com.google.ios.youtube',
@@ -24,6 +28,13 @@ base:
             return true;
         }
       ]]]
+    state_error: > #sagaland93
+        [[[ return ['error', 'unavailable'].indexOf(entity === undefined || entity.state) !== -1; ]]]
+    media_on: > #sagaland93
+      [[[ return entity === undefined || ['playing', 'paused'].indexOf(entity.state) !== -1; ]]]
+    media_off: > #sagaland93
+      [[[ return entity === undefined || ['off', 'idle', 'standby', 'unknown', 'unavailable'].indexOf(entity.state) !== -1; ]]]
+
   aspect_ratio: 1/1
   show_state: true
   show_icon: false
@@ -85,7 +96,7 @@ base:
     action: toggle
     haptic: medium
   double_tap_action:
-    haptic: success
+    haptic: none #success
   hold_action:
     action: block
   styles:
@@ -110,11 +121,12 @@ base:
       - border-width: 0
       - -webkit-tap-highlight-color: rgba(0,0,0,0)
       - transition: none
-      - --mdc-ripple-color: >
+      # - padding: 11.5% 10.5% 10.5% 11.5% #sagaland93
+      - --mdc-ripple-color: > ###controlls the colour shown when a card is held ; changed from #97989c to #b0b2b
           [[[
             return variables.state_on
-                ? 'rgb(0, 0, 0)'
-                : '#97989c';
+                ? 'rgb(0, 0, 0, 0.6)'
+                : '#b0b2b8'; 
           ]]]
       - color: >
           [[[
@@ -128,3 +140,4 @@ base:
                 ? 'rgba(255, 255, 255, 0.85)'
                 : 'rgba(115, 115, 115, 0.25)';
           ]]]
+

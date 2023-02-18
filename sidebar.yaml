@@ -49,7 +49,8 @@
           {% set devices = [
             states.media_player.samsung_55,
             states.media_player.node_8adc,
-            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt
+            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
+            states.media_player.spotify_lulu
           ] %}
 
           {% set lights_on = lights | selectattr('state','eq','on') | list %}

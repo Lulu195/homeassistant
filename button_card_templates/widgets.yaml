@@ -1,0 +1,531 @@
+# based on: https://community.home-assistant.io/t/a-different-take-on-designing-a-lovelace-ui/162594/2754?u=95lulu
+widgets:
+    aspect_ratio: 1
+    variables:
+      forecast1pic: | #weather.smhi_home
+        [[[ 
+          var state = states['weather.smhi_home'].attributes.forecast[1]['condition'];
+          if (state == "cloudy") return 'url("/local/w/cloudy.png")';
+          else if (state == "clear-night") return 'url("/local/w/moon-phase.png")';
+          else if (state == "fog") return 'url("/local/w/fog.png")';
+          else if (state == "hail") return 'url("/local/w/snow.png")';
+          else if (state == "lightning") return 'url("/local/w/lightning.png")';
+          else if (state == "lightning-rainy") return 'url("/local/w/lightning.png")';
+          else if (state == "partlycloudy") return 'url("/local/w/partiallycloudy1.png")';
+          else if (state == "pouring") return 'url("/local/w/rainy.png")';
+          else if (state == "rainy") return 'url("/local/w/rainy.png")';
+          else if (state == "snowy") return 'url("/local/w/snow.png")';
+          else if (state == "snowy-rainy") return 'url("/local/w/sleet.png")';
+          else if (state == "sunny") return 'url("/local/w/sunny.png")';
+          else if (state == "windy") return 'url("/local/w/windy.png")';
+          else if (state == "windy-variant") 'url("/local/w/windy.png")';
+          else if (state == "exceptional") return 'url("/local/w/sunny.png")';
+        ]]]
+      forecast2pic: |
+        [[[ 
+          var state = states['weather.smhi_home'].attributes.forecast[2]['condition'];
+          if (state == "cloudy") return 'url("/local/w/cloudy.png")';
+          else if (state == "clear-night") return 'url("/local/w/moon-phase.png")';
+          else if (state == "fog") return 'url("/local/w/fog.png")';
+          else if (state == "hail") return 'url("/local/w/snow.png")';
+          else if (state == "lightning") return 'url("/local/w/lightning.png")';
+          else if (state == "lightning-rainy") return 'url("/local/w/lightning.png")';
+          else if (state == "partlycloudy") return 'url("/local/w/partiallycloudy1.png")';
+          else if (state == "pouring") return 'url("/local/w/rainy.png")';
+          else if (state == "rainy") return 'url("/local/w/rainy.png")';
+          else if (state == "snowy") return 'url("/local/w/snow.png")';
+          else if (state == "snowy-rainy") return 'url("/local/w/sleet.png")';
+          else if (state == "sunny") return 'url("/local/w/sunny.png")';
+          else if (state == "windy") return 'url("/local/w/windy.png")';
+          else if (state == "windy-variant") 'url("/local/w/windy.png")';
+          else if (state == "exceptional") return 'url("/local/w/sunny.png")';
+        ]]]
+      forecast3pic: |
+        [[[ 
+          var state = states['weather.smhi_home'].attributes.forecast[3]['condition'];
+          if (state == "cloudy") return 'url("/local/w/cloudy.png")';
+          else if (state == "clear-night") return 'url("/local/w/moon-phase.png")';
+          else if (state == "fog") return 'url("/local/w/fog.png")';
+          else if (state == "hail") return 'url("/local/w/snow.png")';
+          else if (state == "lightning") return 'url("/local/w/lightning.png")';
+          else if (state == "lightning-rainy") return 'url("/local/w/lightning.png")';
+          else if (state == "partlycloudy") return 'url("/local/w/partiallycloudy1.png")';
+          else if (state == "pouring") return 'url("/local/w/rainy.png")';
+          else if (state == "rainy") return 'url("/local/w/rainy.png")';
+          else if (state == "snowy") return 'url("/local/w/snow.png")';
+          else if (state == "snowy-rainy") return 'url("/local/w/sleet.png")';
+          else if (state == "sunny") return 'url("/local/w/sunny.png")';
+          else if (state == "windy") return 'url("/local/w/windy.png")';
+          else if (state == "windy-variant") 'url("/local/w/windy.png")';
+          else if (state == "exceptional") return 'url("/local/w/sunny.png")';
+        ]]]
+      forecast4pic: |
+        [[[ 
+          var state = states['weather.smhi_home'].attributes.forecast[4]['condition'];
+          if (state == "cloudy") return 'url("/local/w/cloudy.png")';
+          else if (state == "clear-night") return 'url("/local/w/moon-phase.png")';
+          else if (state == "fog") return 'url("/local/w/fog.png")';
+          else if (state == "hail") return 'url("/local/w/snow.png")';
+          else if (state == "lightning") return 'url("/local/w/lightning.png")';
+          else if (state == "lightning-rainy") return 'url("/local/w/lightning.png")';
+          else if (state == "partlycloudy") return 'url("/local/w/partiallycloudy1.png")';
+          else if (state == "pouring") return 'url("/local/w/rainy.png")';
+          else if (state == "rainy") return 'url("/local/w/rainy.png")';
+          else if (state == "snowy") return 'url("/local/w/snow.png")';
+          else if (state == "snowy-rainy") return 'url("/local/w/sleet.png")';
+          else if (state == "sunny") return 'url("/local/w/sunny.png")';
+          else if (state == "windy") return 'url("/local/w/windy.png")';
+          else if (state == "windy-variant") 'url("/local/w/windy.png")';
+          else if (state == "exceptional") return 'url("/local/w/sunny.png")';
+        ]]]
+      forecast5pic: |
+        [[[ 
+          var state = states['weather.smhi_home'].attributes.forecast[5]['condition'];
+          if (state == "cloudy") return 'url("/local/w/cloudy.png")';
+          else if (state == "clear-night") return 'url("/local/w/moon-phase.png")';
+          else if (state == "fog") return 'url("/local/w/fog.png")';
+          else if (state == "hail") return 'url("/local/w/snow.png")';
+          else if (state == "lightning") return 'url("/local/w/lightning.png")';
+          else if (state == "lightning-rainy") return 'url("/local/w/lightning.png")';
+          else if (state == "partlycloudy") return 'url("/local/w/partiallycloudy1.png")';
+          else if (state == "pouring") return 'url("/local/w/rainy.png")';
+          else if (state == "rainy") return 'url("/local/w/rainy.png")';
+          else if (state == "snowy") return 'url("/local/w/snow.png")';
+          else if (state == "snowy-rainy") return 'url("/local/w/sleet.png")';
+          else if (state == "sunny") return 'url("/local/w/sunny.png")';
+          else if (state == "windy") return 'url("/local/w/windy.png")';
+          else if (state == "windy-variant") 'url("/local/w/windy.png")';
+          else if (state == "exceptional") return 'url("/local/w/sunny.png")';
+        ]]]
+      ypos: |
+        [[[
+          if (states["sensor.time"].state.split(":")[0] == "06"){ 
+             return "49";} 
+          else if (states["sensor.time"].state.split(":")[0] == "07"){ 
+             return "47.9";}
+          else if (states["sensor.time"].state.split(":")[0] == "08"){ 
+             return "46.8";}
+          else if (states["sensor.time"].state.split(":")[0] == "09"){ 
+             return "45.8";}
+          else if (states["sensor.time"].state.split(":")[0] == "10"){ 
+             return "45.4";}
+          else if (states["sensor.time"].state.split(":")[0] == "11"){ 
+             return "45.1";}
+          else if (states["sensor.time"].state.split(":")[0] == "12"){ 
+             return "45";}
+          else if (states["sensor.time"].state.split(":")[0] == "13"){ 
+             return "45.1";}
+          else if (states["sensor.time"].state.split(":")[0] == "14"){ 
+             return "45.4";}
+          else if (states["sensor.time"].state.split(":")[0] == "15"){ 
+             return "45.8";}
+          else if (states["sensor.time"].state.split(":")[0] == "16"){ 
+             return "46.8";}
+          else if (states["sensor.time"].state.split(":")[0] == "17"){ 
+             return "47.9";}
+          else if (states["sensor.time"].state.split(":")[0] == "18"){ 
+             return "49";}
+          else if (states["sensor.time"].state.split(":")[0] == "19"){ 
+             return "50.6";}
+          else if (states["sensor.time"].state.split(":")[0] == "21"){ 
+             return "54.8";}        
+          else if (states["sensor.time"].state.split(":")[0] == "22") { 
+            return "56.9";}
+          else if (states["sensor.time"].state.split(":")[0] == "23") { 
+            return "59.4";}
+          else if (states["sensor.time"].state.split(":")[0] == "24") { 
+            return "60.6";}
+        ]]]
+      xpos: |
+        [[[    
+          return states["sensor.time"].state.split(":")[0] * 4.16;
+        ]]]
+      line: |
+        [[[
+          if (states['sun.sun'].attributes.next_rising.substr(11,2) == "06"){ 
+             return "49";}
+        ]]]
+    show_icon: false
+    show_state: true
+    show_name: true
+    tap_action:
+      animation_card: |
+        [[[
+          const animation_speed_ms = 900;
+          const animation = `card_bounce ${animation_speed_ms}ms cubic-bezier(0.22, 1, 0.36, 1)`;
+          this.shadowRoot.getElementById("card").style.animation = animation;
+          window.setTimeout(() => {
+            this.shadowRoot.getElementById("card").style.animation = "none";
+          }, animation_speed_ms)
+        ]]]
+    styles:
+      card:
+        - background-color: rgba(0,0,0,0.4)
+        - font-color: rgb(255,255,255,0.9)
+        - text-shadow: 0px 0px 1px black
+        - letter-spacing: 0.05vw
+      name:
+        - color: rgb(255,255,255,0.6)
+    extra_styles: |
+      @keyframes card_bounce {
+        0% {
+          transform: scale(1);
+        }
+        15% {
+          transform: scale(0.9);
+        }
+        25% {
+          transform: scale(1);
+        }
+        30% {
+          transform: scale(0.98);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+
+
+
+#### FROM SAGA
+
+weather_forecast2:
+  aspect_ratio: 1
+  variables:
+    forecast1pic: |
+      [[[ 
+        var state = states['weather.pirateweather'].attributes.forecast[1]['condition'];
+        if (state == "cloudy") return 'url("/local/svg/weather/animated/cloudy.png")';
+        else if (state == "clear-night") return 'url("/local/svg/weather/animated/moon-phase.png")';
+        else if (state == "fog") return 'url("/local/svg/weather/animated/fog.png")';
+        else if (state == "hail") return 'url("/local/svg/weather/animated/snow.png")';
+        else if (state == "lightning") return 'url("/local/svg/weather/animated/lightning.png")';
+        else if (state == "lightning-rainy") return 'url("/local/svg/weather/animated/lightning.png")';
+        else if (state == "partlycloudy") return 'url("/local/svg/weather/animated/partiallycloudy1.png")';
+        else if (state == "pouring") return 'url("/local/svg/weather/animated/rainy.png")';
+        else if (state == "rainy") return 'url("/local/svg/weather/animated/rainy.png")';
+        else if (state == "snowy") return 'url("/local/svg/weather/animated/snow.png")';
+        else if (state == "snowy-rainy") return 'url("/local/svg/weather/animated/sleet.png")';
+        else if (state == "sunny") return 'url("/local/svg/weather/animated/sunny.png")';
+        else if (state == "windy") return 'url("/local/svg/weather/animated/windy.png")';
+        else if (state == "windy-variant") 'url("/local/svg/weather/animated/windy.png")';
+        else if (state == "exceptional") return 'url("/local/svg/weather/animated/sunny.png")';
+      ]]]
+    forecast2pic: |
+      [[[ 
+        var state = states['weather.pirateweather'].attributes.forecast[2]['condition'];
+        if (state == "cloudy") return 'url("/local/svg/weather/animated/cloudy.png")';
+        else if (state == "clear-night") return 'url("/local/svg/weather/animated/moon-phase.png")';
+        else if (state == "fog") return 'url("/local/svg/weather/animated/fog.png")';
+        else if (state == "hail") return 'url("/local/svg/weather/animated/snow.png")';
+        else if (state == "lightning") return 'url("/local/svg/weather/animated/lightning.png")';
+        else if (state == "lightning-rainy") return 'url("/local/svg/weather/animated/lightning.png")';
+        else if (state == "partlycloudy") return 'url("/local/svg/weather/animated/partiallycloudy1.png")';
+        else if (state == "pouring") return 'url("/local/svg/weather/animated/rainy.png")';
+        else if (state == "rainy") return 'url("/local/svg/weather/animated/rainy.png")';
+        else if (state == "snowy") return 'url("/local/svg/weather/animated/snow.png")';
+        else if (state == "snowy-rainy") return 'url("/local/svg/weather/animated/sleet.png")';
+        else if (state == "sunny") return 'url("/local/svg/weather/animated/sunny.png")';
+        else if (state == "windy") return 'url("/local/svg/weather/animated/windy.png")';
+        else if (state == "windy-variant") 'url("/local/svg/weather/animated/windy.png")';
+        else if (state == "exceptional") return 'url("/local/svg/weather/animated/sunny.png")';
+      ]]]
+    forecast3pic: |
+      [[[ 
+        var state = states['weather.pirateweather'].attributes.forecast[3]['condition'];
+        if (state == "cloudy") return 'url("/local/svg/weather/animated/cloudy.png")';
+        else if (state == "clear-night") return 'url("/local/svg/weather/animated/moon-phase.png")';
+        else if (state == "fog") return 'url("/local/svg/weather/animated/fog.png")';
+        else if (state == "hail") return 'url("/local/svg/weather/animated/snow.png")';
+        else if (state == "lightning") return 'url("/local/svg/weather/animated/lightning.png")';
+        else if (state == "lightning-rainy") return 'url("/local/svg/weather/animated/lightning.png")';
+        else if (state == "partlycloudy") return 'url("/local/svg/weather/animated/partiallycloudy1.png")';
+        else if (state == "pouring") return 'url("/local/svg/weather/animated/rainy.png")';
+        else if (state == "rainy") return 'url("/local/svg/weather/animated/rainy.png")';
+        else if (state == "snowy") return 'url("/local/svg/weather/animated/snow.png")';
+        else if (state == "snowy-rainy") return 'url("/local/svg/weather/animated/sleet.png")';
+        else if (state == "sunny") return 'url("/local/svg/weather/animated/sunny.png")';
+        else if (state == "windy") return 'url("/local/svg/weather/animated/windy.png")';
+        else if (state == "windy-variant") 'url("/local/svg/weather/animated/windy.png")';
+        else if (state == "exceptional") return 'url("/local/svg/weather/animated/sunny.png")';
+      ]]]
+    forecast4pic: |
+      [[[ 
+        var state = states['weather.pirateweather'].attributes.forecast[4]['condition'];
+        if (state == "cloudy") return 'url("/local/svg/weather/animated/cloudy.png")';
+        else if (state == "clear-night") return 'url("/local/svg/weather/animated/moon-phase.png")';
+        else if (state == "fog") return 'url("/local/svg/weather/animated/fog.png")';
+        else if (state == "hail") return 'url("/local/svg/weather/animated/snow.png")';
+        else if (state == "lightning") return 'url("/local/svg/weather/animated/lightning.png")';
+        else if (state == "lightning-rainy") return 'url("/local/svg/weather/animated/lightning.png")';
+        else if (state == "partlycloudy") return 'url("/local/svg/weather/animated/partiallycloudy1.png")';
+        else if (state == "pouring") return 'url("/local/svg/weather/animated/rainy.png")';
+        else if (state == "rainy") return 'url("/local/svg/weather/animated/rainy.png")';
+        else if (state == "snowy") return 'url("/local/svg/weather/animated/snow.png")';
+        else if (state == "snowy-rainy") return 'url("/local/svg/weather/animated/sleet.png")';
+        else if (state == "sunny") return 'url("/local/svg/weather/animated/sunny.png")';
+        else if (state == "windy") return 'url("/local/svg/weather/animated/windy.png")';
+        else if (state == "windy-variant") 'url("/local/svg/weather/animated/windy.png")';
+        else if (state == "exceptional") return 'url("/local/svg/weather/animated/sunny.png")';
+      ]]]
+    forecast5pic: |
+      [[[ 
+        var state = states['weather.pirateweather'].attributes.forecast[5]['condition'];
+        if (state == "cloudy") return 'url("/local/svg/weather/animated/cloudy.png")';
+        else if (state == "clear-night") return 'url("/local/svg/weather/animated/moon-phase.png")';
+        else if (state == "fog") return 'url("/local/svg/weather/animated/fog.png")';
+        else if (state == "hail") return 'url("/local/svg/weather/animated/snow.png")';
+        else if (state == "lightning") return 'url("/local/svg/weather/animated/lightning.png")';
+        else if (state == "lightning-rainy") return 'url("/local/svg/weather/animated/lightning.png")';
+        else if (state == "partlycloudy") return 'url("/local/svg/weather/animated/partiallycloudy1.png")';
+        else if (state == "pouring") return 'url("/local/svg/weather/animated/rainy.png")';
+        else if (state == "rainy") return 'url("/local/svg/weather/animated/rainy.png")';
+        else if (state == "snowy") return 'url("/local/svg/weather/animated/snow.png")';
+        else if (state == "snowy-rainy") return 'url("/local/svg/weather/animated/sleet.png")';
+        else if (state == "sunny") return 'url("/local/svg/weather/animated/sunny.png")';
+        else if (state == "windy") return 'url("/local/svg/weather/animated/windy.png")';
+        else if (state == "windy-variant") 'url("/local/svg/weather/animated/windy.png")';
+        else if (state == "exceptional") return 'url("/local/svg/weather/animated/sunny.png")';
+      ]]]
+    ypos: |
+      [[[
+        if (states["sensor.time"].state.split(":")[0] == "06"){ 
+          return "49";} 
+        else if (states["sensor.time"].state.split(":")[0] == "07"){ 
+          return "47.9";}
+        else if (states["sensor.time"].state.split(":")[0] == "08"){ 
+          return "46.8";}
+        else if (states["sensor.time"].state.split(":")[0] == "09"){ 
+          return "45.8";}
+        else if (states["sensor.time"].state.split(":")[0] == "10"){ 
+          return "45.4";}
+        else if (states["sensor.time"].state.split(":")[0] == "11"){ 
+          return "45.1";}
+        else if (states["sensor.time"].state.split(":")[0] == "12"){ 
+          return "45";}
+        else if (states["sensor.time"].state.split(":")[0] == "13"){ 
+          return "45.1";}
+        else if (states["sensor.time"].state.split(":")[0] == "14"){ 
+          return "45.4";}
+        else if (states["sensor.time"].state.split(":")[0] == "15"){ 
+          return "45.8";}
+        else if (states["sensor.time"].state.split(":")[0] == "16"){ 
+          return "46.8";}
+        else if (states["sensor.time"].state.split(":")[0] == "17"){ 
+          return "47.9";}
+        else if (states["sensor.time"].state.split(":")[0] == "18"){ 
+          return "49";}
+        else if (states["sensor.time"].state.split(":")[0] == "19"){ 
+          return "50.6";}
+        else if (states["sensor.time"].state.split(":")[0] == "21"){ 
+          return "54.8";}        
+        else if (states["sensor.time"].state.split(":")[0] == "22") { 
+          return "56.9";}
+        else if (states["sensor.time"].state.split(":")[0] == "23") { 
+          return "59.4";}
+        else if (states["sensor.time"].state.split(":")[0] == "24") { 
+          return "60.6";}
+      ]]]
+    xpos: |
+      [[[    
+        return states["sensor.time"].state.split(":")[0] * 4.16;
+      ]]]
+    line: |
+      [[[
+        if (states['sun.sun'].attributes.next_rising.substr(11,2) == "06"){ 
+          return "49";}
+      ]]]
+  show_icon: false
+  show_state: true
+  show_name: false
+  styles:
+    name:
+      - position: absolute
+      - top: 20px
+      - left: 20px
+      - font-size: 14px
+      - font-weight: bold
+    custom_fields:
+      dayonetitle:
+        - position: absolute
+        - top: 40px
+        - left: 0px
+        - width: 100%
+        - padding: 20px
+        - border-bottom: 1px solid rgb(255,255,255,0.1)
+        - text-transform: lowercase
+        - font-weight: bold
+      dayonerainicon:
+        - position: absolute
+        - top: 50px
+        - right: 32px
+        - padding: 0px
+      dayonepic:
+        - position: absolute
+        - width: 120px
+        - height: 120px
+        - left: 37%
+        - top: 118px
+        - background-position: 0% 0%
+        - transform: translate(0%, -50%)
+        - color: rgb(255,255,255,0.6)
+        - background-size: 28%
+        - background-repeat: no-repeat
+        - background-image: |
+            [[[ return variables.forecast1pic ]]]
+      dayonerainbar:
+        - position: absolute
+        - top: 68px
+        - right: 15px
+      daytwotitle:
+        - top: 98px
+        - text-transform: lowercase
+        - font-weight: bold
+        - left: 0px
+        - width: 100%
+        - border-bottom: 1px solid rgb(255,255,255,0.1)
+        - padding: 20px
+        - position: absolute
+        - font-size: 16px
+      daytworainicon:
+        - top: 110px
+        - right: 32px
+        - padding: 0px
+        - position: absolute
+      daytwopic:
+        - width: 120px
+        - height: 120px
+        - left: 37%
+        - top: 177px
+        - background-position: 0% 0%
+        - transform: translate(0%, -50%)
+        - color: grey
+        - position: absolute
+        - background-size: 28%
+        - background-repeat: no-repeat
+        - background-image: |
+            [[[ return variables.forecast2pic ]]]
+      daytworainbar:
+        - top: 127px
+        - right: 15px
+        - position: absolute
+      day3title:
+        - top: 157px
+        - text-transform: lowercase
+        - font-weight: bold
+        - left: 0px
+        - width: 100%
+        - padding: 20px
+        - position: absolute
+        - font-size: 16px
+      day3rainicon:
+        - top: 169px
+        - right: 32px
+        - padding: 0px
+        - position: absolute
+      day3pic:
+        - width: 120px
+        - height: 120px
+        - left: 37%
+        - top: 236px
+        - background-position: 0% 0%
+        - transform: translate(0%, -50%)
+        - color: grey
+        - position: absolute
+        - background-size: 28%
+        - background-repeat: no-repeat
+        - background-image: |
+            [[[ return variables.forecast3pic ]]]
+      day3rainbar:
+        - top: 186px
+        - right: 15px
+        - position: absolute
+  custom_fields:
+    dayonetitle: |
+      [[[    
+      return `<div align="left"> ${states['sensor.daytwo'].state}</div>`;
+        ]]] 
+    dayonepic: |
+      [[[
+            return (states['weather.pirateweather'].attributes.forecast[1]["temperature"]) +
+            "° " +
+            (states['weather.pirateweather'].attributes.forecast[1]["templow"]) + "°";
+            ]]]
+    dayonerainbar: |
+      [[[                       
+        if (states["weather.pirateweather"].state != "unavaliable") { 
+          let input = states['weather.pirateweather'].attributes.forecast[1]['precipitation'],
+            state = input * 10,
+            color = '#79d5ff';
+          return `
+            <svg width="50" height="5">
+              <rect x="0" y="0" rx="3" ry="3" width="106" height="5" stroke="#1f4455" fill="#1f4455" stroke-width="0"/>
+              <rect x="0" y="0" rx="2" ry="2" width="${state}" height="5" fill="${color}" stroke-width="0"/>
+              
+          `;                     
+        } 
+      ]]]
+    dayonerainicon: |
+      [[[  return `<div> <ha-icon
+              icon="ios:drop"
+              style="width: 15px; height: 15px; color:rgb(255,255,255,0.6);"> </div>`;
+        ]]] 
+    daytwotitle: |
+      [[[    
+      return `<div align="left"> ${states['sensor.daythree'].state}</div>`;
+        ]]] 
+    daytwopic: |
+      [[[
+            return (states['weather.pirateweather'].attributes.forecast[2]["temperature"]) +
+            "°  " +
+            (states['weather.pirateweather'].attributes.forecast[2]["templow"]) + "°";
+            ]]]
+    daytworainbar: |
+      [[[                       
+        if (states["weather.pirateweather"].state != "unavaliable") { 
+          let input = states['weather.pirateweather'].attributes.forecast[2]['precipitation'],
+            state = input * 10,
+            color = '#79d5ff';
+          return `
+            <svg width="50" height="5">
+              <rect x="0" y="0" rx="3" ry="3" width="106" height="5" stroke="#1f4455" fill="#1f4455" stroke-width="0"/>
+              <rect x="0" y="0" rx="2" ry="2" width="${state}" height="5" fill="${color}" stroke-width="0"/>
+              
+          `;                     
+        } 
+      ]]] 
+    daytworainicon: |
+      [[[  return `<div> <ha-icon
+              icon="ios:drop"
+              style="width: 15px; height: 15px; color:rgb(255,255,255,0.6);"> </div>`;
+        ]]]
+    day3title: |
+      [[[    
+      return `<div align="left"> ${states['sensor.dayfour'].state}</div>`;
+        ]]] 
+    day3pic: |
+      [[[
+            return (states['weather.pirateweather'].attributes.forecast[3]["temperature"]) +
+            "°  " +
+            (states['weather.pirateweather'].attributes.forecast[3]["templow"]) + "°";
+            ]]]
+    day3rainbar: |
+      [[[                       
+        if (states["weather.pirateweather"].state != "unavaliable") { 
+          let input = states['weather.pirateweather'].attributes.forecast[3]['precipitation'],
+            state = input * 10,
+            color = '#79d5ff';
+          return `
+            <svg width="50" height="5">
+              <rect x="0" y="0" rx="3" ry="3" width="106" height="5" stroke="#1f4455" fill="#1f4455" stroke-width="0"/>
+              <rect x="0" y="0" rx="2" ry="2" width="${state}" height="5" fill="${color}" stroke-width="0"/>
+              
+          `;                     
+        } 
+      ]]]
+    day3rainicon: |
+      [[[  return `<div> <ha-icon
+              icon="ios:drop"
+              style="width: 15px; height: 15px; color:rgb(255,255,255,0.6);"></div>`;
+        ]]]

@@ -33,7 +33,7 @@
       card:
         - border-radius: var(--button-card-border-radius)
         - border-width: 0
-        - padding: 10.9% 9.9% 8.9% 10.9% 
+        - padding: 4.9% 4.9% 3.9% 8.9% 
         - color: > #rgba(157, 160, 162, 1) #rgba(84, 85, 85, 1) #rgba(85, 86, 86, 1)
             [[[
               if (states['sun.sun'].state == 'below_horizon'){
@@ -57,7 +57,7 @@
       img_cell:
         - justify-content: start
       icon:
-        - width: 37% #37%
+        - width: 30% #37%
         - margin-left: none
       label:
         - place-self: center
@@ -81,7 +81,7 @@
       ]]]
     custom_fields:
       temp: >
-        [[[ return entity.attributes.temperature + "°c" ; ]]]
+        [[[ return entity.attributes.temperature + "°C "; ]]]
       wind: >  
         [[[ 
           if (entity.attributes.wind_speed > 60) 
