@@ -2,7 +2,7 @@ action: fire-dom-event
 browser_mod:
   service: browser_mod.popup
   data:
-    title: Windows 11 - VM
+    title: Lulu`s Laptop
     card_mod:
       style:
         #popup header
@@ -16,31 +16,31 @@ browser_mod:
           card_mod:
             class: content
           entities:
-            - entity: switch.wake_on_lan
+            - entity: switch.spectre
               secondary_info: last-changed
               name: WoL
-            - entity: switch.w11_publishallsensors
+            - entity: button.spectre_publishallsensors
               secondary_info: last-changed
-            - entity: sensor.w11_audio_default_device
+            - entity: sensor.spectre_satellite_audio_default_device
               name: Output device
-            - entity: sensor.w11_audio_default_input_device
+            - entity: sensor.spectre_satellite_audio_default_input_device
               name: Input Device
             #secondary_info: last-changed
-            - entity: sensor.w11_gpuload
+            - entity: sensor.spectre_satellite_gpuload
               name: Gpu load
-            - entity: sensor.w11_gputemperature
+            - entity: sensor.spectre_satellite_gputemperature
               name: Gpu Temp
 
 
             - type: custom:slider-entity-row
-              entity: media_player.plex_plex_for_windows_w11
+              entity: media_player.plex_plex_htpc_for_windows_desktop_cd40kgt
               card_mod:
                 style:
                   # icon color mute and max
                   .: |
                     :host {
                       --paper-item-icon-color:
-                        {% if is_state('sensor.w11_audio_default_device_muted', 'True') %}
+                        {% if is_state('sensor.spectre_satellite_audio_default_device_muted', 'True') %}
                           #FFFFFF20
                         {% elif states(config.entity) | int == 0 %}
                           #9da0a2
@@ -74,12 +74,12 @@ browser_mod:
             type: horizontal-stack
             cards:
               - type: custom:button-card
-                entity: switch.w11_mediamute #switch.monitors_mute
+                entity: button.spectre_mediamute #switch.monitors_mute
                 icon: mdi:volume-mute
                 tap_action:
                   action: 
                     - service: button.press
-                      target: switch.w11_mediamute
+                      target: button.spectre_mediamute
                 template: icon_only
 
               - type: custom:button-card
@@ -88,7 +88,7 @@ browser_mod:
                   action: call-service
                   service: button.press #input_number.decrement
                   service_data:
-                    entity_id: button.w11_mediavolumedown #input_number.monitors_volume
+                    entity_id: button.spectre_mediavolumedown #input_number.monitors_volume
                 template: icon_only
 
               - type: custom:button-card
@@ -97,5 +97,5 @@ browser_mod:
                   action: call-service
                   service: button.press #input_number.increment
                   service_data:
-                    entity_id: button.W11_mediavolumeup #input_number.monitors_volume
+                    entity_id: button.spectre_mediavolumeup #input_number.monitors_volume
                 template: icon_only
