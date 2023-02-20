@@ -28,8 +28,8 @@ browser_mod:
             - entity: binary_sensor.template_udm_internet
               secondary_info: last-changed
 
-            - entity: sensor.template_udm_cpu_temp
-              name: CPU Temperatur
+            - entity: sensor.udm_pro_cpu_temperature #sensor.template_udm_cpu_temp
+              name: CPU Temperature
 
             - type: custom:bar-card
               width: 55%
@@ -46,11 +46,11 @@ browser_mod:
                   to: 999
               entity_row: true
               entities:
-                - entity: sensor.template_udm_cpu
-                - entity: sensor.template_udm_mem
-                - entity: sensor.template_udm_disk
+                - entity: sensor.udm_pro_cpu_utilization #sensor.template_udm_cpu
+                - entity: sensor.udm_pro_memory_utilization #sensor.template_udm_mem
+                - entity: sensor.udm_pro_storage_utilization #sensor.template_udm_disk
 
-            - entity: sensor.template_udm_uptime
+            - entity: sensor.udm_pro_uptime #sensor.template_udm_uptime
 
         - type: custom:mod-card
           card_mod:
@@ -64,7 +64,7 @@ browser_mod:
             type: horizontal-stack
             cards:
               - type: custom:button-card
-                name: Nätverksenheter
+                name: Network Devices #Nätverksenheter
                 icon: mdi:devices
                 tap_action:
                   action: url

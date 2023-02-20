@@ -1,24 +1,24 @@
 homeassistant:
-#   customize:
-#     # person.lulu:
-#     #   entity_picture: /local/lulu.png
-#     device_tracker.iphone:
-#       entity_picture: /local/device_tracker.svg
-#     # person.tanya:
-#     #   entity_picture: /local/tanya.png
+  customize:
+    person.lulu:
+      entity_picture: /local/lulu.png
+    device_tracker.s7_edge:
+      entity_picture: /local/device_tracker.svg
+    person.tanya:
+      entity_picture: /local/tanya.png
 
-# person:
-#   - name: Lulu 
-#     id: lulu
-#     device_trackers:
-#       - device_tracker.galaxy_s7_edge #device_tracker.mattias_iphone_unifi
-#       - device_tracker.lulus_phone #ios
+person:
+  - name: Lulu 
+    id: lulu
+    device_trackers:
+      - device_tracker.s7_edge #device_tracker.mattias_iphone_unifi
+      - device_tracker.galaxy_s7_edge #UNIFY
 
-#   - name: Tanya
-#     id: tanya
-#     device_trackers:
-#       - device_tracker.tanyas_phone #device_tracker.tanyas_iphone_unifi
-#       - device_tracker.oneplus_nord_ce_2 #device_tracker.tanya_iphone_13 #ios
+  - name: Tanya
+    id: tanya
+    device_trackers:
+      - device_tracker.tanya_phone #device_tracker.tanyas_iphone_unifi
+      - device_tracker.oneplus_nord_ce_2 #UNIFY
 
 mqtt:
   sensor:
@@ -55,3 +55,4 @@ automation:
         payload_template: >
           {{ now() }}
         retain: true
+

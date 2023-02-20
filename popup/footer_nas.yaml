@@ -75,25 +75,25 @@ browser_mod:
               name: Installed #Installerad
               icon: mdi:home-assistant
 
-            - entity: switch.docker_watchtower
-              name: Watchtower
-              icon: cil:docker-watchtower
+            # - entity: switch.docker_watchtower
+            #   name: Watchtower
+            #   icon: cil:docker-watchtower
 
             - entity: sensor.template_hass_next_release
 
-            - entity: sensor.databas
-              icon: mdi:database
+            # - entity: sensor.databas
+            #   icon: mdi:database
 
-            - entity: sensor.home_assistant_log_size
-              name: Log File #Loggfil
-              icon: mdi:file-document
+            # - entity: sensor.home_assistant_log_size
+            #   name: Log File #Loggfil
+            #   icon: mdi:file-document
 
-            - type: attribute
-              entity: sensor.docker_home_assistant
-              attribute: uptime
-              format: relative
-              name: Last reboot #Senast omstart
-              icon: mdi:update
+            # - type: attribute
+            #   entity: sensor.docker_home_assistant
+            #   attribute: uptime
+            #   format: relative
+            #   name: Last reboot #Senast omstart
+            #   icon: mdi:update
 
             - type: custom:bar-card
               width: 55%
@@ -198,13 +198,13 @@ browser_mod:
             - entity: sensor.docker_containers_stopped
               name: Containers Stopped #Containrar Stoppade
 
-            - entity: switch.docker_transmission_seed
+            # - entity: switch.docker_transmission_seed
 
           footer:
             type: custom:apexcharts-card
             layout: minimal
             graph_span: 1h
-            locale: se
+            locale: dk
             apex_config:
               chart:
                 fontFamily: var(--primary-font-family)
@@ -257,10 +257,10 @@ browser_mod:
               type: area
               fill_raw: last
             series:
-              - entity: sensor.nas_download_throughput
+              - entity: sensor.qbittorrent_down_speed #sensor.nas_download_throughput
                 name: Down #Ned
                 color: green
-              - entity: sensor.nas_upload_throughput
+              - entity: sensor.qbittorrent_up_speed #sensor.nas_upload_throughput
                 name: Up #Upp
                 color: '#385581'
 
