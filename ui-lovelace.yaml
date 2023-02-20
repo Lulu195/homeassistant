@@ -505,25 +505,26 @@ views:
                       #- icon_light_flush
                       #icon_contact_sensor
 
-                  # - type: custom:button-card
-                  #   entity: device_tracker.desktop_74tucr1_2 #sensor.w11_currentvolume #sensor.w11_audio_audio_sessions #switch.gosund_monitors_switch
-                  #   name: Laptop L.
-                  #   tap_action: toggle switch.wake_on_lan #button.w11_mediaplaypause
-                  #   #double_tap_action: !include popup/desktop_74tucr1.yaml
-                  #   template:
-                  #     - media
-                  #     #- base
-                  #     #- icon_monitors
-                  #     - icon_win_pc
-                  #     - circle
-                  #     - loader
-                  #   variables:
-                  #     circle_input: >
-                  #       [[[
-                  #         let volume = states['sensor.w11_audio_default_device_volume'];
-                  #         if (volume) return parseInt(volume.state);
-                  #       ]]]
-                  #     circle_input_unit: "%"   #sensor.w11_currentvolume
+                  - type: custom:button-card
+                    entity: device_tracker.desktop_cd40kgt_2 #sensor.w11_currentvolume #sensor.w11_audio_audio_sessions #switch.gosund_monitors_switch
+                    name: Laptop L.
+                    tap_action: toggle switch.wake_on_lan #button.w11_mediaplaypause
+                    double_tap_action: !include popup/desktop_spectre.yaml
+                    template:
+                      - base
+                      #- media
+                      #- base
+                      #- icon_monitors
+                      - icon_win_pc
+                      - circle
+                      - loader
+                    variables:
+                      circle_input: >
+                        [[[
+                          let volume = states['sensor.spectre_battery_charge_remaining_percentage'];
+                          if (volume) return parseInt(volume.state);
+                        ]]]
+                      circle_input_unit: "%"   #sensor.w11_currentvolume
 
                   - type: custom:button-card
                     entity: device_tracker.desktop_030ipd1 #sensor.desktop_030ipd1_audio_default_device_volume
@@ -1077,7 +1078,14 @@ views:
                   let humidity = states['sensor.lumi_lumi_weather_humidity'];
                   if (humidity) return parseInt(humidity.state);
                 ]]]
-
+              circle_input_unit: "%"
+            # variables:
+            #   circle_input: >
+            #     [[[
+            #       let volume = states['sensor.spectre_battery_charge_remaining_percentage'];
+            #       if (volume) return parseInt(volume.state);
+            #     ]]]
+            #   circle_input_unit: "%"
 #                [[[
 #                  if (entity) {
 #                      return entity.state == 'slightly_cool'
@@ -1085,7 +1093,7 @@ views:
 #                          : Math.round(entity.attributes.current_temperature).toString();
 #                  }
 #                ]]]
-              circle_input_unit: "%"
+            
 
           # - type: custom:button-card
           #   entity: switch.ps5_635_power

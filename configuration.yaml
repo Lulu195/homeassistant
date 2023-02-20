@@ -66,7 +66,18 @@ sensor:
       - 'time_date'
       - 'time_utc'
       - 'beat'
-
+  
+  - platform: unifigateway # /hacs/repository/151580533 #https://github.com/custom-components/sensor.unifigateway
+    host: !secret unifi_ip
+    port: !secret unifi_port
+    username: !secret unifi_user
+    password: !secret unifi_pass
+    monitored_conditions:
+      - www
+      - wlan
+      - lan
+      - alerts
+      - firmware
 
   - platform: plex_recently_added
     name: Plex Recently Added
@@ -75,6 +86,16 @@ sensor:
     port: !secret plex_port_2
     max: 1
     image_resolution: 800
+
+  - platform: qbittorrent
+    url: !secret qbit_url
+    username: !secret qbit_user
+    password: !secret qbit_pass
+
+  # - platform: rejseplanen #https://www.home-assistant.io/integrations/rejseplanen
+  #   stop_id: "YOUR_STOP_ID"
+
+  - platform: linux_battery
 
   - platform: nordpool
     region: "DK1"           # Country/region to get the energy prices for.
@@ -90,6 +111,7 @@ sensor:
                             # The template price is in EUR, DKK, NOK or SEK (not in cents).
                             # For example: "{{ current_price * 0.19 + 0.023 | float}}" 
     additional_costs: "{{0.0|float}}"
+
   - platform: statistics
     entity_id: sensor.eloverblik_energy_total
     name: Eloverblik Monthly Statistics
@@ -97,6 +119,23 @@ sensor:
     state_characteristic: mean
     max_age:
         days: 30
+
+  # - platform: feedparser # /hacs/repository/145180996 #
+  #   name: Engineering Feed
+  #   feed_url: 'https://www.sciencedaily.com/rss/matter_energy/engineering.xml'
+  #   date_format: '%a, %d %b %Y %H:%M:%S %Z'
+  #   scan_interval:
+  #     hours: 3
+  #   inclusions:
+  #     - title
+  #     - link
+  #     - description
+  #     - image
+  #     - pubDate
+  #   exclusions:
+  #     - language
+
+# - platform #TODO TooGoodToGo /hacs/repository/417802358
 
 spotcast:
   sp_dc: !secret sp_dc
@@ -109,9 +148,8 @@ media_player:
     hosts:
       - host: 192.168.1.121
 
-
-# PYTHON
-python_script:
+python_script: #PYTHON ENABLE 
+powercalc: # POWERCALC ENABLE https://github.com/bramstroker/homeassistant-powercalc
 
 # DATABASE
 recorder:
@@ -160,3 +198,18 @@ fuelprices_dk: # Optional entries
     - oktan 95
     - oktan 95+
     #- diesel
+
+
+
+# Wake on Lan
+switch:
+  - platform: wake_on_lan
+    name: "Spectre"
+    mac: !secret wol_spectre
+    host: !secret spectre_ip
+
+  - platform: wake_on_lan
+    name: "Envy"
+    mac: !secret wol_envy
+    host: !secret envy_ip
+

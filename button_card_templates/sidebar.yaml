@@ -14,11 +14,11 @@ sidebar:
           return attr;
       }
     ]]]
-  extra_styles: >
+  extra_styles: > #SF Pro Display, Roboto, system-ui;
     #card {
       padding: 0;
       border-width: 0;
-      font-family: SF Pro Display, Roboto, system-ui;
+      font-family: Poppins, Roboto, system-ui; 
     }
     #container {
       display: flex !important;

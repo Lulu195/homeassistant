@@ -355,3 +355,57 @@ template:
             {% endif %}
             {{ fanart }}
           {% endif %}
+
+
+# # SENSOR - UNIFI STATUS
+#     - unique_id: unifi_status
+#       name: 'UniFi Status'
+#       state: >
+#         {% set lan = state_attr('sensor.unifi_gateway_lan', 'status') %}
+#         {% set wan = state_attr('sensor.unifi_gateway_wan', 'status') %}
+#         {% set wlan = state_attr('sensor.unifi_gateway_wlan', 'status') %}
+#         {% set www = state_attr('sensor.unifi_gateway_www', 'status') %}
+#         {% if lan == 'ok' and wan == 'ok' and wlan == 'ok' and www == 'ok' %}
+#           OK
+#         {% else %}
+#           Attention
+#         {% endif %}
+#     # SENSOR - UNIFI ROUTER STATUS
+#     - unique_id: unifi_router_status
+#       name: 'UniFi Router Status'
+#       state: >
+#         {% set lan = state_attr('sensor.unifi_gateway_lan', 'status') %}
+#         {% set wan = state_attr('sensor.unifi_gateway_wan', 'status') %}
+#         {% set www = state_attr('sensor.unifi_gateway_www', 'status') %}
+#         {% if lan == 'ok' and wan == 'ok' and www == 'ok' %}
+#           OK
+#         {% else %}
+#           Attention
+#         {% endif %}
+#     # SENSOR - UNIFI AP STATUS
+#     - unique_id: unifi_ap_status
+#       name: 'UniFi AP Status'
+#       state: >
+#         {% set wlan = state_attr('sensor.unifi_gateway_wlan', 'status') %}
+#         {% if wlan == 'ok' %}
+#           OK
+#         {% else %}
+#           Attention
+#         {% endif %}
+#     # SENSOR - UNIFI NETWORK
+#     - unique_id: unifi_switch_health
+#       name: 'UniFi Switch Health'
+#       state: >
+#         {%- set switches = [
+#           states.device_tracker.switch_1_rack,
+#           states.device_tracker.switch_2_stua,
+#           states.device_tracker.switch_3_office,
+#           states.device_tracker.switch_4_loft,
+#           states.device_tracker.switch_5_loft
+#         ] %}
+#         {% set switch_state = switches | selectattr('state','eq','home') | list %}
+#         {% if (switch_state | length < 5) %}
+#           error
+#         {% else %}
+#           healthy
+#         {% endif %}
