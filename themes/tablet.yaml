@@ -88,7 +88,7 @@ tablet:
   
   sidebar-time-font-size: 5.2vw
   sidebar-time-line-height: 4.3vw
-  sidebar-font-size: 1.42vw
+  sidebar-font-size: min(max(16px, 1.3vw), 1.6vw) #1.42vw 
   sidebar-line-height: 2vw
   bar-card-color: '#303435'
 
@@ -97,7 +97,7 @@ tablet:
   z-axis-adjustment: 0.05vw #tilt compensation
   button-card-font-weight: 500
   button-card-letter-spacing: -0.02vw
-  button-card-border-radius: 10%
+  button-card-border-radius: 8% #10%
 
   footer-card-font-size: 1.22vw
   footer-card-icon-size: 1.5vw
