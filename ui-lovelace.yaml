@@ -506,45 +506,60 @@ views:
                       #icon_contact_sensor
 
                   - type: custom:button-card
-                    entity: device_tracker.desktop_cd40kgt_2 #sensor.w11_currentvolume #sensor.w11_audio_audio_sessions #switch.gosund_monitors_switch
+                    entity: device_tracker.desktop_cd40kgt_2 
                     name: Laptop L.
                     tap_action: toggle switch.wake_on_lan #button.w11_mediaplaypause
-                    double_tap_action: !include popup/desktop_spectre.yaml
+                    # double_tap_action: !include popup/desktop_spectre.yaml
                     template:
-                      - base
-                      #- media
-                      #- base
-                      #- icon_monitors
+                      - base_pc
                       - icon_win_pc
                       - circle
                       - loader
                     variables:
                       circle_input: >
                         [[[
-                          let volume = states['sensor.spectre_battery_charge_remaining_percentage'];
-                          if (volume) return parseInt(volume.state);
+                          let battery = states['sensor.spectre_battery_charge_remaining_percentage'];
+                          if (battery) return parseInt(battery.state);
                         ]]]
-                      circle_input_unit: "%"   #sensor.w11_currentvolume
-
+                      circle_input_unit: "%"
+                      # circle_input: >
+                      #   [[[
+                      #     let battery = states['sensor.spectre_battery_charge_remaining_percentage'];
+                      #     if (battery) {
+                      #       let batteryLevel = parseInt(battery.state);
+                      #       return {
+                      #         value: batteryLevel,
+                      #         color: batteryLevel < 40 ? 'red' : 'var(--primary-text-color)',
+                      #         style: batteryLevel < 40 ? 'font-weight: bold;' : ''
+                      #       }
+                      #     }
+                      #   ]]]
+                      # circle_input_unit: "%"
+                      
+                      
+                         #sensor.w11_currentvolume
+                      #   [[[
+                      #     if (states["entityname_battery"].state > 40) {
+                      #       let input = states["entityname_battery"].state / 3,
+                      #         state = states["entityname_battery"].state,
+                      #         color = '#08ff4e';
+                      #       return `
                   - type: custom:button-card
                     entity: device_tracker.desktop_030ipd1 #sensor.desktop_030ipd1_audio_default_device_volume
                     name:  Laptop T.
                     #tap_action: toggle button.w11_mediaplaypause
-                    #double_tap_action: !include popup/studio_monitorer_tanya.yaml
+                    double_tap_action: !include popup/studio_monitorer_tanya.yaml
                     # variables:
                     #   retain: sensor.desktop_030ipd1_last_changed
                     template:
-                      - media
-                      #- base
-                      #- person
-                      #- icon_monitors
+                      - base_pc
                       - icon_win_pc
                       - circle
                       - loader
                     variables:
                       circle_input: >
                         [[[
-                          let home = states['sensor.desktop_030ipd1_battery_charge_remaining_percentage'];
+                          let home = states['sensor.envy_battery_charge_remaining_percentage'];
                           if (home) return parseInt(home.state);
                         ]]]
                       circle_input_unit: "%"
@@ -789,7 +804,7 @@ views:
                       motion: |
                         [[[
                               return `<div align="left"> <ha-icon
-                                icon="mdi:tablet-android"
+                                icon="mdi:tablet"
                                 style="width: 20px; height: 20px; color:grey; padding: 10px;">
                                 </ha-icon>Hallway</div>`
                             ]]]
@@ -829,7 +844,7 @@ views:
                       door: |
                         [[[
                               return `<div align="left"> <ha-icon
-                                icon="mdi:tablet-android"
+                                icon="mdi:tablet"
                                 style="width: 20px; height: 20px; color:grey; padding: 10px;">
                                 </ha-icon>Door</div>`
                             ]]]
@@ -869,7 +884,7 @@ views:
                       # entityname: |
                       #   [[[
                       #         return `<div align="left"> <ha-icon
-                      #           icon="mdi:tablet-android"
+                      #           icon="mdi:tablet"
                       #           style="width: 20px; height: 20px; color:grey; padding: 10px;">
                       #           </ha-icon>Entityname</div>`
                       #       ]]]
@@ -909,7 +924,7 @@ views:
                       # entityname: |
                       #   [[[
                       #         return `<div align="left"> <ha-icon
-                      #           icon="mdi:tablet-android"
+                      #           icon="mdi:tablet"
                       #           style="width: 20px; height: 20px; color:grey; padding: 10px;">
                       #           </ha-icon>Entityname</div>`
                       #       ]]]
@@ -1555,7 +1570,7 @@ views:
                       - loader
 
                   - type: custom:button-card
-                    entity: switch.kitchen_led_switch
+                    entity: light.kitchen_led_switch
                     name: Kitchen
                     template:
                       - base
