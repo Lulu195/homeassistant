@@ -144,7 +144,7 @@
             font-size: 0.8vw;
           }  
           #label {
-            font-size: 1.1vw;
+            font-size: 0.9vw;
           }                    
           /* portrait */
           @media screen and (max-width: 1200px) {
@@ -179,7 +179,7 @@
               font-size: 2vw !important;
             }   
             #label {
-              font-size: 2.6vw !important;
+              font-size: 2.5vw !important;
             }                        
           }
           @keyframes card_bounce {
