@@ -1,9 +1,12 @@
-# light:
-#   - platform: group
-#     name: vardagsrum_group
-#     entities:
-#       - light.vardagsrum_tv
-#       - light.vardagsrum_golv
+light:
+  - platform: group
+    name: living_room_group
+    entities:
+      - light.table_front_light
+      - light.table_back_light
+      - light.mushroom
+      - light.couch
+      - light.kitchen_led_switch
 
 #   - platform: group
 #     name: studio_group
@@ -31,19 +34,19 @@
 #       - light.hall_spot_2
 #       - light.hall_spot_3
 
-#   - platform: group
-#     name: all_group_exclude_hall
-#     entities:
-#       - light.vardagsrum
-#       - light.studio
-#       - light.sovrum
-#       - light.badrum
-#       - light.garderob
+  - platform: group
+    name: all_group_exclude_hall
+    entities:
+      - light.table_front_light
+      - light.table_back_light
+      - light.mushroom
+      - light.couch
+      - light.kitchen_led_switch
 
-# homeassistant:
-#   customize:
-#     light.vardagsrum_group:
-#       friendly_name: Belysning
+homeassistant:
+  customize:
+    light.living_room_group:
+      friendly_name: Living Room #Belysning
 #     light.studio_dator:
 #       friendly_name: Datorlampa
 #     light.studio_group:
@@ -51,7 +54,7 @@
 #     light.sovrum_group:
 #       friendly_name: Sänglampor
 #     light.badrum_group:
-#       friendly_name: Badrum
+#       friendly_name: Bathroom #Badrum
 #     light.hall_group:
 #       friendly_name: Hallampor
 #     sensor.dimmer_badrum_battery_level:
