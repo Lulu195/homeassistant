@@ -149,7 +149,7 @@ base_pc:
     - tilt
     - extra_styles
   variables:
-    state_on: > ##was  [[[ return ['on', 'home', 'cool', 'fan_only', 'playing', 'unlocked'].indexOf(!entity || entity.state) !== -1; ]]]
+    state_on: > 
       [[[ return ['on', 'home'].indexOf(entity === undefined || entity.state) !== -1; ]]]
     state: >
       [[[ return !entity || entity.state; ]]]
@@ -159,16 +159,16 @@ base_pc:
     #   [[[ return !entity || entity.attributes.entity_picture; ]]]
     # timeout: >
     #   [[[ return !entity || Date.now() - Date.parse(entity.last_changed); ]]]
-    entity_picture: > #sagaland93
-      [[[ return entity === undefined || entity.attributes.entity_picture; ]]]
-    timeout: > #sagaland93
-        [[[ return entity === undefined || Date.now() - Date.parse(entity.last_changed); ]]]
-    state_error: > #sagaland93
-        [[[ return ['error', 'unavailable'].indexOf(entity === undefined || entity.state) !== -1; ]]]
-    media_on: > #sagaland93
-      [[[ return entity === undefined || ['playing', 'paused'].indexOf(entity.state) !== -1; ]]]
-    media_off: > #sagaland93
-      [[[ return entity === undefined || ['off', 'idle', 'standby', 'unknown', 'unavailable'].indexOf(entity.state) !== -1; ]]]
+    # entity_picture: > #sagaland93
+    #   [[[ return entity === undefined || entity.attributes.entity_picture; ]]]
+    # timeout: > #sagaland93
+    #     [[[ return entity === undefined || Date.now() - Date.parse(entity.last_changed); ]]]
+    # state_error: > #sagaland93
+    #     [[[ return ['error', 'unavailable'].indexOf(entity === undefined || entity.state) !== -1; ]]]
+    # media_on: > #sagaland93
+    #   [[[ return entity === undefined || ['playing', 'paused'].indexOf(entity.state) !== -1; ]]]
+    # media_off: > #sagaland93
+    #   [[[ return entity === undefined || ['off', 'idle', 'standby', 'unknown', 'unavailable'].indexOf(entity.state) !== -1; ]]]
 
   aspect_ratio: 1/1
   show_state: true
@@ -256,25 +256,29 @@ base_pc:
       - border-width: 0
       - -webkit-tap-highlight-color: rgba(0,0,0,0)
       - transition: none
-      # - padding: 11.5% 10.5% 10.5% 11.5% #sagaland93
-      - --mdc-ripple-color: > ###controlls the colour shown when a card is held ; changed from #97989c to #b0b2b
+      - --mdc-ripple-color: > 
           [[[
             return variables.state_on
                 ? 'rgb(0, 0, 0, 0.6)'
                 : '#b0b2b8'; 
           ]]]
-      - color: > #rgba(157, 160, 162, 1) #rgba(84, 85, 85, 1) #rgba(85, 86, 86, 1)
+      - color: > 
           [[[
-            if (states['sun.sun'].state == 'below_horizon'){
-              return 'rgba(157, 160, 162, 1)';
-            } else
-              return 'rgba(71, 71, 71, 1)';
-          ]]]  
-      - background: > # else linear-gradient(to top, rgba(123,168,197,0.8) 0%, rgba(61,132,176,0.8) 100%)
-          [[[
-            if (states['sun.sun'].state == 'below_horizon'){
-              return 'linear-gradient(to top, rgba(53,59,83,0.8) 0%, rgba(10,14,34,0.8) 100%)';
-            } else
-              return 'linear-gradient(to top, rgb(123 168 197) 0%, rgba(61,132,176,0.8) 100%)';
+          if (!variables.state_on){
+            return '#97989c';
+          } else if (states['sun.sun'].state == 'below_horizon'){
+            return 'rgba(157, 160, 162, 1)';
+          } else {
+            return 'rgba(71, 71, 71, 1)';
+          }
           ]]]
-        # return 'linear-gradient(to top, rgb(123 168 197) 0%, #b0c5d3 100%)'; --- rgb(213, 215, 216)
+      - background: > 
+          [[[
+          if (!variables.state_on){
+            return 'linear-gradient(to top, rgba(115, 115, 115, 0.25) 0%, rgba(115, 115, 115, 0.25) 100%)';
+          } else if (states['sun.sun'].state == 'below_horizon'){
+            return 'linear-gradient(to top, rgba(53,59,83,0.8) 0%, rgba(10,14,34,0.8) 100%)';
+          } else {
+            return 'linear-gradient(to top, rgb(123 168 197) 0%, rgba(61,132,176,0.8) 100%)';
+          }
+          ]]]
