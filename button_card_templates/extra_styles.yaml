@@ -63,7 +63,7 @@ extra_styles:
           *                                 *
           * * * * * * * * * * * * * * * * * */
 
-          #circle_slider {
+          #circle_slider { 
             opacity: 0;
             appearance: none;
             transform: rotate(270deg);
@@ -71,7 +71,7 @@ extra_styles:
             position: absolute;
             pointer-events: none;
             cursor: grab;
-            left: 26%;
+            left: 35%; 
             margin-top: 13%;
           }
 
@@ -118,13 +118,13 @@ extra_styles:
           /* phone */
           @media screen and (max-width: 800px) {
             #circle_slider::-webkit-slider-thumb {
-              width: 5.8vw;
-              height: 5.8vw;
+              width: 7vw;
+              height: 7vw;
             }
 
             #circle_slider::-moz-range-thumb {
-              width: 5.8vw;
-              height: 5.8vw;
+              width: 7vw;
+              height: 7vw;
             }
           }
 
@@ -274,6 +274,71 @@ extra_styles:
           }
 
         `:''}
+
+          ${this._config.template.includes('scene') ? `
+
+         /* * * * * * * * * * * * * * * * * *
+          *                                 *
+          *             SCENE               *
+          *                                 *
+          * * * * * * * * * * * * * * * * * */
+
+            :host {
+              --name-font-size: 1vw;
+              --name-icon-size: 1.2vw;
+              --name-padding-v: 0.4vw;
+              --name-padding-h: 0.8vw;
+              --card-border-radius: 0.6vw;
+            }
+            #ripple, .js-tilt-glare {
+              border-radius: calc(var(--card-border-radius) - 0.1vw);
+              clip-path: inset(0 round calc( var(--custom-button-card-border-radius) - 0.1vw ));
+            }
+            #name {
+              font-size: var(--name-font-size);
+              padding: var(--name-padding-v) var(--name-padding-h);
+              letter-spacing: 0.012vw;
+            }
+            ha-icon {
+              width: var(--name-icon-size);
+              vertical-align: 7%;
+              opacity: 0.4;
+            }
+            #card {
+              border-radius: var(--card-border-radius);
+              background: rgba(115, 115, 115, 0.04);
+            }
+            /* portrait */
+            @media screen and (max-width: 1200px) {
+              #name {
+                font-size: calc(var(--name-font-size) * 1.4);
+                padding: calc(var(--name-padding-v) * 1.4) calc(var(--name-padding-h) * 1.4);
+              }
+              ha-icon {
+                width: calc(var(--name-icon-size) * 1.4);
+              }
+              #card {
+                border-radius: calc(var(--card-border-radius) * 1.4);
+                margin: 0 0.5vw;
+              }
+            }
+            /* phone */
+            @media screen and (max-width: 800px) {
+              #name {
+                font-size: calc(var(--name-font-size) * 2.7);
+                padding: calc(var(--name-padding-v) * 2.7) calc(var(--name-padding-h) * 2.7);
+                letter-spacing: 0.12vw;
+              }
+              ha-icon {
+                width: calc(var(--name-icon-size) * 2.7);
+              }
+              #card {
+                border-radius: calc(var(--card-border-radius) * 2.7);
+                background: rgba(115, 115, 115, 0.08);
+                margin: 0 0.5vw;
+              }
+            }
+          `:''}
 
         ${this._config.template.includes('footer') ? `
 
