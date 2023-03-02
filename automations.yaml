@@ -32,6 +32,7 @@
         target:
           entity_id: light.table_group
       action_button_down_short: []
+      helper_last_controller_event: input_text.helper_last_controller_event
 - id: '1675706978863'
   alias: Remote - Living Room
   description: ''
@@ -110,15 +111,17 @@
       zone_entity: zone.home
       notify_device: 2d5fc0e59ac365b406795e6114b6a24b
 - id: '1676497123736'
-  alias: wake up test
+  alias: 01 wake up test
   description: ''
   use_blueprint:
     path: sbyx/wake-up-light-alarm-with-sunrise-effect.yaml
     input:
-      manual_time: 07:00:00
-      light_entity: light.couch
+      manual_time: 09:00:00
       timestamp_sensor: sensor.s7_edge_next_alarm
       check_entity: device_tracker.s7_edge
+      light_entity: light.philips_1746547p7_huelight
+      sunrise_duration: 5
+      end_brightness: 96
 - id: '1676695352325'
   alias: System - Plex Recently Added
   description: Sensor attribute backup
@@ -150,3 +153,158 @@
     target:
       entity_id: input_text.backup_plex_recently_added
   mode: single
+- id: '1676712254087'
+  alias: Managing a door contact
+  description: ''
+  use_blueprint:
+    path: marco-hacs/managing_a_door_contact.yaml
+    input:
+      light: light.table_front_light
+      light_off: 100
+      door: binary_sensor.samjin_multi_iaszone
+      tts: true
+      notify_device: 37ed3fa06bd2ae91f3c47d6cdc447356
+      push: true
+      text_notify: The Front Door is Open
+      notify_tts:
+      - media_player.g3_instant_speaker
+      alexa: false
+      notify_alexa:
+      - media_player.lulu_phone
+- id: '1676928639326'
+  alias: 02 MEDIA - Node off on paused for x Min
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - media_player.node_8adc
+    to: paused
+    for:
+      hours: 0
+      minutes: 1
+      seconds: 30
+  condition: []
+  action:
+  - service: switch.turn_off
+    data: {}
+    target:
+      device_id:
+      - ba3f289f4f281ea4902ca90cca0b9f17
+      - aec8f1a01101150430bf1d65e8f07486
+  - service: media_player.media_stop
+    data: {}
+    target:
+      entity_id: media_player.node_8adc
+  - service: media_player.clear_playlist
+    data: {}
+    target:
+      entity_id: media_player.node_8adc
+  - service: media_player.volume_set
+    data:
+      volume_level: 0.12
+    target:
+      entity_id: media_player.node_8adc
+  mode: single
+- id: '1677093926789'
+  alias: 02 Node ON on Source with conditions
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - media_player.node_8adc
+    to: playing
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 0
+  condition: []
+  action:
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: media_player.node_8adc
+        attribute: source
+        state: TV (HDMI)
+      sequence:
+      - type: turn_on
+        device_id: aec8f1a01101150430bf1d65e8f07486
+        entity_id: switch.radio_switch
+        domain: switch
+      - type: turn_on
+        device_id: ba3f289f4f281ea4902ca90cca0b9f17
+        entity_id: switch.subwoofer_switch
+        domain: switch
+      - service: media_player.volume_set
+        data:
+          volume_level: 0.15
+        target:
+          entity_id: media_player.node_8adc
+  mode: single
+- id: '1677275238517'
+  alias: 02 MEDIA - Node and Speakers OFF when SAMSUNG OFF
+  description: ''
+  trigger:
+  - platform: device
+    device_id: b91b22daad37db70b37adb9db8fc445c
+    domain: media_player
+    entity_id: media_player.samsung_55
+    type: turned_off
+  condition:
+  - condition: state
+    entity_id: media_player.node_8adc
+    attribute: source
+    state: TV (HDMI)
+  action:
+  - service: media_player.media_stop
+    data: {}
+    target:
+      entity_id: media_player.node_8adc
+  - service: switch.turn_off
+    data: {}
+    target:
+      device_id:
+      - aec8f1a01101150430bf1d65e8f07486
+      - ba3f289f4f281ea4902ca90cca0b9f17
+  - service: media_player.volume_set
+    data:
+      volume_level: 0.2
+    target:
+      entity_id: media_player.node_8adc
+  mode: single
+- id: '1677446975316'
+  alias: 01 Light - Bedroom Hue with Controller
+  description: ''
+  use_blueprint:
+    path: EPMatt/ikea_e1743.yaml
+    input:
+      integration: ZHA
+      helper_last_controller_event: input_text.helper_last_controller_event
+      controller_device: f9d2f322fa859bf1755236be155554b8
+      action_button_down_long:
+      - device_id: c8448a875d206fae98aa1a00ff63ac69
+        domain: light
+        entity_id: light.philips_1746547p7_huelight
+        type: brightness_decrease
+      action_button_up_short:
+      - type: turn_on
+        device_id: c8448a875d206fae98aa1a00ff63ac69
+        entity_id: light.philips_1746547p7_huelight
+        domain: light
+      action_button_up_long:
+      - device_id: c8448a875d206fae98aa1a00ff63ac69
+        domain: light
+        entity_id: light.philips_1746547p7_huelight
+        type: brightness_increase
+      action_button_up_double:
+      - device_id: c8448a875d206fae98aa1a00ff63ac69
+        domain: number
+        entity_id: number.philips_1746547p7_start_up_current_level
+        type: set_value
+        value: 128
+        enabled: false
+      action_button_down_short:
+      - type: turn_off
+        device_id: c8448a875d206fae98aa1a00ff63ac69
+        entity_id: light.philips_1746547p7_huelight
+        domain: light
+      action_button_down_release: []

@@ -1,6 +1,7 @@
 # Home Assistant Configuration
 
-[Home Assistant Container](https://www.home-assistant.io/installation/#compare-installation-methods) on a Synology DiskStation DS918+ NAS. [Wall mounted](https://www.durable.eu/en_DE/tablet-holder-wall/893323) tablet ([Galaxy Tab A 10.1](https://www.samsung.com/us/mobile/tablets/galaxy-tab-a/galaxy-tab-a-10-1-2019-32gb-black-wi-fi-sm-t510nzkaxar/)) using [Fully Kiosk Browser](https://www.fully-kiosk.com/#get-kiosk-apps). My configuration is exposed to HomeKit with Apple TV acting as a hub for remote connection.
+[Home Assistant Container](https://www.home-assistant.io/installation/#compare-installation-methods) on a NAS Laptop (Acer V3) running Unraid. 
+<!-- [Wall mounted](https://www.durable.eu/en_DE/tablet-holder-wall/893323) tablet ([Galaxy Tab A 10.1](https://www.samsung.com/us/mobile/tablets/galaxy-tab-a/galaxy-tab-a-10-1-2019-32gb-black-wi-fi-sm-t510nzkaxar/)) using [Fully Kiosk Browser](https://www.fully-kiosk.com/#get-kiosk-apps). My configuration is exposed to HomeKit with Apple TV acting as a hub for remote connection. -->
 
 If you like anything here, be sure to :star2: my repo!
 
@@ -32,10 +33,10 @@ No, because this is not a custom card or integration
 
 * Time and date with greeting based on time of day
 * Entities that are on, using natural language
-* Mailbox counter to show received mail
-* Temperature with emoji based on weather conditions
-* Important calendar information
-* Other conditional alerts
+<!-- * Mailbox counter to show received mail -->
+* Temperature with emoji based on weather conditions // Changed to its on card
+* Important calendar information -> incoming
+* Other conditional alerts -> incoming
 
 #### Footer
 
@@ -45,20 +46,21 @@ Popups that supports notifications.
 
 #### Popups
 
-Long press a button to show settings and information pertaining to the entity, using [browser_mod](https://github.com/thomasloven/hass-browser_mod). Light popups are automatically created using the `light` button-card template with 🍄 [Mushroom](https://github.com/piitaya/lovelace-mushroom)
+Long press a button to show settings and information pertaining to the entity, using [browser_mod](https://github.com/thomasloven/hass-browser_mod). 
+<!-- Light popups are automatically created using the `light` button-card template with 🍄 [Mushroom](https://github.com/piitaya/lovelace-mushroom) -->
 
-<img src="https://raw.githubusercontent.com/matt8707/hass-config/master/www/img/group.png" width="35%">
+<!-- <img src="https://raw.githubusercontent.com/matt8707/hass-config/master/www/img/group.png" width="35%"> -->
 
 #### Media
 
-Conditionally display media players based on the last active device. If nothing is active for 15 minutes, a poster of the last downloaded movie/episode is shown ([Plex](https://github.com/plexinc/pms-docker), [Radarr](https://github.com/Radarr/Radarr), [Sonarr](https://github.com/Sonarr/Sonarr)). Swipe to reveal non-active media players
+Conditionally display media players based on the last active device. If nothing is active for 15 minutes, a poster of the last downloaded movie/episode is shown, additionally a backup sensor is made in case the NAS is stopped or sleepig ([Plex](https://github.com/plexinc/pms-docker), [Radarr](https://github.com/Radarr/Radarr), [Sonarr](https://github.com/Sonarr/Sonarr)). Swipe to reveal non-active media players
 
 ![media](https://raw.githubusercontent.com/matt8707/hass-config/master/www/img/media.gif)
 
 ## Theme
 
 [card-mod](https://github.com/thomasloven/lovelace-card-mod) is used for the styles in `include/themes.yaml` and each popup also contain styles depending on content.
-I've made a tool to help with css element selectors - [https://matt8707.github.io/card-mod-helper/](https://matt8707.github.io/card-mod-helper/)
+Matthias has made a tool to help with css element selectors - [https://matt8707.github.io/card-mod-helper/](https://matt8707.github.io/card-mod-helper/)
 
 ![media](https://raw.githubusercontent.com/matt8707/hass-config/master/www/img/cardmod_helper.png)
 
@@ -77,6 +79,15 @@ I've made a tool to help with css element selectors - [https://matt8707.github.i
 | Vendor | Product | Integration | Description |
 |---|---|---|---|
 | Ubiquiti | UniFi Dream Machine | [unifi](https://www.home-assistant.io/integrations/unifi/) | Router, controller, switch and access point |
+| Home Assistant | SkyConnect  | [custom](https://www.home-assistant.io/skyconnect/) | Zigbee USB gateway using zigbee2mqtt |
+| Samsung | QE55Q7FNATXXC | [custom](https://github.com/ollo69/ha-samsungtv-smart) | 2018 55" Q7F 4K UHD Smart QLED TV|
+| Android | Oneplus & Samsung | [mobile_app](https://www.home-assistant.io/integrations/mobile_app/) | Home Assistant Companion App for Android |
+
+<!--
+| Xiaomi | Aqara MCCGQ11LM | [mqtt](https://www.home-assistant.io/integrations/mqtt/) | 3x zigbee door/window contact sensors |
+| Apple | TV 4K | [apple_tv](https://www.home-assistant.io/integrations/apple_tv/) | 2x set-top-boxes that streams content from Plex |
+| Sony | Bravia KDL-55W905A | [braviatv](https://www.home-assistant.io/integrations/braviatv/) | 2013 mid-range 55" 1080p 3D TV |
+| Sony | PlayStation 5 | [custom](https://github.com/FunkeyFlo/ps5-mqtt) | Game console - State, sleep and wake |
 | Synology | DiskStation DS918+ | [synology_dsm](https://www.home-assistant.io/integrations/synology_dsm/) | 4x4TB NAS - [matt8707/docker-compose-dsm](https://github.com/matt8707/docker-compose-dsm) |
 | ~~Raspberry~~ | ~~Pi 3 Model B+~~ | ~~[shell_command](https://www.home-assistant.io/integrations/shell_command/)~~ | ~~Bluetooth communication - [matt8707/docker-compose-rpi](https://github.com/matt8707/docker-compose-rpi)~~ |
 | Samsung | Galaxy Tab A SM-T510 | [custom](https://github.com/cgarwood/homeassistant-fullykiosk) | Wall mounted tablet in hallway by the front door |
@@ -88,20 +99,14 @@ I've made a tool to help with css element selectors - [https://matt8707.github.i
 | Gosund | SP112 | [esphome](https://www.home-assistant.io/integrations/esphome/) | 3x tuya wifi plugs with power monitoring, flashed with ESPHome |
 | Belkin | WeMo | [wemo](https://www.home-assistant.io/integrations/wemo/) | 2x wifi plugs and 1x motion sensor |
 | Google | Nest Mini | [cast](https://www.home-assistant.io/integrations/cast/) | Not really used, Google sent me one |
-| Deltaco | SH-P01 | [tuya](https://www.home-assistant.io/integrations/tuya/) | Cheap wifi plug for balcony LED lights |
-| Phoscon | ConBee II | [custom](https://github.com/Koenkk/zigbee2mqtt) | Zigbee USB gateway using zigbee2mqtt |
-| Xiaomi | Aqara MCCGQ11LM | [mqtt](https://www.home-assistant.io/integrations/mqtt/) | 3x zigbee door/window contact sensors |
-| Apple | TV 4K | [apple_tv](https://www.home-assistant.io/integrations/apple_tv/) | 2x set-top-boxes that streams content from Plex |
-| Sony | Bravia KDL-55W905A | [braviatv](https://www.home-assistant.io/integrations/braviatv/) | 2013 mid-range 55" 1080p 3D TV |
-| Samsung | UE50RU6025KXXC | [custom](https://github.com/ollo69/ha-samsungtv-smart) | 2019 low-range 50" 4K HDR TV |
-| Sony | PlayStation 5 | [custom](https://github.com/FunkeyFlo/ps5-mqtt) | Game console - State, sleep and wake |
-| Apple | iPhone X | [ios](https://www.home-assistant.io/integrations/ios/) | Home Assistant Companion App for iOS |
+| Deltaco | SH-P01 | [tuya](https://www.home-assistant.io/integrations/tuya/) | Cheap wifi plug for balcony LED lights | 
+-->
 
 *Note: I do not recommend "Belkin WeMo" or "Deltaco SH-P01"*
 
 ---
 
-**GitHub Repository**
+**OriginalGitHub Repository**
 [https://github.com/matt8707/hass-config](https://github.com/matt8707/hass-config)
 
 **Home Assistant Community Topic**

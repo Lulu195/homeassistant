@@ -114,7 +114,7 @@ template:
         {% set state = 'no' %}
         {% if is_state('person.lulu', 'home') %}
           {% set state = 'yes' %}
-        {% elif is_state('sensor.office_pc_real_session_state', 'Active') %}
+        {% elif is_state('person.tanya', 'home') %}
           {% set state = 'yes' %}
         {% endif %}
         {{ state }}
@@ -195,12 +195,12 @@ template:
       name: 'Active Media Players'
       state: >
         {% set media_players = [
-          states.media_player.samsung_55,
-          states.media_player.plex_plex_for_samsung_tv_2018,
-          states.media_player.bedroom_tv,
-          states.media_player.node_8adc,
-          states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
-          states.media_player.spotify_lulu 
+            states.media_player.samsung_55,
+            states.media_player.plex_plex_for_samsung_tv_2018,
+            states.media_player.bedroom_tv,
+            states.media_player.node_8adc,
+            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
+            states.media_player.spotify_lulu
           ] %}
         {{ media_players | selectattr('state','search','(playing|paused)') | list | count }}
       attributes:
@@ -211,12 +211,14 @@ template:
             states.media_player.bedroom_tv,
             states.media_player.node_8adc,
             states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
-            states.media_player.spotify_lulu 
+            states.media_player.spotify_lulu
           ] %}
           {%- set media_players_playing = media_players | selectattr('state','eq','playing') | list %}
           {%- set media_player_id_playing = media_players_playing | map(attribute='entity_id') | join(', ') %}
+        
           {%- set media_players_paused = media_players | selectattr('state','eq','paused') | list %}
           {%- set media_player_id_paused = media_players_paused | map(attribute='entity_id') | join(', ') %}
+          
           {%- if (media_players_playing | length > 0) -%}
             {{ media_player_id_playing }}
           {%- elif (media_players_paused | length > 0) -%}
@@ -302,11 +304,23 @@ template:
             {%- endif %}
           {%- endif %}
 
+ # SENSOR - NODE BLUESOUND STREAMER SOURCE
+    - unique_id: node_source
+      name: 'Node Source'
+      state: >
+        {% set receiver = states.media_player.node_8adc.state %} 
+        {% set source = states.media_player.node_8adc.attributes.source %}
+        {% if receiver == 'playing' and source is defined %}
+          {{ source }}
+        {% else %}
+          N/A
+        {% endif %}
+
 # SENSOR - PLEX RECENTLY ADDED (BACKUP)
     - unique_id: plex_recently_added_backup
       name: 'Recently Added (Offline)'
       state: >
-        {% if not is_state('sensor.plex_recently_added', 'Online') %}
+        {% if not is_state('sensor.plex_recently_added_backup', 'Online') %}
           Active
         {% else %}
           Passive

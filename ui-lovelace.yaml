@@ -508,8 +508,8 @@ views:
                   - type: custom:button-card
                     entity: device_tracker.desktop_cd40kgt_2 
                     name: Laptop L.
-                    tap_action: toggle switch.wake_on_lan #button.w11_mediaplaypause
-                    # double_tap_action: !include popup/desktop_spectre.yaml
+                    tap_action: toggle switch.wake_on_lan 
+                    double_tap_action: !include popup/desktop_spectre.yaml
                     template:
                       - base_pc
                       - icon_win_pc
@@ -1145,6 +1145,7 @@ views:
               #- base_saga
               #- extra_styles_saga
               - weather_forecast
+              #- weather_forecast_trial
             variables:
               temp_min: sensor.weather_min_temp
               temp_max: sensor.weather_max_temp

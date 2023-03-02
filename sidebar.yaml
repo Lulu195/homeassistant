@@ -45,16 +45,18 @@
             states.light.couch,
             states.light.ambient_kitchen,
             states.light.dinning,
-            states.switch.kitchen_led_switch,
+            states.light.kitchen_led_switch,
             states.light.philips_1746547p7_huelight,
             states.light.ikea_lamp_light,
             states.switch.led_strip_switch
           ] %}
 
-          {% set devices = [
+          {% set devices = [ 
             states.media_player.samsung_55,
+            states.media_player.spotify_lulu,
             states.media_player.node_8adc,
-            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt
+            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
+            states.switch.radio_switch
           ] %}
 
           {% set lights_on = lights | selectattr('state','eq','on') | list %}
@@ -211,40 +213,40 @@
               
 #        unique_id: sidebar_uptime
 # FROM https://community.home-assistant.io/t/a-different-take-on-designing-a-lovelace-ui/162594/4274
-        state: > 
-            System Uptime: 
-            {% set up_time =  as_timestamp(now()) - as_timestamp(states('sensor.uptime')) %}
+        # state: > 
+        #     System Uptime: 
+        #     {% set up_time =  as_timestamp(now()) - as_timestamp(states('sensor.uptime')) %}
 
-            {% if up_time == 0 %}
-              Just restarted...
-            {% else %}
-              {% set minutes = (up_time // 60) | int %}
-              {% set hours = (minutes // 60) %}
-              {% set days = (hours // 24) %}
-              {% set weeks = (days // 7) %}
+        #     {% if up_time == 0 %}
+        #       Just restarted...
+        #     {% else %}
+        #       {% set minutes = (up_time // 60) | int %}
+        #       {% set hours = (minutes // 60) %}
+        #       {% set days = (hours // 24) %}
+        #       {% set weeks = (days // 7) %}
 
-              {% set minutes = (minutes % 60) %}
-              {% set hours =  (hours % 24) %}
-              {% set days = (days % 7) %}
+        #       {% set minutes = (minutes % 60) %}
+        #       {% set hours =  (hours % 24) %}
+        #       {% set days = (days % 7) %}
 
-              {% macro phrase(value, name) %}
-                        {%- set value = value %}
-                        {%- set end = 's' if value > 1 else '' %}
-                        {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
-              {%- endmacro %}
+        #       {% macro phrase(value, name) %}
+        #                 {%- set value = value %}
+        #                 {%- set end = 's' if value > 1 else '' %}
+        #                 {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
+        #       {%- endmacro %}
 
-              {% if weeks > 0 %}
-                {% set text = [ phrase(weeks, 'week'), phrase(days, 'day') ] | select('!=','') | list | join(', ') %}
-              {% elif days > 0 %}
-                {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hour') ] | select('!=','') | list | join(', ') %}
-              {% else %}
-                {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hour'), phrase(minutes, 'min') ] | select('!=','') | list | join(', ') %}
-                {% set last_comma = text.rfind(',') %}
-                {% if last_comma != -1 %}
-                  {% set text = text[:last_comma] + ' and' + text[last_comma + 1:] %}
-                {% endif %}
-              {% endif %}
+        #       {% if weeks > 0 %}
+        #         {% set text = [ phrase(weeks, 'week'), phrase(days, 'day') ] | select('!=','') | list | join(', ') %}
+        #       {% elif days > 0 %}
+        #         {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hour') ] | select('!=','') | list | join(', ') %}
+        #       {% else %}
+        #         {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hour'), phrase(minutes, 'min') ] | select('!=','') | list | join(', ') %}
+        #         {% set last_comma = text.rfind(',') %}
+        #         {% if last_comma != -1 %}
+        #           {% set text = text[:last_comma] + ' and' + text[last_comma + 1:] %}
+        #         {% endif %}
+        #       {% endif %}
 
-            {{ text }}
+        #     {{ text }}
 
-            {% endif %}
+        #     {% endif %}
