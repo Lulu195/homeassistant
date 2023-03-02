@@ -98,7 +98,7 @@ template:
             {{ state | selectattr('last_changed','eq', last_changed) | map(attribute='name') | list | join }}
           {% endmacro %}
 
-          {% set recently_added = recently_added_backup if is_state('sensor.recently_added_offline','Active') else recently_added %}
+          {% set recently_added = plex_recently_added_backup if is_state('sensor.recently_added_offline','Active') else recently_added %}
 
           {% set playing = media_players | selectattr('state','eq','playing') | list %}
           {% set timeout_playing = False if playing | length == 0 else

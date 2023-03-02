@@ -187,7 +187,7 @@ media_volume:
           type: custom:mod-card
           card:
             type: custom:media_player-popup-card
-            #entity: media_player.denon_receiver
+            #entity: media_player.node_8adc
             entity: '[[[ return variables.volume_control; ]]]' # IF something, then receiver, else current entity
             icon: none
             fullscreen: false
@@ -300,14 +300,15 @@ conditional_media:
     - base_media
     - icon_play_pause
   variables:
-    entity_picture: ''
-    i: >
-      [[[
-        if (entity) {
-          let data = entity.attributes.data;
-          return data === undefined || Math.floor(Math.random() * (data.length - 1)) + 1;
-        }
-      ]]]
+    entity_picture: '[[[ return entity.entity_id; ]]]'
+    # entity_picture: ''
+    # i: >
+    #   [[[
+    #     if (entity) {
+    #       let data = entity.attributes.data;
+    #       return data === undefined || Math.floor(Math.random() * (data.length - 1)) + 1;
+    #     }
+    #   ]]]
   state_display: >
     [[[
       let horizontalStack = this.getRootNode().host,
