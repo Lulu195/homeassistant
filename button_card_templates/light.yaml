@@ -26,7 +26,7 @@ light:
       ]]]
     circle_input_unit: '%'
   double_tap_action:
-    action: fire-dom-event
+    action: more-info #fire-dom-event
     browser_mod:
       service: browser_mod.popup
       data:
