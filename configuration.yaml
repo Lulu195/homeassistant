@@ -46,6 +46,16 @@ lovelace:
       { url: '/local/fonts.css?v=2.1',                                              type: css }
     ]
 
+#panel_iframe:
+#  plex:
+#    title: "Plex"
+#    url: !secret plex_url2 ("http://ip:port/web")
+#    icon: mdi:plex
+#  unraid:
+#    title: "Unraid"
+#    url: !secret unraid_url
+#    icon: 
+
 logger:
   default: warning
   logs:
