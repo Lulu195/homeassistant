@@ -105,7 +105,8 @@ Matthias has made a tool to help with css element selectors - [https://matt8707.
 *Note: I do not recommend "Belkin WeMo" or "Deltaco SH-P01"*
 
 ---
-
+TODO: Code cleanup and fix missing entities and services (Curently 193 entities and 21 services) 
+      *Some are due some server services not beeing ported yes since i changed the servers and needs reconfiguration
 **OriginalGitHub Repository**
 [https://github.com/matt8707/hass-config](https://github.com/matt8707/hass-config)
 
