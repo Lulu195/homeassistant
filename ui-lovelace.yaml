@@ -1184,8 +1184,8 @@ views:
                         state_not: Samsung
                       - entity: select.conditional_media
                         state_not: Plex (Plex for Samsung - TV 2018)
-                      # - entity: select.conditional_media
-                      #   state_not: Sovrum
+                      - entity: select.conditional_media
+                        state_not: Plex (Plex Cast - Chromecast)
                       # - entity: select.conditional_media
                       #   state_not: Spotify
                       - entity: select.conditional_media
@@ -1195,7 +1195,9 @@ views:
                       # - entity: select.conditional_media
                       #   state_not: Plex (Plex for Windows - DESKTOP-030IPD1)
                       - entity: select.conditional_media
-                        state_not: Plex W11
+                        state_not: Plex (Plex for Windows - DESKTOP-CD40KGT)
+
+
 
                     card:
                       type: custom:button-card
@@ -1254,7 +1256,21 @@ views:
                         # - media_volume
                         #- icon_plex
                         - progress_bar
-
+                      
+                  
+                  - type: conditional
+                    conditions:
+                      - entity: select.conditional_media
+                        state: Plex (Plex Cast - Chromecast)
+                    card:
+                      type: custom:button-card
+                      entity: media_player.plex_plex_cast_chromecast
+                      triggers_update: media_player.plex_plex_cast_chromecast
+                      template:
+                        - conditional_media
+                        #- icon_plex
+                        - progress_bar
+                  
                   # - type: conditional
                   #   conditions:
                   #     - entity: select.conditional_media
@@ -1307,17 +1323,15 @@ views:
                   - type: conditional
                     conditions:
                       - entity: select.conditional_media
-                        state: Plex W11
+                        state: Plex (Plex for Windows - DESKTOP-CD40KGT)
                     card:
                       type: custom:button-card
-                      entity: media_player.plex_plex_htpc_for_windows_desktop_cd40kgt
+                      entity: media_player.plex_plex_for_windows_desktop_cd40kgt
                       template:
                         - conditional_media
                         #- icon_plex
                         - progress_bar
-
-
-
+ 
 ###################################
 ###### SWIPE CARD - 2nd PAGE ######
 ###################################
@@ -1379,7 +1393,7 @@ views:
                         - icon_tv
 
                     - type: custom:button-card
-                      entity: media_player.plex_plex_htpc_for_windows_desktop_cd40kgt
+                      entity: media_player.plex_plex_for_windows_desktop_cd40kgt
                       name: Lulu
                       template:
                         - media
@@ -1391,6 +1405,13 @@ views:
                       template:
                         - media
                         - icon_win_pc
+
+                    - type: custom:button-card
+                      entity: media_player.plex_plex_cast_chromecast
+                      name: Chromecast
+                      template:
+                        - media
+                       # - icon_win_pc
 
       #################################################
       #                                               #

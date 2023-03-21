@@ -88,8 +88,8 @@ template:
             states.media_player.plex_plex_for_samsung_tv_2018,
             states.media_player.bedroom_tv,
             states.media_player.node_8adc,
-            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
-            states.media_player.spotify_lulu
+            states.media_player.plex_plex_for_windows_desktop_cd40kgt,
+            states.media_player.plex_plex_cast_chromecast
             ] %}
 
           {% macro media(state) %}
@@ -123,8 +123,8 @@ template:
             states.media_player.plex_plex_for_samsung_tv_2018,
             states.media_player.bedroom_tv,
             states.media_player.node_8adc,
-            states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
-            states.media_player.spotify_lulu 
+            states.media_player.plex_plex_for_windows_desktop_cd40kgt,
+            states.media_player.plex_plex_cast_chromecast
             ] %}
           {{ recently_added + plex_recently_added_backup + media_players | map(attribute='name') | list }}
         select_option:
