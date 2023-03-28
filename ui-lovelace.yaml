@@ -466,6 +466,7 @@ views:
             start_card: 1
             parameters:
               roundLengths: true
+              touchStartPreventDefault: false
               effect: coverflow
               speed: 650
               spaceBetween: 20
