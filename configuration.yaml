@@ -40,21 +40,28 @@ lovelace:
       { url: /hacsfiles/light-popup-card/light-popup-card.js,                       type: module },
       { url: /hacsfiles/atomic-calendar-revive/atomic-calendar-revive.js,           type: module },
       
-      { url: '/local/marked.min.js?v=4.2.5',                                        type: module },
+      { url: '/local/marked.min.js?v=4.3.0',                                        type: module },
       { url: '/local/vanilla-tilt.min.js?v=1.8.0',                                  type: module },
       { url: '/local/browser_mod_icon.js?v=0.5',                                    type: module },
       { url: '/local/fonts.css?v=2.1',                                              type: css }
     ]
 
-#panel_iframe:
-#  plex:
-#    title: "Plex"
-#    url: !secret plex_url2 ("http://ip:port/web")
-#    icon: mdi:plex
-#  unraid:
-#    title: "Unraid"
-#    url: !secret unraid_url
-#    icon: 
+panel_iframe:
+  # plex:
+  #   title: "Plex"
+  #   url: !secret plex_url2 #("http://ip:port/web")
+  #   icon: mdi:plex
+  unraid:
+    title: "Unraid"
+    url: !secret unraid_url
+    icon: mdi:nas
+  windy:
+    title: "Windy"
+    url: !secret windy_url 
+    icon: mdi:weather-night-partly-cloudy
+  
+
+
 
 logger:
   default: warning
@@ -62,7 +69,7 @@ logger:
     homeassistant.components.websocket_api: fatal
     custom_components.monitor_docker.helpers: error
     homeassistant.setup: error
-    pyeloverblik.eloverblik: debug
+    pyeloverblik.eloverblik: error #debug
     homeassistant.core: fatal
     homeassistant.components.mqtt: warning
 
@@ -106,7 +113,7 @@ sensor:
   # - platform: rejseplanen #https://www.home-assistant.io/integrations/rejseplanen
   #   stop_id: "YOUR_STOP_ID"
 
-  - platform: linux_battery
+#  - platform: linux_battery
 
   - platform: nordpool
     region: "DK1"           # Country/region to get the energy prices for.
@@ -184,7 +191,7 @@ recorder:
 # TEXT TO SPEECH
 tts:
   - platform: google_translate
-    service_name: google_say
+#    service_name: google_say
 
 # WEATHER
 weather:
