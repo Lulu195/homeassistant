@@ -1,8 +1,9 @@
+# FOR HACKS INTEGRATIONs TO SHOW UP MAKE SURE TO ENABLE EXPERIMENTAL FEATURES (IN HACKS CONFIG)
 action: fire-dom-event
 browser_mod:
   service: browser_mod.popup
   data:
-    title: Uppdateringar
+    title: Updates
     card_mod:
       style:
         #popup header
@@ -40,7 +41,7 @@ browser_mod:
 
           - type: custom:button-card
             entity: sensor.current_version
-            name: Uppdatera HASS
+            name: Update HA Install
             variables:
               latest: sensor.docker_hub
               latest_beta: sensor.docker_hub_beta
@@ -51,7 +52,7 @@ browser_mod:
                 sequence:
                   - service: browser_mod.notification
                     data:
-                      message: Startar watchtower...
+                      message: Starting watchtower...
                   - service: switch.turn_on
                     data:
                       entity_id: switch.docker_watchtower
@@ -68,7 +69,7 @@ browser_mod:
 
           - type: custom:button-card
             entity: sensor.template_updates
-            name: Uppdateringar
+            name: Updates
             template:
               - updates_icon_name
               - >
@@ -84,9 +85,9 @@ browser_mod:
                 sequence:
                   - service: browser_mod.notification
                     data:
-                      message: Söker efter uppdateringar...
+                      message: Checking for updates...
                   - service: homeassistant.update_entity
                     data:
                       entity_id:
-                        - sensor.updates_esphome_latest
+                        #- sensor.updates_esphome_latest
                         - sensor.updates_kemper

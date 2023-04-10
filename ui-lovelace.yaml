@@ -1673,6 +1673,7 @@ views:
             name: Lulu
             triggers_update:
               - sensor.lulu_last_changed
+              - person.lulu
             double_tap_action:
               !include popup/home_lulu.yaml
             variables:
@@ -1687,6 +1688,7 @@ views:
             name: Tanya
             triggers_update:
               - sensor.tanya_last_changed
+              - person.tanya
             double_tap_action:
               !include popup/home_tanya.yaml
             variables:
@@ -1697,14 +1699,14 @@ views:
               - circle
 
           - type: custom:button-card
-            entity: script.home_leave
+            entity: script.home_leave_test #found in scene_config.yaml
             name: All Off
             template:
               - base
               - icon_away
 
           - type: custom:button-card
-            entity: script.home_arrive
+            entity: script.home_arrive #found in scene_config.yaml
             name: Home
             template:
               - base
@@ -1774,22 +1776,29 @@ views:
 
           - type: custom:button-card
             name: >
-              <ha-icon icon="mdi:chart-line-variant"></ha-icon> Historic
+              <ha-icon icon="mdi:chart-line-variant"></ha-icon> History
             tap_action:
               !include popup/footer_history.yaml
             template: footer
 
+#          - type: custom:button-card
+#            name: >
+#              <ha-icon icon="mdi:tablet"></ha-icon> Tablet
+#            tap_action:
+#              !include popup/footer_tablet.yaml
+#            variables:
+#              notify: >
+#                [[[
+#                  let id = states['binary_sensor.galaxy_tab_a_plugged_in'];
+#                  if (id) return id.state === 'off';
+#                ]]]
+#            template: footer
+
           - type: custom:button-card
             name: >
-              <ha-icon icon="mdi:tablet"></ha-icon> Tablet
+              <ha-icon icon="mdi:chart-line-variant"></ha-icon> Electricity
             tap_action:
-              !include popup/footer_tablet.yaml
-            variables:
-              notify: >
-                [[[
-                  let id = states['binary_sensor.galaxy_tab_a_plugged_in'];
-                  if (id) return id.state === 'off';
-                ]]]
+              !include popup/footer_electricity.yaml
             template: footer
 
           - type: custom:button-card

@@ -79,7 +79,12 @@ browser_mod:
             #   name: Watchtower
             #   icon: cil:docker-watchtower
 
-            - entity: sensor.template_hass_next_release
+#            - entity: sednsor.template_hass_next_release
+
+            - entity: sensor.watchman_missing_entities
+              name: Missing entities
+            - entity: sensor.watchman_missing_services
+              name: Missing services
 
             # - entity: sensor.databas
             #   icon: mdi:database
@@ -141,7 +146,7 @@ browser_mod:
                   template: icon_name
 
                 - type: custom:button-card
-                  name: Container
+                  name: Container restart
                   icon: mdi:reload
                   tap_action:
                     action: call-service
@@ -282,16 +287,16 @@ browser_mod:
             - entity: sensor.template_nas_status
 
             - entity: binary_sensor.nas_security_status
-              name: Säkerhetsstatus
+              name: Security status #Säkerhetsstatus
 
             - entity: sensor.nas_volume_1_average_disk_temp
 
             - entity: sensor.last_boot
               name: Last boot #Senast omstart
 
-            - entity: update.nas_dsm_update
-              icon: mdi:package-up
-              name: Update #Uppdatering
+#            - entity: update.nas_dsm_update
+#              icon: mdi:package-up
+#              name: Update #Uppdatering
 
             - type: custom:bar-card
               width: 55%

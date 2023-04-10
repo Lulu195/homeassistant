@@ -2,7 +2,7 @@ action: fire-dom-event
 browser_mod:
   service: browser_mod.popup
   data:
-    title: Platta
+    title: Tablet
     card_mod:
       style:
         #popup header
@@ -77,7 +77,7 @@ browser_mod:
               entities:
 
                 - entity: sensor.template_fullykiosk_memory
-                  name: Minne - 2GB
+                  name: Memory - GB #Minne - 2GB
                   icon: mdi:memory
                   tap_action:
                     action: call-service

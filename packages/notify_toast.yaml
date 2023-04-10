@@ -4,16 +4,16 @@ notify:
     services:
       - service: mobile_app_s7
       - service: mobile_app_s7_edge
-      - service: mobile_app_sanja_iphone
+      - service: mobile_app_tanya_phone
 
 homeassistant:
   customize:
-    binary_sensor.badrum_motion_motion:
-      friendly_name: badrummet
-    binary_sensor.garderob_motion_motion:
-      friendly_name: klädkammaren
-    binary_sensor.wemo_motion:
-      friendly_name: vardagsrummet
+    binary_sensor.ikea_of_sweden_tradfri_motion_sensor_motion:
+      friendly_name: Office
+    binary_sensor.samjin_motion_iaszone:
+      friendly_name: Entrance
+    binary_sensor.samjin_multi_accelerometer:
+      friendly_name: Door
 
 # input_datetime:
 #   sleep_notify_torrent:
@@ -28,9 +28,9 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - binary_sensor.garderob_motion_motion
-        - binary_sensor.badrum_motion_motion
-        - binary_sensor.wemo_motion
+        - binary_sensor.ikea_of_sweden_tradfri_motion_sensor_motion #Office
+        - binary_sensor.samjin_motion_iaszone #Hallway
+        - binary_sensor.samjin_multi_accelerometer #Door
       from: 'off'
       to: 'on'
     action:
@@ -38,7 +38,7 @@ automation:
       data:
         duration: 3000
         message: >
-          Rörelse detekterat i {{ trigger.to_state.name }}
+          Motion detected in {{ trigger.to_state.name }}
 
   - alias: dismiss_lovelace_updated
     id: '1309195316329'
@@ -95,17 +95,17 @@ automation:
             - sensor.hass_release_notes_beta
       - delay:
           minutes: 15
-      - service: notify.mobile_app_iphone
+      - service: notify.mobile_app_s7_edge
         data:
           title: >
             {{ states('sensor.docker_hub_beta') if version(installed).beta
-            else states('sensor.docker_hub') }} tillgänglig {{ '\U0001F389' }}
-          message: Håll in för att uppdatera
+            else states('sensor.docker_hub') }} available {{ '\U0001F389' }}
+          message: Hold to update #Håll in för att uppdatera
           data:
             url: https://www.home-assistant.io/latest-release-notes/
             actions:
               - action: START_WATCHTOWER
-                title: Uppdatera
+                title: Update
 
   - alias: ios_notify_hass_update_action
     id: '0694774018396'

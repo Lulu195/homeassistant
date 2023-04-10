@@ -21,19 +21,19 @@ browser_mod:
               name: WoL
             - entity: button.spectre_publishallsensors
               secondary_info: last-changed
-            - entity: sensor.spectre_satellite_audio_default_device
-              name: Output device
-            - entity: sensor.spectre_satellite_audio_default_input_device
-              name: Input Device
+            # - entity: sensor.spectre_satellite_audio_default_device
+            #   name: Output device
+            # - entity: sensor.spectre_satellite_audio_default_input_device
+            #   name: Input Device
             #secondary_info: last-changed
             - entity: sensor.spectre_satellite_gpuload
-              name: Gpu load
+              name: Gpu Load
             - entity: sensor.spectre_satellite_gputemperature
               name: Gpu Temp
 
 
             - type: custom:slider-entity-row
-              entity: media_player.plex_plex_htpc_for_windows_desktop_cd40kgt
+              entity: media_player.plex_plex_for_windows_desktop_cd40kgt
               card_mod:
                 style:
                   # icon color mute and max

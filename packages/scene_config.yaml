@@ -35,12 +35,41 @@ script:
         target:
           entity_id:
             - light.all_group_exclude_hall
-            - climate.ac
             - media_player.bedroom_tv
             - media_player.samsung_55
             - switch.bedroom_switch
             - switch.balcony_switch
             - switch.subwoofer_switch
             - switch.radio_switch
+            - light.mushroom
+            - switch.balcony_switch,
+            - light.couch,
+            - light.ambient_kitchen,
+            - light.dinning,
+            - light.kitchen_led_switch,
+            - light.philips_1746547p7_huelight,
+            - light.ikea_lamp_light,
+            - switch.led_strip_switch
       - delay:
           seconds: 4
+
+  home_leave_test:
+    alias: Power down
+    sequence:
+      - service: homeassistant.turn_off
+        target:
+          entity_id: >
+            {% set light_entities = expand('group.all') | selectattr('entity_id', 'match', '.*light.*') %}
+            {% set media_player_entities = expand('group.all') | selectattr('entity_id', 'match', '.*media_player.*') %}            
+            {% set included_switches = [
+              'switch.bedroom_switch',
+              'switch.balcony_switch',
+              'switch.subwoofer_switch',
+              'switch.radio_switch',
+              'switch.led_strip_switch']
+            %}
+            {% for entity in light_entities + media_player_entities + included_switches %}
+              {{ entity.entity_id }},
+            {% endfor %}
+      - delay:
+          seconds: 5

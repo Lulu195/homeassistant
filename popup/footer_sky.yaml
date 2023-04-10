@@ -28,10 +28,10 @@ browser_mod:
             #ADD IFRAME WITH https://virmalised.ee/aurora-live-cameras/abisko-lights-over-lapland-sweden-aurora-live-camera.jpg?1674522444
             #ADD IFRAME WITH https://virmalised.ee/aurora-live-cameras/
             
-            - entity: binary_sensor.template_udm_internet
+            - entity: sensor.astroweather_condition #sensor.aurora_visibility_aurora_visibility
               secondary_info: last-changed
 
-            - entity: sensor.template_udm_cpu_temp
+            - entity: sensor.astroweather_condition
               name: TEST TEST
 
             - type: iframe
