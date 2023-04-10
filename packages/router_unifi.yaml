@@ -33,28 +33,28 @@
 #           cookies=login.cookies, verify=False)
 #       data = response.json()["data"][0]
 
-#       print(json.dumps({
-#           "cpu": data["system-stats"]["cpu"],
-#           "cpu_temp": round(data["temperatures"][1]["value"], 1),
-#           "mem": data["system-stats"]["mem"],
-#           "disk": round(data["storage"][1]["used"] / data["storage"][1]["size"] * 100, 1),
-#           "internet": data["internet"],
-#           "uptime": datetime.fromtimestamp(data["startup_timestamp"]).isoformat(),
-#           "version": data["displayable_version"]
-#       }))
-#       EOF
-#     command_timeout: 180
-#     value_template: >
-#       {{ value_json.internet }}
-#     json_attributes:
-#       - cpu
-#       - cpu_temp
-#       - mem
-#       - disk
-#       - internet
-#       - uptime
-#       - version
-#     scan_interval: 900
+    #   print(json.dumps({
+    #       "cpu": data["system-stats"]["cpu"],
+    #       "cpu_temp": round(data["temperatures"][1]["value"], 1),
+    #       "mem": data["system-stats"]["mem"],
+    #       "disk": round(data["storage"][1]["used"] / data["storage"][1]["size"] * 100, 1),
+    #       # "internet": data["internet"],
+    #       "uptime": datetime.fromtimestamp(data["startup_timestamp"]).isoformat(),
+    #       "version": data["displayable_version"]
+    #   }))
+    #   EOF
+    # command_timeout: 180
+    # value_template: >
+    #   {{ value_json.version }}
+    # json_attributes:
+    #   - cpu
+    #   - cpu_temp
+    #   - mem
+    #   - disk
+    #   # - internet
+    #   - uptime
+    #   - version
+    # scan_interval: 900
 
 # template:
 #   - binary_sensor:
