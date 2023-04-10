@@ -153,6 +153,12 @@ tablet:
   weather-icon-sunny: url("/local/svg/weather/static/clear-day.svg")
   weather-icon-windy: url("/local/svg/weather/static/wind.svg")
   weather-icon-windy-alert: url("/local/svg/weather/static/wind-alert.svg")  
+
+  # Progress Bar
+  progress-bar-color: '#e5a00d'
+  progress-bar-background-color: rgba(0,0,0,0.33)
+  progress-bar-height: 2%
+  
   ####################################################
   #                                                  #
   #                     CARD-MOD                     #
