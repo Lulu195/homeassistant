@@ -2,6 +2,7 @@ template:
   # SENSORS
   sensor:
   # SENSOR - WEATHER
+  # TO-DO Update replace timezone and make it automatic 
     - unique_id: weather_min_temp
       name: 'Weather Min Temp'
       state: >-

@@ -63,7 +63,7 @@ homeassistant:
 #         data:
 #           transition: 10
 #         target:
-#           area_id: sovrum
+#           area_id: living_room
 #       - service: script.samsung_tv_energy_saving
 #
 
@@ -86,9 +86,7 @@ template:
           {% macro media(state) %}
           {% set state = media_players | selectattr('state','eq',state) | list %}
           {% set last_changed = recently_added if state | length == 0 else state | map(attribute='last_changed') | list | max %}
-          {% set exclude_node = media_players | selectattr('state', 'eq', 'playing') | selectattr('attributes.source', 'eq', 'TV (HDMI)') | list | map(attribute='name') | list %}
-          {% set exclude_node = exclude_node + [media_players[3].name] if media_players[3].attributes.source == 'TV (HDMI)' else exclude_node %}
-          {{ state | selectattr('last_changed','eq', last_changed) | rejectattr('name', 'in', exclude_node) | map(attribute='name') | list | join }}
+            {{ state | selectattr('last_changed','eq', last_changed) | map(attribute='name') | list | join }}
           {% endmacro %}
 
           {% set recently_added = plex_recently_added_backup if is_state('sensor.recently_added_offline','Active') else recently_added %}
@@ -119,7 +117,7 @@ template:
             states.media_player.plex_plex_for_windows_desktop_cd40kgt,
             states.media_player.plex_plex_cast_chromecast
             ] %}
-           {{ recently_added + plex_recently_added_backup + media('unknown') | map(attribute="name") | list if media('unknown') != '' else recently_added + plex_recently_added_backup }}
+          {{ recently_added + plex_recently_added_backup + media_players | map(attribute='name') | list }}
         select_option:
           service: select.select_option
           target:
@@ -179,10 +177,10 @@ template:
 #     action:
 #       - service: media_player.turn_on
 #         target:
-#           entity_id: media_player.sovrum
+#           entity_id: media_player.living_room
 #       - service: remote.send_command
 #         target:
-#           entity_id: remote.sovrum
+#           entity_id: remote.living_room
 #         data:
 #           command: wakeup
 
