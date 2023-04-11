@@ -19,4 +19,4 @@ browser_mod:
     cards:
       - type: weather-forecast
         entity: weather.pirateweather
-        name: Hvittingfoss
+        name: Location Name #

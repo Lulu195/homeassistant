@@ -2,7 +2,7 @@ action: fire-dom-event
 browser_mod:
   service: browser_mod.popup
   data:
-    title: Dammsugare
+    title: Vacuum cleaner
     timeout: 300000
     style: |
       --popup-max-width: calc(385px + 495px);
@@ -45,14 +45,14 @@ browser_mod:
               "map"
       cards:
 
-        ### ÖVERSIKT
+        ### OVERVIEW
 
         - type: vertical-stack
           view_layout:
             grid-area: info
           cards:
           - type: entities
-            title: Översikt
+            title: Overview
             card_mod:
               class: header
               style: |
@@ -179,10 +179,10 @@ browser_mod:
                       params: [16821,23105]
                   template: icon_only
 
-        ### KARTLÄGGNING
+        ### SURVEY
 
         - type: custom:xiaomi-vacuum-map-card
-          title: Kartläggning
+          title: Survey
           view_layout:
             grid-area: map
           card_mod:
@@ -217,7 +217,7 @@ browser_mod:
                 color: #9da0a2 !important;
                 padding: 0.42em;
               }
-          language: sv
+          language: en
           entity: vacuum.morty
           map_source:
             camera: camera.vacuum_map

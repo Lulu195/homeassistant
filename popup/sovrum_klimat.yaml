@@ -2,7 +2,7 @@ action: fire-dom-event
 browser_mod:
   service: browser_mod.popup
   data:
-    title: Klimat
+    title: Climate
     card_mod:
       style:
         #popup header
@@ -63,7 +63,7 @@ browser_mod:
 
                   - type: custom:mushroom-climate-card
                     entity: climate.ac
-                    name: Klimat
+                    name: Climate
                     icon: mdi:home-thermometer
                     hvac_modes:
                       - 'off'
@@ -91,12 +91,12 @@ browser_mod:
                         }
 
                   - type: custom:hui-horizontal-stack-card
-                    title: Fläktläge
+                    title: Fan mode
                     cards:
 
                       - type: custom:button-card
                         entity: climate.ac
-                        name: Låg
+                        name: Low
                         variables:
                           fan_mode: low
                         template:
@@ -112,7 +112,7 @@ browser_mod:
 
                       - type: custom:button-card
                         entity: climate.ac
-                        name: Hög
+                        name: High
                         variables:
                           fan_mode: high
                         template:
@@ -120,14 +120,14 @@ browser_mod:
 
                       - type: custom:button-card
                         entity: climate.ac
-                        name: Svep
+                        name: Sweep
                         template:
                           - climate_swing_mode
 
                   - entity: sensor.broadlink_temperature
-                    name: Rumstemperatur
+                    name: Room temperature
                   - entity: sensor.broadlink_humidity
-                    name: Luftfuktighet
+                    name: Humidity
 
               - type: custom:apexcharts-card
                 layout: minimal
@@ -184,10 +184,10 @@ browser_mod:
                   class: content
                 entities:
                   - entity: binary_sensor.sovrum_contact_contact
-                    name: Sovrumsfönster
+                    name: Bedroom window
                     icon: mdi:window-closed
                   - entity: automation.climate_safeguard
-                    name: Endast fläkt om fönstret är stängt
+                    name: Only fan if the window is closed
                     icon: mdi:robot
 
                   - entity: timer.climate

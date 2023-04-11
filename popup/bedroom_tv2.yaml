@@ -2,7 +2,7 @@ action: fire-dom-event
 browser_mod:
   service: browser_mod.popup
   data:
-    title: bedroom Tv
+    title: Bedroom Tv
     card_mod:
       style:
         #popup header

@@ -2,7 +2,7 @@ action: fire-dom-event
 browser_mod:
   service: browser_mod.popup
   data:
-    title: Klimat
+    title: Climate
     card_mod:
       style:
         #popup header
@@ -23,7 +23,7 @@ browser_mod:
 
             - type: custom:mushroom-climate-card
               entity: climate.ac
-              name: Klimat
+              name: Climate
               icon: mdi:home-thermometer
               hvac_modes:
                 - 'off'
@@ -84,10 +84,10 @@ browser_mod:
                           }
 
             - entity: automation.climate_safeguard
-              name: Endast fläkt om fönstret är stängt
+              name: Only fan if the window is closed
               icon: mdi:robot
             - entity: binary_sensor.bedroom_contact_contact
-              name: bedroomsfönster
+              name: bedroom window
               icon: mdi:window-closed
             - entity: switch.climate_timer
               name: Timer
@@ -97,13 +97,13 @@ browser_mod:
             - entity: timer.climate
 
             - entity: sensor.broadlink_temperature
-              name: Rumstemperatur
+              name: Room temperature
             - entity: sensor.broadlink_humidity
-              name: Luftfuktighet
+              name: Air humidity
 
         - type: custom:apexcharts-card
           layout: minimal
-          locale: se
+          locale: dk
           graph_span: 8h
           show:
             loading: false

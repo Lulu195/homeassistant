@@ -1,7 +1,7 @@
 homeassistant:
   customize:
     # automation.tv_on_lights:
-    #   friendly_name: Tänd Tv-lampa
+    #   friendly_name: Turn on the TV lights
     media_player.samsung_55:
       friendly_name: Samsung
       device_class: tv
@@ -23,7 +23,7 @@ homeassistant:
 #       - service: browser_mod.notification
 #         data:
 #           duration: 8000
-#           message: Setting eco mode on TV in the bedroom... #Ställer in eko-läge på Tv i sovrummet...
+#           message: Setting eco mode on TV in the bedroom...
 #       - service: media_player.play_media
 #         target:
 #           entity_id: media_player.samsung
@@ -66,16 +66,7 @@ homeassistant:
 #           area_id: sovrum
 #       - service: script.samsung_tv_energy_saving
 #
-      # - name: conditional_media
-      #   state: >
-      #     {% set recently_added = 'Last added' %}
-      #     {% set paused_timeout_minutes = 15 %}
-      #     {% set media_players = [
-      #       states.media_player.vardagsrum,
-      #       states.media_player.sovrum,
-      #       states.media_player.plex_plex_for_windows_desktop_030ipd1,
-      #       states.media_player.node,
-      #       states.media_player.spotify ] %}
+
 template:
   - select:
       - name: conditional_media
@@ -95,7 +86,9 @@ template:
           {% macro media(state) %}
           {% set state = media_players | selectattr('state','eq',state) | list %}
           {% set last_changed = recently_added if state | length == 0 else state | map(attribute='last_changed') | list | max %}
-            {{ state | selectattr('last_changed','eq', last_changed) | map(attribute='name') | list | join }}
+          {% set exclude_node = media_players | selectattr('state', 'eq', 'playing') | selectattr('attributes.source', 'eq', 'TV (HDMI)') | list | map(attribute='name') | list %}
+          {% set exclude_node = exclude_node + [media_players[3].name] if media_players[3].attributes.source == 'TV (HDMI)' else exclude_node %}
+          {{ state | selectattr('last_changed','eq', last_changed) | rejectattr('name', 'in', exclude_node) | map(attribute='name') | list | join }}
           {% endmacro %}
 
           {% set recently_added = plex_recently_added_backup if is_state('sensor.recently_added_offline','Active') else recently_added %}
@@ -126,7 +119,7 @@ template:
             states.media_player.plex_plex_for_windows_desktop_cd40kgt,
             states.media_player.plex_plex_cast_chromecast
             ] %}
-          {{ recently_added + plex_recently_added_backup + media_players | map(attribute='name') | list }}
+           {{ recently_added + plex_recently_added_backup + media('unknown') | map(attribute="name") | list if media('unknown') != '' else recently_added + plex_recently_added_backup }}
         select_option:
           service: select.select_option
           target:

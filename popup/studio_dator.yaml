@@ -13,7 +13,7 @@ action: fire-dom-event
 browser_mod:
   service: browser_mod.popup
   data:
-    title: Dator
+    title: Computer
     card_mod:
       style:
         #popup header
@@ -90,7 +90,7 @@ browser_mod:
                       style: |
                         :host {
                           --paper-item-icon-color:
-                            {{ 'red' if not is_state(config.entity, 'Ansluten') }};
+                            {{ 'red' if not is_state(config.entity, 'Connected') }};
                           }
 
                   - entity: input_boolean.imac_lock
@@ -109,7 +109,7 @@ browser_mod:
                   cards:
 
                     - type: custom:button-card
-                      name: Försätt i vila
+                      name: Put to sleep
                       icon: mdi:power-sleep
                       tap_action:
                         action: call-service
@@ -117,7 +117,7 @@ browser_mod:
                       template: icon_name
 
                     - type: custom:button-card
-                      name: Starta om
+                      name: Restart
                       icon: mdi:restart
                       tap_action:
                         action: call-service
@@ -160,7 +160,7 @@ browser_mod:
                   cards:
 
                     - type: custom:button-card
-                      name: Starta iMac
+                      name: Start the iMac
                       icon: mdi:power
                       tap_action:
                         action: call-service

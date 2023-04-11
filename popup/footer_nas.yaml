@@ -90,14 +90,14 @@ browser_mod:
             #   icon: mdi:database
 
             # - entity: sensor.home_assistant_log_size
-            #   name: Log File #Loggfil
+            #   name: Log File 
             #   icon: mdi:file-document
 
             # - type: attribute
             #   entity: sensor.docker_home_assistant
             #   attribute: uptime
             #   format: relative
-            #   name: Last reboot #Senast omstart
+            #   name: Last reboot 
             #   icon: mdi:update
 
             - type: custom:bar-card
@@ -123,13 +123,13 @@ browser_mod:
 
                 - entity: sensor.docker_home_assistant
                   attribute: memory_percentage
-                  name: RAM #Minne
+                  name: RAM 
                   icon: mdi:memory
 
             - type: custom:hui-horizontal-stack-card
               cards:
                 - type: custom:button-card
-                  name: Server restart #Serveromstart
+                  name: Server restart
                   icon: mdi:reload
                   tap_action:
                     action: call-service
@@ -138,7 +138,7 @@ browser_mod:
                       sequence:
                         - service: browser_mod.notification
                           data:
-                            message: Restarting server... #Startar om server...
+                            message: Restarting server...
                         - service: browser_mod.delay
                           data:
                             time: 3000
@@ -155,7 +155,7 @@ browser_mod:
                       sequence:
                         - service: browser_mod.notification
                           data:
-                            message: Restarting container... #Startar om container...
+                            message: Restarting container...
                         - service: homeassistant.save_persistent_states
                         - service: browser_mod.delay
                           data:
@@ -189,19 +189,19 @@ browser_mod:
                   name: Processor
 
                 - entity: sensor.docker_memory_percent
-                  name: RAM #Minne
+                  name: RAM
 
             - entity: sensor.docker_containers_total
-              name: Containers Total #Containrar Totalt
+              name: Containers Total
 
             - entity: sensor.docker_containers_running
-              name: Containers Running #Containrar Körs
+              name: Containers Running
 
             - entity: sensor.docker_containers_paused
-              name: Containers Paused #Containrar Pausade
+              name: Containers Paused
 
             - entity: sensor.docker_containers_stopped
-              name: Containers Stopped #Containrar Stoppade
+              name: Containers Stopped
 
             # - entity: switch.docker_transmission_seed
 
@@ -263,10 +263,10 @@ browser_mod:
               fill_raw: last
             series:
               - entity: sensor.qbittorrent_down_speed #sensor.nas_download_throughput
-                name: Down #Ned
+                name: Down
                 color: green
               - entity: sensor.qbittorrent_up_speed #sensor.nas_upload_throughput
-                name: Up #Upp
+                name: Up
                 color: '#385581'
 
         ### NAS
@@ -274,7 +274,7 @@ browser_mod:
         - type: entities
           view_layout:
             grid-area: nas
-          title: Unraid Obi-Wan-Kenobi #Synology DS918+
+          title: Unraid Obi-Wan-Kenobi
           show_header_toggle: false
           card_mod:
             class: header
@@ -287,16 +287,16 @@ browser_mod:
             - entity: sensor.template_nas_status
 
             - entity: binary_sensor.nas_security_status
-              name: Security status #Säkerhetsstatus
+              name: Security status 
 
             - entity: sensor.nas_volume_1_average_disk_temp
 
             - entity: sensor.last_boot
-              name: Last boot #Senast omstart
+              name: Last boot 
 
 #            - entity: update.nas_dsm_update
 #              icon: mdi:package-up
-#              name: Update #Uppdatering
+#              name: Update
 
             - type: custom:bar-card
               width: 55%
@@ -318,7 +318,7 @@ browser_mod:
                       entity_id: sensor.processor_use
 
                 - entity: sensor.memory_use_percent
-                  name: RAM (64GB) #Minne - 4GB
+                  name: RAM (64GB)
                   tap_action:
                     action: call-service
                     service: homeassistant.update_entity
@@ -326,7 +326,7 @@ browser_mod:
                       entity_id: sensor.memory_use_percent
 
                 - entity: sensor.disk_use_percent
-                  name: Docker.img #Lagring - 10.5TB
+                  name: Docker.img
                   tap_action:
                     action: call-service
                     service: homeassistant.update_entity
@@ -336,10 +336,10 @@ browser_mod:
             - type: custom:hui-horizontal-stack-card
               cards:
                 - type: custom:button-card
-                  name: Restart #Starta om
+                  name: Restart
                   icon: mdi:restart-alert
                   confirmation:
-                    text: Are you sure you want to reboot the NAS? #Är du säker på att du vill starta om NAS?
+                    text: Are you sure you want to reboot the NAS?
                   tap_action:
                     action: call-service
                     service: browser_mod.sequence
@@ -347,17 +347,17 @@ browser_mod:
                       sequence:
                         - service: browser_mod.notification
                           data:
-                            message: Rebooting the NAS... #Startar om NAS...
+                            message: Rebooting the NAS...
                         - service: button.press
                           data:
                             entity_id: button.nas_reboot
                   template: icon_name
 
                 - type: custom:button-card
-                  name: Turn off.. #Stäng av...
+                  name: Turn off...
                   icon: mdi:alert
                   confirmation:
-                    text: Are you sure you want to turn off the NAS? #Är du säker på att du vill stänga av NAS?
+                    text: Are you sure you want to turn off the NAS?
                   tap_action:
                     action: call-service
                     service: browser_mod.sequence
@@ -365,7 +365,7 @@ browser_mod:
                       sequence:
                         - service: browser_mod.notification
                           data:
-                            message: Turning OFF #Stänger av NAS...
+                            message: Turning OFF
                         - service: button.press
                           data:
                             entity_id: button.nas_shutdown

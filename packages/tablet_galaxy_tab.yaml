@@ -1,7 +1,7 @@
 # homeassistant:
 #   customize:
 #     switch.galaxy_tab_a_screensaver:
-#       friendly_name: Skärmsläckare
+#       friendly_name: Screen saver
 #       icon: mdi:power-sleep
 #     number.galaxy_tab_a_screen_brightness:
 #       friendly_name: Display
@@ -10,13 +10,13 @@
 #       friendly_name: Display
 #       icon: mdi:tablet
 #     binary_sensor.galaxy_tab_a_plugged_in:
-#       friendly_name: Strömtillförsel
+#       friendly_name: Power supply
 #       icon: mdi:power-plug
 #     sensor.galaxy_tab_a_last_app_start:
-#       friendly_name: Senast omstart
+#       friendly_name: Latest reboot
 #       icon: mdi:update
 #     sensor.galaxy_tab_a_battery:
-#       friendly_name: Batteri
+#       friendly_name: Battery
 
 # template:
 #   - sensor:
@@ -28,7 +28,7 @@
 #             {{ 100 - (FreeSpace / TotalSpace * 100) | int(default=0) }}
 #           {% endif %}
 #         attributes:
-#           friendly_name: Lagring
+#           friendly_name: Storage
 #           icon: mdi:sd
 #           unit_of_measurement: '%'
 
@@ -40,7 +40,7 @@
 #             {{ 100 - (FreeMemory / TotalMemory * 100) | int(default=0) }}
 #           {% endif %}
 #         attributes:
-#           friendly_name: Minne
+#           friendly_name: Memory
 #           icon: mdi:memory
 #           unit_of_measurement: '%'
 
@@ -74,9 +74,9 @@
 #     action:
 #       service: notify.all_devices
 #       data:
-#         title: Ladda väggplattan...
+#         title: Plug in the tablet...
 #         message: >
-#           Batteri {{ states(trigger.entity_id) }}%
+#           Battery {{ states(trigger.entity_id) }}%
 
 #   - alias: fullykiosk_screensaver
 #     id: '9452750674803'

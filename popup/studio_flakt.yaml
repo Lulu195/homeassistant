@@ -2,7 +2,7 @@ action: fire-dom-event
 browser_mod:
   service: browser_mod.popup
   data:
-    title: "Fläkt\u00B2"
+    title: "Fan\u00B2"
     card_mod:
       style:
         #popup header
