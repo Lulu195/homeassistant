@@ -48,12 +48,12 @@
   use_blueprint:
     path: Stan-Gobien/CriticalCollapseOptionNotHomeMotionCameraSnapshotWithClickAction.yaml
     input:
-      motion_sensor: binary_sensor.hallway_motion_iaszone
       camera: camera.g3_instant_high
-      notify_device: 2d5fc0e59ac365b406795e6114b6a24b
+      notify_device: 37ed3fa06bd2ae91f3c47d6cdc447356
       blocker_entity: zone.home
       delay: 2
       is_ios: false
+      motion_sensor: binary_sensor.g3_instant_motion
 - id: '1676051186006'
   alias: Remote On/Off Media
   description: Speakers Sub and volume control
@@ -170,8 +170,8 @@
       notify_tts:
       - media_player.g3_instant_speaker
       alexa: false
-      notify_alexa:
-      - media_player.lulu_phone
+      notify_alexa: []
+      time_door: 60
 - id: '1676928639326'
   alias: 02 MEDIA - Node off on paused for x Min
   description: ''
@@ -305,3 +305,17 @@
         entity_id: light.philips_1746547p7_huelight
         domain: light
       action_button_down_release: []
+- id: '1681259486649'
+  alias: Office check mption during day
+  description: ''
+  use_blueprint:
+    path: Aleks130699/motion_light_brightness.yaml
+    input:
+      motion_entity: binary_sensor.ikea_of_sweden_tradfri_motion_sensor_motion
+      on_night_time: '23:00:00'
+      off_night_time: 06:00:00
+      day_brightness: 50
+      no_motion_wait_day: 20
+      no_motion_wait_night: 30
+      light_target:
+        device_id: 4c394ec74b5d7fc064416fa60bb6b6ad

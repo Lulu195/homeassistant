@@ -73,7 +73,7 @@ template:
         state: >
           {% set recently_added = 'Last added' %}
           {% set plex_recently_added_backup = 'Recently Added (Offline)' %}
-          {% set paused_timeout_minutes = 15 %}
+          {% set paused_timeout_minutes = 10 %}
           {% set media_players = [
             states.media_player.samsung_55,
             states.media_player.plex_plex_for_samsung_tv_2018,

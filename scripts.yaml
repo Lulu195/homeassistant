@@ -1,0 +1,6 @@
+notify_mobile_app_devices:
+  alias: Notify Mobile App Devices
+  use_blueprint:
+    path: Grumblezz/notify_devices.yaml
+  icon: mdi:bell-ring
+  mode: single
