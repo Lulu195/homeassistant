@@ -105,10 +105,10 @@ sensor:
     max: 1
     image_resolution: 800
 
-  - platform: qbittorrent
-    url: !secret qbit_url
-    username: !secret qbit_user
-    password: !secret qbit_pass
+  # - platform: qbittorrent
+  #   url: !secret qbit_url
+  #   username: !secret qbit_user
+  #   password: !secret qbit_pass
 
   # - platform: rejseplanen #https://www.home-assistant.io/integrations/rejseplanen
   #   stop_id: "YOUR_STOP_ID"

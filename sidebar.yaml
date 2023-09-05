@@ -65,20 +65,23 @@
           {% set devices_on = devices | selectattr('state','search','(on|cool|fan_only|playing)') | list %}
           {% set devices_name = devices_on | map(attribute='name') | join(', ') %}
 
-          {% if (lights_on | length == 0) and (devices_on | length > 0) %}
-            {{ devices_name | regex_replace(',([^,]*)$',' and\\1') }} is on
+          {% if (lights_on | length == 0) and (devices_on | length == 1) %}
+            {{ devices_name | regex_replace(',([^,]*)$','\\1') }} is on
+
+          {% elif (lights_on | length == 0) and (devices_on | length > 1) %}
+            {{ devices_name | regex_replace(',([^,]*)$',' and the\\1') }} are on
 
           {% elif (lights_on | length == 1) and (devices_on | length == 1) %}
-            {{ lights_name }} and {{devices_name }} is on
+            {{ lights_name }} and the {{ devices_name }} are on
 
           {% elif (lights_on | length == 1) and (devices_on | length > 1) %}
-            {{ lights_name }}, {{ devices_name | regex_replace(',([^,]*)$',' and\\1') }} is on
+            {{ lights_name }}, {{ devices_name | regex_replace(',([^,]*)$',' and\\1') }} are on
 
           {% elif (lights_on | length > 1) and (devices_on | length == 1) %}
-            {{ lights_on | length }} lights and {{ devices_name }} is on
+            {{ lights_on | length }} lights and {{ devices_name }} are on
 
           {% elif (lights_on | length > 1) and (devices_on | length > 1) %}
-            {{ lights_on | length }} lights, {{ devices_name | regex_replace(',([^,]*)$',' and\\1') }} is on
+            {{ lights_on | length }} lights, {{ devices_name | regex_replace(',([^,]*)$',' and\\1') }} are on
 
           {% elif (lights_on | length == 1) and (devices_on | length == 0) %}
             {{ lights_name }} is on
@@ -89,7 +92,7 @@
           {% else %}
           {% endif %}
           </b>
-# <font color='#6a7377'>Everything is turned off</font>
+        # <font color='#6a7377'>Everything is turned off</font>
         # mailbox: >
         #   {% set mailbox = states('sensor.mailbox') %}
         #   {% if mailbox | int(default=0) > 0 %}
@@ -109,7 +112,7 @@
         #     {% set temp = state_attr(entity, 'temperature') | round %}
         #     {% set precip = state_attr(entity, 'forecast')[0]['precipitation'] | round %}
         #     {% set snow = temp | float(default=0) <= 0.0 -%}
-        #       Feels like {{ temp }}° with {{ 'no risk of rain' if precip == 0 and snow == false  
+        #       Feels like {{ temp }}° with {{ 'no risk of rain' if precip == 0 and snow == false
         #       else precip | string + 'mm rain \u2614\uFE0F' if snow == false else precip | string + 'mm snow \u2744\uFE0F' }}
         #   {% else %}
         #     Can't read weather...
@@ -177,76 +180,72 @@
           {{ "<b><font color='#6a7377'>Quest</font></b> is in use..." if is_state('binary_sensor.quest2_in_use', "on")  else "" }}
 
         # lastmotion: |
-        #     {% set time =  relative_time(states.binary_sensor.all_motion_sensors.last_changed) %}    
+        #     {% set time =  relative_time(states.binary_sensor.all_motion_sensors.last_changed) %}
         #     {% if is_state('binary_sensor.all_motion_sensors', 'off') %}
         #         Last motion: {{ time }} ago
         #     {% elif is_state('binary_sensor.all_motion_sensors', 'on') %}
         #       {{-'\u26A0\uFE0F'}}  🏠 <b><font color='#6a7377'>Motion Detected</font></b>
-        #     {% endif %} 
-          
+        #     {% endif %}
 
 #                         {% if is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "off") %}
 #                             No Motion Detected for {{ relative_time(states.sensor.g3_instant_last_motion_detected.last_changed) }}
 #                         {% elif is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "on") %}
 #                            {{-'\u26A0\uFE0F'}}  🏠 <b><font color='#6a7377'>Motion Detected</font></b>
 #                         {% else %} {{-'\u26A0\uFE0F'}}<b><font color='#6a7377'>Camera is Offline</font></b>
-#                         {% endif %}          
+#                         {% endif %}
 
-        # occasion: >
-        #   {%- set occasion = states.sensor.special_occasions.state %}
-        #   {%- if occasion == "New year" -%} {{'🎉'}} <b>Happy new year!!</b>
-        #   {%- elif occasion == "Christmas" -%} {{'🎄'}} <b>Merry Christmas!</b> {{'🎅🏼'}}
-        #   {%- elif "Tata" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>dad's</strong> birthday <strong>today</strong>! He turns {{now().strftime('%Y') | round(0) - 1967}}</b> {{'👴'}}
-        #   {%- elif "Mama" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>mom's</strong> birthday <strong>today</strong>! She turns {{now().strftime('%Y') | round(0) - 1968}}</b> {{'👵'}}
-        #   {%- elif "Tanya" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>Tanya's</strong> birthday <strong>today</strong>! She turns {{now().strftime('%Y') | round(0) - 1996}}</b> {{'👵'}}
-        #   {%- elif "Tanyas dad" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>dad's</strong> birthday <strong>today</strong>! He turns {{now().strftime('%Y') | round(0) - 1967}}</b> {{'👴'}}
-        #   {%- elif "Tanyas mother" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>mom's</strong> birthday <strong>today</strong>! She turns {{now().strftime('%Y') | round(0) - 1968}}</b> {{'👵'}}
-        #   {%- elif "21 May" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>Lulu's</strong> name day <strong>today</strong>! He turns on the BBQ</b> {{'♨️'}}
-        #   {%- elif "Birthday" in occasion -%} {{'🎂'}} <b>Happy birthday, Lulu!!</b>
-        #   {%- elif "Constitution" in occasion -%} {{'🤝🏼'}} <b>Happy birthday, Norway!</b>
-        #   {%- elif "Mother" in occasion -%} {{'🎖️'}} <b>Remember Mother's day's today!</b>
-        #   {%- elif "Father" in occasion -%} {{'🎖️'}} <b>Remember Father's day's today!</b>
-        #   {%- endif %}
+# occasion: >
+#   {%- set occasion = states.sensor.special_occasions.state %}
+#   {%- if occasion == "New year" -%} {{'🎉'}} <b>Happy new year!!</b>
+#   {%- elif occasion == "Christmas" -%} {{'🎄'}} <b>Merry Christmas!</b> {{'🎅🏼'}}
+#   {%- elif "Tata" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>dad's</strong> birthday <strong>today</strong>! He turns {{now().strftime('%Y') | round(0) - 1967}}</b> {{'👴'}}
+#   {%- elif "Mama" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>mom's</strong> birthday <strong>today</strong>! She turns {{now().strftime('%Y') | round(0) - 1968}}</b> {{'👵'}}
+#   {%- elif "Tanya" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>Tanya's</strong> birthday <strong>today</strong>! She turns {{now().strftime('%Y') | round(0) - 1996}}</b> {{'👵'}}
+#   {%- elif "Tanyas dad" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>dad's</strong> birthday <strong>today</strong>! He turns {{now().strftime('%Y') | round(0) - 1967}}</b> {{'👴'}}
+#   {%- elif "Tanyas mother" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>mom's</strong> birthday <strong>today</strong>! She turns {{now().strftime('%Y') | round(0) - 1968}}</b> {{'👵'}}
+#   {%- elif "21 May" in occasion -%} {{'🎂'}} <b>Special occasion!</b><br>It's <strong>Lulu's</strong> name day <strong>today</strong>! He turns on the BBQ</b> {{'♨️'}}
+#   {%- elif "Birthday" in occasion -%} {{'🎂'}} <b>Happy birthday, Lulu!!</b>
+#   {%- elif "Constitution" in occasion -%} {{'🤝🏼'}} <b>Happy birthday, Norway!</b>
+#   {%- elif "Mother" in occasion -%} {{'🎖️'}} <b>Remember Mother's day's today!</b>
+#   {%- elif "Father" in occasion -%} {{'🎖️'}} <b>Remember Father's day's today!</b>
+#   {%- endif %}
 
-
-
-              
 #        unique_id: sidebar_uptime
 # FROM https://community.home-assistant.io/t/a-different-take-on-designing-a-lovelace-ui/162594/4274
-        # state: > 
-        #     System Uptime: 
-        #     {% set up_time =  as_timestamp(now()) - as_timestamp(states('sensor.uptime')) %}
+# state: >
+#     System Uptime:
+#     {% set up_time =  as_timestamp(now()) - as_timestamp(states('sensor.uptime')) %}
 
-        #     {% if up_time == 0 %}
-        #       Just restarted...
-        #     {% else %}
-        #       {% set minutes = (up_time // 60) | int %}
-        #       {% set hours = (minutes // 60) %}
-        #       {% set days = (hours // 24) %}
-        #       {% set weeks = (days // 7) %}
+#     {% if up_time == 0 %}
+#       Just restarted...
+#     {% else %}
+#       {% set minutes = (up_time // 60) | int %}
+#       {% set hours = (minutes // 60) %}
+#       {% set days = (hours // 24) %}
+#       {% set weeks = (days // 7) %}
 
-        #       {% set minutes = (minutes % 60) %}
-        #       {% set hours =  (hours % 24) %}
-        #       {% set days = (days % 7) %}
+#       {% set minutes = (minutes % 60) %}
+#       {% set hours =  (hours % 24) %}
+#       {% set days = (days % 7) %}
 
-        #       {% macro phrase(value, name) %}
-        #                 {%- set value = value %}
-        #                 {%- set end = 's' if value > 1 else '' %}
-        #                 {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
-        #       {%- endmacro %}
+#       {% macro phrase(value, name) %}
+#                 {%- set value = value %}
+#                 {%- set end = 's' if value > 1 else '' %}
+#                 {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
+#       {%- endmacro %}
 
-        #       {% if weeks > 0 %}
-        #         {% set text = [ phrase(weeks, 'week'), phrase(days, 'day') ] | select('!=','') | list | join(', ') %}
-        #       {% elif days > 0 %}
-        #         {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hour') ] | select('!=','') | list | join(', ') %}
-        #       {% else %}
-        #         {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hour'), phrase(minutes, 'min') ] | select('!=','') | list | join(', ') %}
-        #         {% set last_comma = text.rfind(',') %}
-        #         {% if last_comma != -1 %}
-        #           {% set text = text[:last_comma] + ' and' + text[last_comma + 1:] %}
-        #         {% endif %}
-        #       {% endif %}
+#       {% if weeks > 0 %}
+#         {% set text = [ phrase(weeks, 'week'), phrase(days, 'day') ] | select('!=','') | list | join(', ') %}
+#       {% elif days > 0 %}
+#         {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hour') ] | select('!=','') | list | join(', ') %}
+#       {% else %}
+#         {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hour'), phrase(minutes, 'min') ] | select('!=','') | list | join(', ') %}
+#         {% set last_comma = text.rfind(',') %}
+#         {% if last_comma != -1 %}
+#           {% set text = text[:last_comma] + ' and' + text[last_comma + 1:] %}
+#         {% endif %}
+#       {% endif %}
 
-        #     {{ text }}
+#     {{ text }}
 
-        #     {% endif %}
+#     {% endif %}

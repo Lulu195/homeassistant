@@ -1,5 +1,4 @@
-button_card_templates:
-  !include_dir_merge_named button_card_templates
+button_card_templates: !include_dir_merge_named button_card_templates
 
 views:
   - type: custom:grid-layout
@@ -7,14 +6,14 @@ views:
     layout:
       #default
       margin: 0
-      grid-gap: var(--custom-layout-card-padding)
-      grid-template-columns: repeat(4, 1fr) 0
+      grid-gap: calc(var(--custom-layout-card-padding) * 0.7) #var(--custom-layout-card-padding)
+      grid-template-columns: repeat(5, 1fr) 0
       grid-template-rows: 0 repeat(2, fit-content(100%)) 0fr
       grid-template-areas: |
-        "sidebar  .           .       .       ."
-        "sidebar  vardagsrum  studio  sovrum  ."
-        "sidebar  media       other   home    ."
-        "sidebar  footer      footer  footer  ."
+        "sidebar  .           .       .       .       ."
+        "sidebar  vardagsrum  studio  sovrum  camera  ."
+        "sidebar  media       other   home    climate ."
+        "sidebar  footer      footer  footer  footer  ."
       mediaquery:
         #phone
         "(max-width: 800px)":
@@ -23,10 +22,11 @@ views:
           grid-template-rows: 0 repeat(5, fit-content(100%)) 0fr
           grid-template-areas: |
             ".  .           .        ."
-            ".  sidebar     sidebar  ."
+            ".  sidebar      sidebar  ."
             ".  vardagsrum  sovrum   ."
             ".  studio      other    ."
             ".  media       home     ."
+            ".  camera      climate  ."
             ".  footer      footer   ."
             ".  .           .        ."
         #portrait
@@ -39,10 +39,10 @@ views:
             "sidebar  vardagsrum  sovrum  ."
             "sidebar  studio      other   ."
             "sidebar  media       home    ."
+            "sidebar  camera      climate ."
             "sidebar  footer      footer  ."
             "sidebar  .           .       ."
     cards:
-
       #extra_styles fix, do not remove
       #also warn if theme is not set
 
@@ -79,7 +79,6 @@ views:
         view_layout:
           grid-area: sidebar
         cards:
-
           - type: custom:button-card
             entity: sensor.template_sidebar
             template: sidebar
@@ -109,7 +108,7 @@ views:
       #################################################
 
       - type: grid
-        title: Living room
+        title: Living
         view_layout:
           grid-area: vardagsrum
         columns: 2
@@ -120,7 +119,6 @@ views:
             template:
               - light
               - icon_ceiling_dining
-
 
           - type: custom:button-card
             entity: light.mushroom
@@ -141,7 +139,7 @@ views:
             #         return variables.translate_unknown;
             #     }
             #   ]]]
-#            double_tap_action: !include popup/vardagsrum_tv_matt.yaml #popup/living_room_tv.yaml
+            #            double_tap_action: !include popup/vardagsrum_tv_matt.yaml #popup/living_room_tv.yaml
             template:
               #- base
               - media
@@ -157,294 +155,474 @@ views:
               - light
               - icon_hue
 
+          # ################################################
+          # #                                              #
+          # #                   CLIMATE                    #
+          # #                                              #
+          # ################################################
 
+      - type: grid
+        title: Climate
+        view_layout:
+          grid-area: climate
+        columns: 2
+        cards:
+          # - type: custom:button-card
+          #   entity: sensor.livingroom_weather_temp
+          #   name: AC
+          #   # tap_action: !include popup/climate.yaml
+          #   # hold_action: !include popup/climate.yaml
+          #   triggers_update:
+          # #     - binary_sensor.kaiteki_6600_filter_clean_required
+          # #   template:
+          # #     - base
+          # #     - icon_climate
+          # #     - climate
+          # #   variables:
+          # #     circle_input: >
+          # #       [[[
+          # #         if (states['sensor.temperature_average_upstairs'].state) {
+          # #           return (states['sensor.temperature_average_upstairs'].state);
+          # #         }
+          # #       ]]]
 
+          # # - type: custom:button-card
+          # #   entity: cover.gardin_1
+          # #   name: Blinds
+          # #   template:
+          # #     - blinds
+          # #     - icon_blinds
+
+          ####  TEMPERATURE SENSOR CARD DOOR ####
+          - type: custom:button-card
+            entity: sensor.samjin_multi_temperature
+            name: Door
+            tap_action: none
+            state_display: >
+              [[[ return '&nbsp;'; ]]]
+            template:
+              - base
+              - circle
+              #- icon_climate
+              - icon_contact_sensor
+            custom_fields:
+              circle: >
+                [[[
+                  if (entity) {
+                    return `
+                      <svg viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="20.5" stroke="none" stroke-width="1.5" fill="rgba(255,255,255,0.04)" />
+                        <text x="50%" y="54%" fill="#8d8e90" font-size="14" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle">${parseInt(entity.state)}<tspan font-size="10">°C</tspan></text>
+                      </svg>
+                    `;
+                  }
+                ]]]
+              graph:
+                card:
+                  type: sensor
+                  entity: >
+                    [[[ return entity.entity_id; ]]]
+                  graph: line
+                  card_mod:
+                    style: |
+                      .header, .value, .measurement {
+                        display: none !important;
+                      }
+              push_graph: >
+                [[[
+                  setTimeout(() => {
+                    let elt = this.shadowRoot,
+                      card = elt.getElementById('card'),
+                      container = elt.getElementById('container'),
+                      graph = elt.getElementById('graph');
+                    if (elt && card && container && graph) {
+                      card.insertBefore(graph, container);
+                    }
+                  }, 0);
+                  return null;
+                ]]]
+            styles:
+              custom_fields:
+                graph:
+                  - position: absolute
+                  - width: 100%
+                  - height: 100%
+                  - clip-path: inset(0 round var(--custom-button-card-border-radius))
+                  - left: 0
+                  - bottom: 0
+
+          ####  TEMPERATURE SENSOR CARD HALLWAY ####
+          - type: custom:button-card
+            entity: sensor.samjin_motion_temperature
+            name: Hallway
+            tap_action: none
+            state_display: >
+              [[[ return '&nbsp;'; ]]]
+            template:
+              - base
+              - circle
+              - icon_climate
+            custom_fields:
+              icon: >
+                <ha-icon icon="mdi:thermometer" style="color: #9da0a2;"></ha-icon>
+              circle: >
+                [[[
+                  if (entity) {
+                    return `
+                      <svg viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="20.5" stroke="none" stroke-width="1.5" fill="rgba(255,255,255,0.04)" />
+                        <text x="50%" y="54%" fill="#8d8e90" font-size="14" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle">${parseInt(entity.state)}<tspan font-size="10">°C</tspan></text>
+                      </svg>
+                    `;
+                  }
+                ]]]
+              graph:
+                card:
+                  type: sensor
+                  entity: >
+                    [[[ return entity.entity_id; ]]]
+                  graph: line
+                  card_mod:
+                    style: |
+                      .header, .value, .measurement {
+                        display: none !important;
+                      }
+              push_graph: >
+                [[[
+                  setTimeout(() => {
+                    let elt = this.shadowRoot,
+                      card = elt.getElementById('card'),
+                      container = elt.getElementById('container'),
+                      graph = elt.getElementById('graph');
+                    if (elt && card && container && graph) {
+                      card.insertBefore(graph, container);
+                    }
+                  }, 0);
+                  return null;
+                ]]]
+            styles:
+              custom_fields:
+                graph:
+                  - position: absolute
+                  - width: 100%
+                  - height: 100%
+                  - clip-path: inset(0 round var(--custom-button-card-border-radius))
+                  - left: 0
+                  - bottom: 0
+
+          ###  TEMPERATURE SENSOR CARD LIVING ROOM ####
+          - type: custom:button-card
+            entity: sensor.livingroom_weather_temperature
+            name: Living Room
+            tap_action: none
+            state_display: >
+              [[[ return '&nbsp;'; ]]]
+            template:
+              - base
+              - circle
+              - icon_climate
+              #- icon_contact_sensor
+            custom_fields:
+              circle: >
+                [[[
+                  if (entity) {
+                    return `
+                      <svg viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="20.5" stroke="none" stroke-width="1.5" fill="rgba(255,255,255,0.04)" />
+                        <text x="50%" y="54%" fill="#8d8e90" font-size="14" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle">${parseInt(entity.state)}<tspan font-size="10">°C</tspan></text>
+                      </svg>
+                    `;
+                  }
+                ]]]
+              graph:
+                card:
+                  type: sensor
+                  entity: >
+                    [[[ return entity.entity_id; ]]]
+                  graph: line
+                  card_mod:
+                    style: |
+                      .header, .value, .measurement {
+                        display: none !important;
+                      }
+              push_graph: >
+                [[[
+                  setTimeout(() => {
+                    let elt = this.shadowRoot,
+                      card = elt.getElementById('card'),
+                      container = elt.getElementById('container'),
+                      graph = elt.getElementById('graph');
+                    if (elt && card && container && graph) {
+                      card.insertBefore(graph, container);
+                    }
+                  }, 0);
+                  return null;
+                ]]]
+            styles:
+              custom_fields:
+                graph:
+                  - position: absolute
+                  - width: 100%
+                  - height: 100%
+                  - clip-path: inset(0 round var(--custom-button-card-border-radius))
+                  - left: 0
+                  - bottom: 0
+
+          ###  TEMPERATURE SENSOR CARD BEDROOM ####
+          - type: custom:button-card
+            entity: sensor.lumi_lumi_weather_temperature
+            name: Bedroom
+            tap_action: none
+            double_tap_action: !include popup/thermal_comfort.yaml
+            state_display: >
+              [[[ return '&nbsp;'; ]]]
+            template:
+              - base
+              - circle
+              - icon_climate
+              #- icon_contact_sensor
+            custom_fields:
+              circle: >
+                [[[
+                  if (entity) {
+                    return `
+                      <svg viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="20.5" stroke="none" stroke-width="1.5" fill="rgba(255,255,255,0.04)" />
+                        <text x="50%" y="54%" fill="#8d8e90" font-size="14" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle">${parseInt(entity.state)}<tspan font-size="10">°C</tspan></text>
+                      </svg>
+                    `;
+                  }
+                ]]]
+              graph:
+                card:
+                  type: sensor
+                  entity: >
+                    [[[ return entity.entity_id; ]]]
+                  graph: line
+                  card_mod:
+                    style: |
+                      .header, .value, .measurement {
+                        display: none !important;
+                      }
+              push_graph: >
+                [[[
+                  setTimeout(() => {
+                    let elt = this.shadowRoot,
+                      card = elt.getElementById('card'),
+                      container = elt.getElementById('container'),
+                      graph = elt.getElementById('graph');
+                    if (elt && card && container && graph) {
+                      card.insertBefore(graph, container);
+                    }
+                  }, 0);
+                  return null;
+                ]]]
+            styles:
+              custom_fields:
+                graph:
+                  - position: absolute
+                  - width: 100%
+                  - height: 100%
+                  - clip-path: inset(0 round var(--custom-button-card-border-radius))
+                  - left: 0
+                  - bottom: 0
+
+          # ####  TEMPERATURE SENSOR CARD BEDROOM HUMIDITY ####
+          # - type: custom:button-card
+          #   entity: sensor.bedroom_humidity
+          #   name: Bedroom Humidity
+          #   tap_action: none
+          #   state_display: >
+          #     [[[ return '&nbsp;'; ]]]
+          #   template:
+          #     - base
+          #     - circle
+          #     - icon_plex_service
+          #     #- icon_temp
+          #     #- icon_washer
+          #     #- icon_contact_sensor
+          #     #- icon_humidifier  ## THIS DOES NOT WORK FOR SOME REASON
+          #   custom_fields:
+          #     circle: >
+          #       [[[
+          #         if (entity) {
+          #           return `
+          #             <svg viewBox="0 0 50 50">
+          #               <circle cx="25" cy="25" r="20.5" stroke="none" stroke-width="1.5" fill="rgba(255,255,255,0.04)" />
+          #               <text x="50%" y="54%" fill="#8d8e90" font-size="14" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle">${parseInt(entity.state)}<tspan font-size="10">%</tspan></text>
+          #             </svg>
+          #           `;
+          #         }
+          #       ]]]
+          #     graph:
+          #       card:
+          #         type: sensor
+          #         entity: >
+          #           [[[ return entity.entity_id; ]]]
+          #         graph: line
+          #         card_mod:
+          #           style: |
+          #             .header, .value, .measurement {
+          #               display: none !important;
+          #             }
+          #     push_graph: >
+          #       [[[
+          #         setTimeout(() => {
+          #           let elt = this.shadowRoot,
+          #             card = elt.getElementById('card'),
+          #             container = elt.getElementById('container'),
+          #             graph = elt.getElementById('graph');
+          #           if (elt && card && container && graph) {
+          #             card.insertBefore(graph, container);
+          #           }
+          #         }, 0);
+          #         return null;
+          #       ]]]
+          #   styles:
+          #     custom_fields:
+          #       graph:
+          #         - position: absolute
+          #         - width: 100%
+          #         - height: 100%
+          #         - clip-path: inset(0 round var(--custom-button-card-border-radius))
+          #         - left: 0
+          #         - bottom: 0
 
       #################################################
       #                                               #
-      #                    CLIMATE                    #
+      #                    CAMERA                     #
       #                                               #
       #################################################
 
-#       - type: grid
-#         title: Climate
-#         view_layout:
-#           grid-area: climate
-#         columns: 2
-#         cards:
+      - type: grid
+        title: Cameras
+        view_layout:
+          grid-area: camera
+        columns: 1
+        cards:
+          - type: custom:swipe-card
+            parameters:
+              speed: 550
+              spaceBetween: 40
+              threshold: 5
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: conditional
+                    conditions:
+                      - entity: select.conditional_media_camera
+                        state_not: Vardagsrum #Living room
 
-#           # - type: custom:button-card
-#           #   entity: climate.sensibo
-#           #   name: AC
-#           #   tap_action:
-#           #     !include popup/climate.yaml
-#           #   hold_action:
-#           #     !include popup/climate.yaml
-#           #   triggers_update:
-#           #     - binary_sensor.kaiteki_6600_filter_clean_required
-#           #   template:
-#           #     - base
-#           #     - icon_climate
-#           #     - climate
-#           #   variables:
-#           #     circle_input: >
-#           #       [[[
-#           #         if (states['sensor.temperature_average_upstairs'].state) {
-#           #           return (states['sensor.temperature_average_upstairs'].state);
-#           #         }
-#           #       ]]]
+                      # - entity: select.conditional_media_camera
+                      #   state_not: Sovrum #Bedroom
 
-#           # - type: custom:button-card
-#           #   entity: cover.gardin_1
-#           #   name: Blinds
-#           #   template:
-#           #     - blinds
-#           #     - icon_blinds
+                      # - entity: select.conditional_media_camera
+                      #   state_not: Spotify
 
-# ####  TEMPERATURE SENSOR CARD DOOR ####
-#           - type: custom:button-card
-#             entity: sensor.samjin_multi_temperature
-#             name: Door
-#             tap_action: none
-#             state_display: >
-#               [[[ return '&nbsp;'; ]]]
-#             template:
-#               - base
-#               - circle
-#               #- icon_climate
-#               - icon_contact_sensor
-#             custom_fields:
-#               circle: >
-#                 [[[
-#                   if (entity) {
-#                     return `
-#                       <svg viewBox="0 0 50 50">
-#                         <circle cx="25" cy="25" r="20.5" stroke="none" stroke-width="1.5" fill="rgba(255,255,255,0.04)" />
-#                         <text x="50%" y="54%" fill="#8d8e90" font-size="14" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle">${parseInt(entity.state)}<tspan font-size="10">°C</tspan></text>
-#                       </svg>
-#                     `;
-#                   }
-#                 ]]]
-#               graph:
-#                 card:
-#                   type: sensor
-#                   entity: >
-#                     [[[ return entity.entity_id; ]]]
-#                   graph: line
-#                   card_mod:
-#                     style: |
-#                       .header, .value, .measurement {
-#                         display: none !important;
-#                       }
-#               push_graph: >
-#                 [[[
-#                   setTimeout(() => {
-#                     let elt = this.shadowRoot,
-#                       card = elt.getElementById('card'),
-#                       container = elt.getElementById('container'),
-#                       graph = elt.getElementById('graph');
-#                     if (elt && card && container && graph) {
-#                       card.insertBefore(graph, container);
-#                     }
-#                   }, 0);
-#                   return null;
-#                 ]]]
-#             styles:
-#               custom_fields:
-#                 graph:
-#                   - position: absolute
-#                   - width: 100%
-#                   - height: 100%
-#                   - clip-path: inset(0 round var(--custom-button-card-border-radius))
-#                   - left: 0
-#                   - bottom: 0
+                      # - entity: select.conditional_media_camera
+                      #   state_not: Kök #Kitchen
+                    card:
+                      # type: custom:button-card
+                      # entity: camera.g3_instant_high
+                      # name: Last motion
+                      # tap_action: !include popup/other_security.yaml
+                      # template:
+                      #   - conditional_media_camera
+                      #   #- icon_unifi_cam
 
-# ####  TEMPERATURE SENSOR CARD HALLWAY ####
-#           - type: custom:button-card
-#             entity: sensor.hallway_motion_sensor_temperature
-#             name: Hallway
-#             tap_action: none
-#             state_display: >
-#               [[[ return '&nbsp;'; ]]]
-#             template:
-#               - base
-#               - circle
-#               - icon_climate
-#             custom_fields:
-#               icon: >
-#                 <ha-icon icon="mdi:thermometer" style="color: #9da0a2;"></ha-icon>
-#               circle: >
-#                 [[[
-#                   if (entity) {
-#                     return `
-#                       <svg viewBox="0 0 50 50">
-#                         <circle cx="25" cy="25" r="20.5" stroke="none" stroke-width="1.5" fill="rgba(255,255,255,0.04)" />
-#                         <text x="50%" y="54%" fill="#8d8e90" font-size="14" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle">${parseInt(entity.state)}<tspan font-size="10">°C</tspan></text>
-#                       </svg>
-#                     `;
-#                   }
-#                 ]]]
-#               graph:
-#                 card:
-#                   type: sensor
-#                   entity: >
-#                     [[[ return entity.entity_id; ]]]
-#                   graph: line
-#                   card_mod:
-#                     style: |
-#                       .header, .value, .measurement {
-#                         display: none !important;
-#                       }
-#               push_graph: >
-#                 [[[
-#                   setTimeout(() => {
-#                     let elt = this.shadowRoot,
-#                       card = elt.getElementById('card'),
-#                       container = elt.getElementById('container'),
-#                       graph = elt.getElementById('graph');
-#                     if (elt && card && container && graph) {
-#                       card.insertBefore(graph, container);
-#                     }
-#                   }, 0);
-#                   return null;
-#                 ]]]
-#             styles:
-#               custom_fields:
-#                 graph:
-#                   - position: absolute
-#                   - width: 100%
-#                   - height: 100%
-#                   - clip-path: inset(0 round var(--custom-button-card-border-radius))
-#                   - left: 0
-#                   - bottom: 0
+                      type: custom:button-card
+                      entity: camera.g3_instant_high
+                      name: >
+                        [[[
+                          if (variables.state == 'recording') {
+                            return 'Online';
+                          }
+                        ]]]
 
+                      #                        [[[ return variables.state; ]]]
+                      template:
+                        #- base
+                        - media
+                        - icon_unifi_cam
+                      # hold_action:
+                      #   !include popup/other_security.yaml #!include popup/cameras.yaml
+                      # tap_action:
+                      #   !include popup/cameras.yaml
+                      #state_display: >
 
+                  #      [[[ return variables.state['sensor.g3_instant_last_motion_detected.last_changed']; ]]]
+                  #     [[[ return relative_time['states.sensor.g3_instant_last_motion_detected.last_changed']; ]]]
+                  #     states['sensor.g3_instant_last_motion_detected']
+                  # {% set time =  relative_time(states.sensor.g3_instant_last_motion_detected.last_changed) %}
+                  #  Last motion: {{ time }}
 
+              # {% if is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "off") %}
+              # No Motion Detected for {{ relative_time(states.sensor.g3_instant_last_motion_detected.last_changed) }}
+              # {% elif is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "on") %}
+              #   {{-'\u26A0\uFE0F'}} mdi:motion-play 🏠 <b><font color='#6a7377'>Motion Detected</font></b>
+              # {% else %} {{-'\u26A0\uFE0F'}}<b><font color='#6a7377'>Camera is Offline</font></b>
+              # {% endif %}
 
-# ###  TEMPERATURE SENSOR CARD BEDROOM 2 ####
-#           - type: custom:button-card
-#             entity: sensor.bedroom_temperature
-#             name: Bedroom Temp
-#             tap_action: none
-#             state_display: >
-#               [[[ return '&nbsp;'; ]]]
-#             template:
-#               - base
-#               - circle
-#               - icon_climate
-#               #- icon_contact_sensor
-#             custom_fields:
-#               circle: >
-#                 [[[
-#                   if (entity) {
-#                     return `
-#                       <svg viewBox="0 0 50 50">
-#                         <circle cx="25" cy="25" r="20.5" stroke="none" stroke-width="1.5" fill="rgba(255,255,255,0.04)" />
-#                         <text x="50%" y="54%" fill="#8d8e90" font-size="14" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle">${parseInt(entity.state)}<tspan font-size="10">°C</tspan></text>
-#                       </svg>
-#                     `;
-#                   }
-#                 ]]]
-#               graph:
-#                 card:
-#                   type: sensor
-#                   entity: >
-#                     [[[ return entity.entity_id; ]]]
-#                   graph: line
-#                   card_mod:
-#                     style: |
-#                       .header, .value, .measurement {
-#                         display: none !important;
-#                       }
-#               push_graph: >
-#                 [[[
-#                   setTimeout(() => {
-#                     let elt = this.shadowRoot,
-#                       card = elt.getElementById('card'),
-#                       container = elt.getElementById('container'),
-#                       graph = elt.getElementById('graph');
-#                     if (elt && card && container && graph) {
-#                       card.insertBefore(graph, container);
-#                     }
-#                   }, 0);
-#                   return null;
-#                 ]]]
-#             styles:
-#               custom_fields:
-#                 graph:
-#                   - position: absolute
-#                   - width: 100%
-#                   - height: 100%
-#                   - clip-path: inset(0 round var(--custom-button-card-border-radius))
-#                   - left: 0
-#                   - bottom: 0
+              # state_display: >
+              #
 
+              #                         {% if is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "off") %}
+              #                             No Motion Detected for {{ relative_time(states.sensor.g3_instant_last_motion_detected.last_changed) }}
+              #                         {% elif is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "on") %}
+              #                            {{-'\u26A0\uFE0F'}}  🏠 <b><font color='#6a7377'>Motion Detected</font></b>
+              #                         {% else %} {{-'\u26A0\uFE0F'}}<b><font color='#6a7377'>Camera is Offline</font></b>
+              #                         {% endif %}
 
+              ###################################
+              ###### SWIPE CARD - 2nd PAGE ######
+              ###################################
 
+              - type: grid
+                columns: 2
+                cards:
+                  - type: custom:button-card
+                    entity: light.kitchen_led_switch
+                    name: Christmas Tree #Kitchen LED
+                    template:
+                      - light
+                      #- icon_silus_dome
+                      - icon_superman
 
-# ####  TEMPERATURE SENSOR CARD BEDROOM HUMIDITY ####
-#           - type: custom:button-card
-#             entity: sensor.bedroom_humidity
-#             name: Bedroom Humidity
-#             tap_action: none
-#             state_display: >
-#               [[[ return '&nbsp;'; ]]]
-#             template:
-#               - base
-#               - circle
-#               - icon_plex_service
-#               #- icon_temp
-#               #- icon_washer
-#               #- icon_contact_sensor
-#               #- icon_humidifier  ## THIS DOES NOT WORK FOR SOME REASON
-#             custom_fields:
-#               circle: >
-#                 [[[
-#                   if (entity) {
-#                     return `
-#                       <svg viewBox="0 0 50 50">
-#                         <circle cx="25" cy="25" r="20.5" stroke="none" stroke-width="1.5" fill="rgba(255,255,255,0.04)" />
-#                         <text x="50%" y="54%" fill="#8d8e90" font-size="14" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle">${parseInt(entity.state)}<tspan font-size="10">%</tspan></text>
-#                       </svg>
-#                     `;
-#                   }
-#                 ]]]
-#               graph:
-#                 card:
-#                   type: sensor
-#                   entity: >
-#                     [[[ return entity.entity_id; ]]]
-#                   graph: line
-#                   card_mod:
-#                     style: |
-#                       .header, .value, .measurement {
-#                         display: none !important;
-#                       }
-#               push_graph: >
-#                 [[[
-#                   setTimeout(() => {
-#                     let elt = this.shadowRoot,
-#                       card = elt.getElementById('card'),
-#                       container = elt.getElementById('container'),
-#                       graph = elt.getElementById('graph');
-#                     if (elt && card && container && graph) {
-#                       card.insertBefore(graph, container);
-#                     }
-#                   }, 0);
-#                   return null;
-#                 ]]]
-#             styles:
-#               custom_fields:
-#                 graph:
-#                   - position: absolute
-#                   - width: 100%
-#                   - height: 100%
-#                   - clip-path: inset(0 round var(--custom-button-card-border-radius))
-#                   - left: 0
-#                   - bottom: 0
+      #################################################
+      #                                               #
+      #                    Server                     #
+      #                                               #
+      #################################################
 
-
-
+      # - type: grid
+      #   title: Server
+      #   view_layout:
+      #     grid-area: server
+      #   columns: 1
+      #   cards:
+      #     - type: custom:swipe-card
+      #       start_card: 1
+      #       parameters:
+      #         roundLengths: true
+      #         touchStartPreventDefault: false
+      #         effect: coverflow
+      #         speed: 650
+      #         spaceBetween: 20
+      #         threshold: 7
+      #         coverflowEffect:
+      #           rotate: 80
+      #           depth: 300
+      #       cards:
+      #         - type: grid
+      #           columns: 2
+      #           cards:
+      #             - type: custom:button-card
+      #               entity: sensor.qbittorrent_status
+      #               name: Qbit
+      #               template:
+      #                 - light
+      #                 - icon_shade
+      #                 #- swiper_title
 
       #################################################
       #                                               #
@@ -458,7 +636,6 @@ views:
           grid-area: studio
         columns: 1
         cards:
-
           - type: custom:swipe-card
             start_card: 1
             parameters:
@@ -472,11 +649,9 @@ views:
                 rotate: 80
                 depth: 300
             cards:
-
               - type: grid
                 columns: 2
                 cards:
-
                   - type: custom:button-card
                     entity: light.ikea_lamp_light
                     name: Ikea Lamp
@@ -504,9 +679,9 @@ views:
                       #icon_contact_sensor
 
                   - type: custom:button-card
-                    entity: device_tracker.desktop_cd40kgt_2 
+                    entity: device_tracker.desktop_cd40kgt_2
                     name: Laptop L.
-                    tap_action: toggle switch.wake_on_lan 
+                    tap_action: toggle switch.wake_on_lan
                     double_tap_action: !include popup/desktop_spectre.yaml
                     template:
                       - base_pc
@@ -533,9 +708,8 @@ views:
                       #     }
                       #   ]]]
                       # circle_input_unit: "%"
-                      
-                      
-                         #sensor.w11_currentvolume
+
+                      #sensor.w11_currentvolume
                       #   [[[
                       #     if (states["entityname_battery"].state > 40) {
                       #       let input = states["entityname_battery"].state / 3,
@@ -544,7 +718,7 @@ views:
                       #       return `
                   - type: custom:button-card
                     entity: device_tracker.desktop_030ipd1 #sensor.desktop_030ipd1_audio_default_device_volume
-                    name:  Laptop T.
+                    name: Laptop T.
                     #tap_action: toggle button.w11_mediaplaypause
                     double_tap_action: !include popup/studio_monitorer_tanya.yaml
                     # variables:
@@ -562,28 +736,26 @@ views:
                         ]]]
                       circle_input_unit: "%"
 
-          # - type: custom:button-card
-          #   entity: person.tanya
-          #   name: Tanya
-          #   triggers_update:
-          #     - sensor.tanya_last_changed
-          #   double_tap_action: !include popup/home_tanya.yaml
-          #   variables:
-          #     retain: sensor.tanya_last_changed
-          #   template:
-          #     - person
-          #     - circle
-
+              # - type: custom:button-card
+              #   entity: person.tanya
+              #   name: Tanya
+              #   triggers_update:
+              #     - sensor.tanya_last_changed
+              #   double_tap_action: !include popup/home_tanya.yaml
+              #   variables:
+              #     retain: sensor.tanya_last_changed
+              #   template:
+              #     - person
+              #     - circle
 
               - type: grid
                 columns: 2
                 cards:
-
                   - type: custom:button-card
                     entity: device_tracker.padawan_plex #sensor.plex_online
                     name: Plex
                     tap_action: none
-                   # double_tap_action: !include popup/plex2.yaml    #plex.yaml tap_action: !include popup/footer_nas.yaml
+                    # double_tap_action: !include popup/plex2.yaml    #plex.yaml tap_action: !include popup/footer_nas.yaml
                     template:
                       - base
                       - icon_plex_service
@@ -595,22 +767,81 @@ views:
                       ]]]
 
                   - type: custom:button-card
-                    entity: binary_sensor.pi_hole #binary_sensor.ping_rackstation
+                    entity: switch.pihole_control
                     name: Pi-Hole
+                    tap_action:
+                      action: toggle
+                    hold_action:
+                      action: more-info
                     template:
                       - base
-                      #- icon_synology_rs
-                    # tap_action:
-                    #   !include popup/rs_info.yaml
-                  - type: custom:button-card
-                    entity:  binary_sensor.pi_hole_backup #binary_sensor.ping_rackstation
-                    name: Pi-Hole 2
-                    template:
-                      - base
-                      #- icon_synology_rs
-                    # tap_action:
-                    #   !include popup/rs_info.yaml
+                      - loader
+                      - pihole
+                    custom_fields:
+                      icon: |
+                        <ha-icon icon='mdi:pi-hole'></ha-icon>
+                      graph:
+                        card:
+                          hour24: true
+                          color_type: card
+                          height: 100
+                          hours_to_show: 24
+                          points_per_hour: 4
+                          update_interval: 10
+                          aggregate_func: avg
+                          line_width: 5
+                          smoothing: false
+                          align_state: center
+                          show:
+                            graph: bar
+                            average: false
+                            extrema: false
+                          color_thresholds_transition: hard
+                          entities:
+                            - entity: binary_sensor.pi_hole
+                              # color: "#f205b3"
+                      circle: |
+                        [[[
+                          if (variables.state === 'on') {
+                            const input = states['binary_sensor.pi_hole'].state;
+                            const radius = 20.5;
+                            const circumference = radius * 2 * Math.PI;
+                            return `
+                              <svg viewBox="0 0 50 50">
+                                <style>
+                                  circle {
+                                    transform: rotate(-90deg);
+                                    transform-origin: 50% 50%;
+                                    stroke-dasharray: ${circumference};
+                                    stroke-dashoffset: ${circumference - input / 100 * circumference};
+                                  }
+                                  tspan {
+                                    font-size: 10px;
+                                  }
+                                </style>
+                                <circle cx="25" cy="25" r="${radius}" stroke="#b2b2b2" stroke-width="1.5" fill="none" />
+                                <text x="50%" y="54%" fill="#8d8e90" font-size="14" text-anchor="middle" alignment-baseline="middle" dominant-baseline="middle">${input}<tspan font-size="10">%</tspan></text>
+                              </svg>
+                            `;
+                          }
+                        ]]]
 
+                  # - type: custom:button-card
+                  #   entity: binary_sensor.pi_hole #binary_sensor.ping_rackstation
+                  #   name: Pi-Hole
+                  #   template:
+                  #     - base
+                  #     #- icon_synology_rs
+                  #   # tap_action:
+                  #   #   !include popup/rs_info.yaml
+                  # - type: custom:button-card
+                  #   entity: binary_sensor.pi_hole_backup #binary_sensor.ping_rackstation
+                  #   name: Pi-Hole 2
+                  #   template:
+                  #     - base
+                  #     #- icon_synology_rs
+                  #   # tap_action:
+                  #   #   !include popup/rs_info.yaml
                   - type: custom:button-card
                     entity: device_tracker.nr200p #binary_sensor.ping_diskstation
                     name: Server
@@ -620,21 +851,20 @@ views:
                     # tap_action:
                     #   !include popup/ds_info.yaml
 
-          # - type: custom:button-card
-          #   entity: light.studio_desk_lamp
-          #   name: Desktop Lamp
-          #   template:
-          #     - light
-          #     #- icon_hue
-          #     - icon_desk_lamp
+              # - type: custom:button-card
+              #   entity: light.studio_desk_lamp
+              #   name: Desktop Lamp
+              #   template:
+              #     - light
+              #     #- icon_hue
+              #     - icon_desk_lamp
 
-          # - type: custom:button-card
-          #   entity: light.studio_group
-          #   name: Taklampor
-          #   template:
-          #     - light
-          #     - icon_spot
-
+              # - type: custom:button-card
+              #   entity: light.studio_group
+              #   name: Taklampor
+              #   template:
+              #     - light
+              #     - icon_spot
 
               - type: grid
                 columns: 1
@@ -663,7 +893,7 @@ views:
                       custom_fields:
                         s7:
                           - top: 40px
-                          - left: '-5px'
+                          - left: "-5px"
                           - width: 110%
                           - border-bottom: 1px solid rgb(255,255,255,0.1)
                           - padding: 10px
@@ -677,7 +907,7 @@ views:
                           - font-size: 14px
                         tempsensor:
                           - top: 100px
-                          - left: '-5px'
+                          - left: "-5px"
                           - width: 110%
                           - border-bottom: 1px solid rgb(255,255,255,0.1)
                           - padding: 10px
@@ -691,7 +921,7 @@ views:
                           - font-size: 14px
                         motion:
                           - top: 160px
-                          - left: '-5px'
+                          - left: "-5px"
                           - width: 110%
                           - border-bottom: 1px solid rgb(255,255,255,0.1)
                           - padding: 10px
@@ -705,7 +935,7 @@ views:
                           - font-size: 14px
                         door:
                           - top: 220px
-                          - left: '-5px'
+                          - left: "-5px"
                           - width: 110%
                           - border-bottom: 1px solid rgb(255,255,255,0.1)
                           - padding: 10px
@@ -960,7 +1190,6 @@ views:
                       #     }
                       #   ]]]
 
-
           # - type: custom:button-card
           #   entity: weather.pirateweather
           #   name: Hvittingfoss
@@ -1073,41 +1302,6 @@ views:
           #     #     - light
           #     #     - icon_lamp
 
-          - type: custom:button-card
-            entity: sensor.lumi_lumi_weather_temperature #sensor.thermal_comfort_summer_simmer_perception #sensor.thermal_comfort_simmerzone
-            name: Temp #[[[ return states.['sensor.thermal_comfort_summer_simmer_perception'].state ]]]
-            tap_action: none
-            double_tap_action: !include popup/thermal_comfort.yaml
-            template:
-              - base
-              #- climate_base
-              #- media
-              - icon_climate
-              #- extra_styles
-              - circle
-            variables:
-              circle_input: >
-                [[[
-                  let humidity = states['sensor.lumi_lumi_weather_humidity'];
-                  if (humidity) return parseInt(humidity.state);
-                ]]]
-              circle_input_unit: "%"
-            # variables:
-            #   circle_input: >
-            #     [[[
-            #       let volume = states['sensor.spectre_battery_charge_remaining_percentage'];
-            #       if (volume) return parseInt(volume.state);
-            #     ]]]
-            #   circle_input_unit: "%"
-#                [[[
-#                  if (entity) {
-#                      return entity.state == 'slightly_cool'
-#                          ? Math.round(entity.attributes.temperature).toString()
-#                          : Math.round(entity.attributes.current_temperature).toString();
-#                  }
-#                ]]]
-            
-
           # - type: custom:button-card
           #   entity: switch.ps5_635_power
           #   name: Playstation
@@ -1162,20 +1356,16 @@ views:
           grid-area: media
         columns: 1
         cards:
-
           - type: custom:swipe-card
             parameters:
               speed: 550
               spaceBetween: 40
               threshold: 5
             cards:
-
               - type: horizontal-stack
                 cards:
-
                   - type: conditional
                     conditions:
-                      
                       - entity: select.conditional_media
                         state_not: Recently Added (Offline)
                       - entity: select.conditional_media
@@ -1195,8 +1385,6 @@ views:
                       - entity: select.conditional_media
                         state_not: Plex (Plex for Windows - DESKTOP-CD40KGT)
 
-
-
                     card:
                       type: custom:button-card
                       entity: sensor.plex_recently_added
@@ -1206,7 +1394,6 @@ views:
                       template:
                         - conditional_media
                         - icon_plex
-
 
                     # RECENTLY ADDED (BACKUP)
                   - type: conditional
@@ -1254,8 +1441,7 @@ views:
                         # - media_volume
                         #- icon_plex
                         - progress_bar
-                      
-                  
+
                   - type: conditional
                     conditions:
                       - entity: select.conditional_media
@@ -1268,7 +1454,7 @@ views:
                         - conditional_media
                         #- icon_plex
                         - progress_bar
-                  
+
                   # - type: conditional
                   #   conditions:
                   #     - entity: select.conditional_media
@@ -1304,7 +1490,7 @@ views:
                         - conditional_media
                         - progress_bar
                   #       - icon_nest_mini
-                        #- icon_amp
+                  #- icon_amp
 
                   # - type: conditional
                   #   conditions:
@@ -1329,15 +1515,14 @@ views:
                         - conditional_media
                         #- icon_plex
                         - progress_bar
- 
-###################################
-###### SWIPE CARD - 2nd PAGE ######
-###################################
+
+              ###################################
+              ###### SWIPE CARD - 2nd PAGE ######
+              ###################################
 
               - type: grid
                 columns: 2
                 cards:
-
                   - type: custom:button-card
                     entity: media_player.samsung_55
                     triggers_update: media_player.samsung_55 #sensor.youtube_watching
@@ -1373,42 +1558,40 @@ views:
                       #- icon_receiver
                       - icon_amp
 
-###################################
-###### SWIPE CARD - 3nd PAGE ######
-###################################
-
+              ###################################
+              ###### SWIPE CARD - 3nd PAGE ######
+              ###################################
 
               - type: grid
                 columns: 2
                 cards:
+                  - type: custom:button-card
+                    entity: media_player.plex_plex_for_samsung_tv_2018
+                    name: TV
+                    template:
+                      - media
+                      - icon_tv
 
-                    - type: custom:button-card
-                      entity: media_player.plex_plex_for_samsung_tv_2018
-                      name: TV
-                      template:
-                        - media
-                        - icon_tv
+                  - type: custom:button-card
+                    entity: media_player.plex_plex_for_windows_desktop_cd40kgt
+                    name: Lulu
+                    template:
+                      - media
+                      - icon_win_pc
 
-                    - type: custom:button-card
-                      entity: media_player.plex_plex_for_windows_desktop_cd40kgt
-                      name: Lulu
-                      template:
-                        - media
-                        - icon_win_pc
+                  - type: custom:button-card
+                    entity: media_player.plex_plex_for_windows_desktop_030ipd1
+                    name: Tanya
+                    template:
+                      - media
+                      - icon_win_pc
 
-                    - type: custom:button-card
-                      entity: media_player.plex_plex_for_windows_desktop_030ipd1
-                      name: Tanya
-                      template:
-                        - media
-                        - icon_win_pc
-
-                    - type: custom:button-card
-                      entity: media_player.plex_plex_cast_chromecast
-                      name: Chromecast
-                      template:
-                        - media
-                       # - icon_win_pc
+                  - type: custom:button-card
+                    entity: media_player.plex_plex_cast_chromecast
+                    name: Chromecast
+                    template:
+                      - media
+                      # - icon_win_pc
 
       #################################################
       #                                               #
@@ -1423,193 +1606,109 @@ views:
         columns: 1
 
         cards:
-          - type: custom:swipe-card
-            parameters:
-              speed: 550
-              spaceBetween: 40
-              threshold: 5
+          ###################################
+          ###### SWIPE CARD - 2nd PAGE ######
+          ###################################
+
+          - type: grid
+            columns: 2
             cards:
-              - type: horizontal-stack
-                cards:
-                  - type: conditional
-                    conditions:
-                      - entity: select.conditional_media_camera
-                        state_not: Vardagsrum #Living room
+              # - type: custom:button-card
+              #   entity: light.kitchen_led_switch
+              #   name: Christmas Tree #Kitchen LED
+              #   template:
+              #     - light
+              #     #- icon_silus_dome
+              #     - icon_superman
 
-                      # - entity: select.conditional_media_camera
-                      #   state_not: Sovrum #Bedroom
+              # - type: custom:button-card
+              #   entity: switch.living_room_radio
+              #   name: "Speakers"
+              #   #double_tap_action: !include popup/sovrum_tv2.yaml
+              #   template:
+              #     - base
+              #     - icon_tv
+              #     - loader
 
-                      # - entity: select.conditional_media_camera
-                      #   state_not: Spotify
+              # - type: custom:button-card
+              #   entity: switch.living_room_radio
+              #   name: Speakers
+              #   double_tap_action: !include popup/studio_monitorer.yaml
+              #   template:
+              #     - base
+              #     - icon_monitors
+              #     - circle
+              #     - loader
+              #   variables:
+              #     circle_input: >
+              #       {{ state_attr('media_player.node_8adc','volume_level') }}
+              #     circle_input_unit: "%"
 
-                      # - entity: select.conditional_media_camera
-                      #   state_not: Kök #Kitchen
-                    card:
-                      # type: custom:button-card
-                      # entity: camera.g3_instant_high
-                      # name: Last motion
-                      # tap_action: !include popup/other_security.yaml
-                      # template:
-                      #   - conditional_media_camera
-                      #   #- icon_unifi_cam
+              - type: custom:button-card
+                entity: switch.radio_switch #sensor.w11_audio_audio_sessions #switch.gosund_monitors_switch
+                name: Speakers #📺
+                #tap_action: toggle button.w11_mediaplaypause
+                double_tap_action: !include popup/studio_monitorer_radio.yaml
+                template:
+                  #- media
+                  - base
+                  - icon_monitors
+                  #- circle
+                  - loader
+                # variables: ### let volume = states['sensor.w11_currentvolume'];
+                #   circle_input: >
+                #    {{ state_attr("media_player.node_8adc", "volume_level") *100 }}
+                #   circle_input_unit: "%"
 
-                      type: custom:button-card
-                      entity: camera.g3_instant_high
-                      name: >
-                        [[[
-                          if (variables.state == 'recording') {
-                            return 'Online';
-                          }
-                        ]]]
+                # [[[
+                #   let volume = states['media_player.node_8adc'];
+                #   if (volume) return parseInt(volume.state);
+                # ]]]
 
-#                        [[[ return variables.state; ]]]
-                      template:
-                        #- base
-                        - media
-                        - icon_unifi_cam
-                      # hold_action:
-                      #   !include popup/other_security.yaml #!include popup/cameras.yaml
-                      # tap_action:
-                      #   !include popup/cameras.yaml
-                      #state_display: >
+              - type: custom:button-card
+                entity: switch.studiolight_switch
+                name: "Studio Light"
+                #double_tap_action: !include popup/sovrum_tv2.yaml
+                template:
+                  - base
+                  - icon_sub
+                  - loader
 
+              # - type: custom:button-card
+              #   entity: switch.
+              #   name: Kitchen Led #Balcony
+              #   template:
+              #     - light
+              #     - icon_hue_fair
+              #     #- icon_porch
+              #     - circle
+              #     - loader
 
-                  #      [[[ return variables.state['sensor.g3_instant_last_motion_detected.last_changed']; ]]]
-                  #     [[[ return relative_time['states.sensor.g3_instant_last_motion_detected.last_changed']; ]]]
-                  #     states['sensor.g3_instant_last_motion_detected']
-                  # {% set time =  relative_time(states.sensor.g3_instant_last_motion_detected.last_changed) %}
-                  #  Last motion: {{ time }}
+              - type: custom:button-card
+                entity: switch.balcony_switch
+                name: Outdoor
+                template:
+                  - base
+                  #- icon_silus_dome
+                  - icon_porch
+                  - loader
 
+              - type: custom:button-card
+                entity: light.kitchen_led_switch
+                name: Kitchen
+                template:
+                  - base
+                  - icon_hue_fair
+                  #- icon_porch
+                  - loader
 
-# {% if is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "off") %}
-# No Motion Detected for {{ relative_time(states.sensor.g3_instant_last_motion_detected.last_changed) }}
-# {% elif is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "on") %}
-#   {{-'\u26A0\uFE0F'}} mdi:motion-play 🏠 <b><font color='#6a7377'>Motion Detected</font></b>
-# {% else %} {{-'\u26A0\uFE0F'}}<b><font color='#6a7377'>Camera is Offline</font></b>
-# {% endif %}
+      ###################################
+      ###### SWIPE CARD - 3rd PAGE ######
+      ###################################
 
-# state_display: >
-#
-
-
-#                         {% if is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "off") %}
-#                             No Motion Detected for {{ relative_time(states.sensor.g3_instant_last_motion_detected.last_changed) }}
-#                         {% elif is_state('camera.g3_instant_high', 'recording') and is_state('binary_sensor.g3_instant_motion' , "on") %}
-#                            {{-'\u26A0\uFE0F'}}  🏠 <b><font color='#6a7377'>Motion Detected</font></b>
-#                         {% else %} {{-'\u26A0\uFE0F'}}<b><font color='#6a7377'>Camera is Offline</font></b>
-#                         {% endif %}
-
-###################################
-###### SWIPE CARD - 2nd PAGE ######
-###################################
-
-              - type: grid
-                columns: 2
-                cards:
-
-                  # - type: custom:button-card
-                  #   entity: light.kitchen_led_switch
-                  #   name: Christmas Tree #Kitchen LED
-                  #   template:
-                  #     - light
-                  #     #- icon_silus_dome
-                  #     - icon_superman
-
-                  # - type: custom:button-card
-                  #   entity: switch.living_room_radio
-                  #   name: "Speakers"
-                  #   #double_tap_action: !include popup/sovrum_tv2.yaml
-                  #   template:
-                  #     - base
-                  #     - icon_tv
-                  #     - loader
-
-
-                  # - type: custom:button-card
-                  #   entity: switch.living_room_radio
-                  #   name: Speakers
-                  #   double_tap_action: !include popup/studio_monitorer.yaml
-                  #   template:
-                  #     - base
-                  #     - icon_monitors
-                  #     - circle
-                  #     - loader
-                  #   variables:
-                  #     circle_input: >
-                  #       {{ state_attr('media_player.node_8adc','volume_level') }}
-                  #     circle_input_unit: "%"
-
-                  - type: custom:button-card
-                    entity: switch.radio_switch #sensor.w11_audio_audio_sessions #switch.gosund_monitors_switch
-                    name: Speakers #📺
-                    #tap_action: toggle button.w11_mediaplaypause
-                    double_tap_action: !include popup/studio_monitorer_radio.yaml
-                    template:
-                      #- media
-                      - base
-                      - icon_monitors
-                      #- circle
-                      - loader
-                    # variables: ### let volume = states['sensor.w11_currentvolume'];
-                    #   circle_input: >
-                    #    {{ state_attr("media_player.node_8adc", "volume_level") *100 }}
-                    #   circle_input_unit: "%"
-
-                      # [[[
-                        #   let volume = states['media_player.node_8adc'];
-                        #   if (volume) return parseInt(volume.state);
-                        # ]]]
-
-                  - type: custom:button-card
-                    entity: switch.subwoofer_switch
-                    name: "Subwoofer"
-                    #double_tap_action: !include popup/sovrum_tv2.yaml
-                    template:
-                      - base
-                      - icon_sub
-                      - loader
-
-                  # - type: custom:button-card
-                  #   entity: switch.
-                  #   name: Kitchen Led #Balcony
-                  #   template:
-                  #     - light
-                  #     - icon_hue_fair
-                  #     #- icon_porch
-                  #     - circle
-                  #     - loader
-
-                  - type: custom:button-card
-                    entity: switch.balcony_switch
-                    name: Outdoor
-                    template:
-                      - base
-                      #- icon_silus_dome
-                      - icon_porch
-                      - loader
-
-                  - type: custom:button-card
-                    entity: light.kitchen_led_switch
-                    name: Kitchen
-                    template:
-                      - base
-                      - icon_hue_fair
-                      #- icon_porch
-                      - loader
-
-
-
-
-###################################
-###### SWIPE CARD - 3rd PAGE ######
-###################################
-
-
-              # - type: grid
-              #   columns: 2
-              #   cards:
-
-
+      # - type: grid
+      #   columns: 2
+      #   cards:
 
       # - type: custom:button-card
       #   entity: light.balcony
@@ -1663,15 +1762,13 @@ views:
           grid-area: home
         columns: 2
         cards:
-
           - type: custom:button-card
             entity: person.lulu
             name: Lulu
             triggers_update:
               - sensor.lulu_last_changed
               - person.lulu
-            double_tap_action:
-              !include popup/home_lulu.yaml
+            double_tap_action: !include popup/home_lulu.yaml
             variables:
               retain: sensor.lulu_last_changed
             template:
@@ -1684,8 +1781,7 @@ views:
             triggers_update:
               - sensor.tanya_last_changed
               - person.tanya
-            double_tap_action:
-              !include popup/home_tanya.yaml
+            double_tap_action: !include popup/home_tanya.yaml
             variables:
               retain: sensor.tanya_last_changed
             template:
@@ -1716,12 +1812,10 @@ views:
         view_layout:
           grid-area: footer
         cards:
-
           - type: custom:button-card
             name: >
               <ha-icon icon="mdi:nas"></ha-icon> NAS
-            tap_action:
-              !include popup/footer_nas.yaml
+            tap_action: !include popup/footer_nas.yaml
             triggers_update:
               - update.nas_dsm_update
               - sensor.nas_volume_1_status
@@ -1744,8 +1838,7 @@ views:
             entity: sensor.template_updates
             name: >
               <ha-icon icon="mdi:arrow-up-bold-circle-outline"></ha-icon> Updates
-            tap_action:
-              !include popup/footer_updates.yaml
+            tap_action: !include popup/footer_updates.yaml
             variables:
               notify: >
                 [[[
@@ -1771,35 +1864,32 @@ views:
           - type: custom:button-card
             name: >
               <ha-icon icon="mdi:chart-line-variant"></ha-icon> History
-            tap_action:
-              !include popup/footer_history.yaml
+            tap_action: !include popup/footer_history.yaml
             template: footer
 
-#          - type: custom:button-card
-#            name: >
-#              <ha-icon icon="mdi:tablet"></ha-icon> Tablet
-#            tap_action:
-#              !include popup/footer_tablet.yaml
-#            variables:
-#              notify: >
-#                [[[
-#                  let id = states['binary_sensor.galaxy_tab_a_plugged_in'];
-#                  if (id) return id.state === 'off';
-#                ]]]
-#            template: footer
+          #          - type: custom:button-card
+          #            name: >
+          #              <ha-icon icon="mdi:tablet"></ha-icon> Tablet
+          #            tap_action:
+          #              !include popup/footer_tablet.yaml
+          #            variables:
+          #              notify: >
+          #                [[[
+          #                  let id = states['binary_sensor.galaxy_tab_a_plugged_in'];
+          #                  if (id) return id.state === 'off';
+          #                ]]]
+          #            template: footer
 
           - type: custom:button-card
             name: >
               <ha-icon icon="mdi:chart-line-variant"></ha-icon> Electricity
-            tap_action:
-              !include popup/footer_electricity.yaml
+            tap_action: !include popup/footer_electricity.yaml
             template: footer
 
           - type: custom:button-card
             name: >
               <ha-icon icon="mdi:router-wireless"></ha-icon> Router
-            tap_action:
-              !include popup/footer_router.yaml
+            tap_action: !include popup/footer_router.yaml
             triggers_update:
               - update.unifi_dream_machine
               - binary_sensor.template_udm_internet
@@ -1814,20 +1904,36 @@ views:
                 ]]]
             template: footer
 
+          # - type: custom:button-card
+          #   name: >
+          #     <ha-icon icon="mdi:panorama-sphere-outline"></ha-icon> Sky++
+          #   tap_action: !include popup/footer_sky.yaml
+          #   triggers_update:
+          #     - sensor.aurora_visibility_aurora_visibility
+          #   variables:
+          #     notify: >
+          #       [[[
+          #         let id = this._config.triggers_update;
+          #         if (id.every(e => states[e]))
+          #             return states[id[0]].state === 'on'
+          #                 ? 1
+          #                 : states[id[1]].state === 'off';
+          #       ]]]
+          #   template: footer
+
           - type: custom:button-card
             name: >
-              <ha-icon icon="mdi:panorama-sphere-outline"></ha-icon> Sky++
-            tap_action:
-              !include popup/footer_sky.yaml
-            triggers_update:
-              - sensor.aurora_visibility_aurora_visibility
-            variables:
-              notify: >
-                [[[
-                  let id = this._config.triggers_update;
-                  if (id.every(e => states[e]))
-                      return states[id[0]].state === 'on'
-                          ? 1
-                          : states[id[1]].state === 'off';
-                ]]]
+              <ha-icon icon="mdi:kitesurfing"></ha-icon> Kite
+            tap_action: !include popup/footer_kite.yaml
+            # triggers_update:
+            #   - sensor.date
+            # variables:
+            #   notify: >
+            #     [[[
+            #       let id = this._config.triggers_update;
+            #       if (id.every(e => states[e]))
+            #           return states[id[0]].state === 'on'
+            #               ? 1
+            #               : states[id[1]].state === 'off';
+            #     ]]]
             template: footer

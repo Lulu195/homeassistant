@@ -1,0 +1,39 @@
+pihole:
+    template:
+      - base
+    show_state: false
+    custom_fields:
+      graph:
+        card:
+          type: custom:mini-graph-card
+          line_color: '#3182b7'
+          line_width: 4
+          font_size: 75
+          show:
+            name: false
+            icon: false
+            state: false
+            legend: false
+            labels: false
+    styles:
+      name:
+        - margin: '-40% 0% -13% 0%'
+        - position: absolute
+        - top: 57%
+      custom_fields:
+        graph:
+          - bottom: 0%
+          - left: 0%
+          - width: 130%
+          - position: absolute
+          - margin: 0% 0% -13% -15%
+        circle:
+          - display: initial
+          - width: 90%
+          - letter-spacing: 0.03vw
+          - margin: '-6% -6% 0 0'
+          - justify-self: end
+          - opacity: 1
+        icon:
+          - width: 67%
+          - fill: '#9da0a2'

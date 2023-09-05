@@ -36,17 +36,17 @@ base_media:
             }
             return (variables.state != 'off' && variables.state != 'idle' && variables.state != 'standby') && (entity_picture == null) ? 'rgba(0, 0, 0, 0.6)' : '#efefef';
           ]]]
-#          [[[
-#            if (variables.is_youtube) {
-#                return `#efefef`;
-#            } else {
-#                return variables.media_on && variables.entity_picture === undefined
-#                    ? 'rgba(0, 0, 0, 0.6)'
-#                    : variables.media_off
-#                        ? '#97989c'
-#                        : '#efefef';
-#            }
-#          ]]]
+      #          [[[
+      #            if (variables.is_youtube) {
+      #                return `#efefef`;
+      #            } else {
+      #                return variables.media_on && variables.entity_picture === undefined
+      #                    ? 'rgba(0, 0, 0, 0.6)'
+      #                    : variables.media_off
+      #                        ? '#97989c'
+      #                        : '#efefef';
+      #            }
+      #          ]]]
       - text-shadow: >
           [[[
             let entity_picture = entity === undefined ? null : entity.attributes.entity_picture;
@@ -80,23 +80,23 @@ media:
       icon:
         - width: 70%
         - margin-left: 2%
-        - fill: '#9da0a2'
+        - fill: "#9da0a2"
         - display: >
             [[[
               return variables.media_off || variables.entity_picture === undefined
                   ? 'initial'
                   : 'none';
             ]]]
-#            [[[
-#            if (variables.is_youtube) {
-#                return `none`;
-#            }
-#            else {
-#                return variables.media_off || variables.entity_picture === undefined
-#                    ? 'initial'
-#                    : 'none';
-#            }
-#            ]]]
+    #            [[[
+    #            if (variables.is_youtube) {
+    #                return `none`;
+    #            }
+    #            else {
+    #                return variables.media_off || variables.entity_picture === undefined
+    #                    ? 'initial'
+    #                    : 'none';
+    #            }
+    #            ]]]
     card:
       - background-color: none
       - background-size: cover
@@ -124,7 +124,6 @@ media:
 #            }
 #          ]]]
 
-
 #Samsung TV try
 samsung_tv:
   variables:
@@ -151,8 +150,8 @@ media_volume:
       [[[ return !entity || ['on', 'playing', 'paused', 'idle'].indexOf(entity.state) !== -1; ]]]
     media_off: >
       [[[ return !entity || ['off', 'standby', 'unknown', 'unavailable'].indexOf(entity.state) !== -1; ]]]
-    volume_control: '[[[ return entity.entity_id; ]]]'
-    player: '[[[ return entity.entity_id; ]]]'
+    volume_control: "[[[ return entity.entity_id; ]]]"
+    player: "[[[ return entity.entity_id; ]]]"
   tap_action:
     action: >
       [[[
@@ -188,33 +187,32 @@ media_volume:
           card:
             type: custom:media_player-popup-card
             #entity: media_player.node_8adc
-            entity: '[[[ return variables.volume_control; ]]]' # IF something, then receiver, else current entity
+            entity: "[[[ return variables.volume_control; ]]]" # IF something, then receiver, else current entity
             icon: none
             fullscreen: false
             sliderWidth: 130px
             sliderHeight: 360px
             borderRadius: 1.7em
-            sliderColor: '#c7c7c7'
+            sliderColor: "#c7c7c7"
             sliderTrackColor: rgba(25, 25, 25, 0.9)
             displayType: slider
             actionsInARow: 3
             actions:
               - service: media_player.media_previous_track
                 service_data:
-                  entity_id: '[[[ return variables.player; ]]]'
+                  entity_id: "[[[ return variables.player; ]]]"
                 #name: previous
                 icon: mdi:skip-previous
               - service: media_player.media_play_pause
                 service_data:
-                  entity_id: '[[[ return variables.player; ]]]'
+                  entity_id: "[[[ return variables.player; ]]]"
                 #name: play/pause
                 icon: mdi:play-pause
               - service: media_player.media_next_track
                 service_data:
-                  entity_id: '[[[ return variables.player; ]]]'
+                  entity_id: "[[[ return variables.player; ]]]"
                 #name: next
                 icon: mdi:skip-next
-
 
 #################################################
 #                                               #
@@ -284,8 +282,6 @@ progress_bar:
           }, 0);
         return ' ';}
       ]]]
-      
-
 
 #################################################
 #                                               #
@@ -300,7 +296,7 @@ conditional_media:
     - base_media
     - icon_play_pause
   variables:
-    entity_picture: '[[[ return entity.entity_id; ]]]'
+    entity_picture: "[[[ return entity.entity_id; ]]]"
     # entity_picture: ''
     # i: >
     #   [[[
@@ -331,12 +327,16 @@ conditional_media:
         let elt = this.shadowRoot,
             await = setTimeout(marquee, 100),
             data = entity.attributes.data,
+            series_title = entity.attributes.media_series_title,
             title = entity.attributes.title,
+            season = entity.attributes.media_season,
+            episode = entity.attributes.media_episode,
             poster = entity.attributes.poster,
             fanart = entity.attributes.fanart,
             s_e = entity.attributes.number,
             media_artist = entity.attributes.media_artist,
-            media_title = entity.attributes.media_title;
+            media_title = entity.attributes.media_title,
+            game_title = entity.attributes.title_name;
           if (entity.state === "Active") {
             var number = s_e === undefined && title !== undefined
                 ? ' '
@@ -388,7 +388,7 @@ conditional_media:
       }
       return variables.translate_unknown;
     ]]]
-    
+
   styles:
     grid:
       - gap: 0.65%
@@ -472,9 +472,6 @@ conditional_media:
           }, 0);
         return ' ';
       ]]]
-
-
-
 
 # #################################################
 # #                                               #
@@ -651,9 +648,6 @@ conditional_media:
 #         return ' ';
 #       ]]]
 
-
-
-
 #################################################
 #                                               #
 #                    CAMERA                     #
@@ -665,12 +659,12 @@ camera:
     - base
     - base_camera
   state_display: >
-      [[[ if (variables.state == 'idle' || variables.state == 'recording') return ' '; ]]]
+    [[[ if (variables.state == 'idle' || variables.state == 'recording') return ' '; ]]]
   styles:
     custom_fields:
       icon:
         - width: 70%
-        - fill: '#9da0a2'
+        - fill: "#9da0a2"
         - opacity: >
             [[[
               let entity_picture = entity === undefined ? null : entity.attributes.entity_picture;
@@ -695,7 +689,6 @@ camera:
               'linear-gradient(0deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.8) 100%)' : 
               'linear-gradient(0deg, rgba(0,0,0,.1) 0%, rgba(0,0,0,0) 100%), url(' + entity_picture + ')';
           ]]]
-
 
 #################################################
 #                                               #

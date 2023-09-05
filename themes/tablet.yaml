@@ -6,7 +6,7 @@ tablet:
   ha-card-box-shadow: none
   ha-card-background: none
 
-  grid-card-gap: 3.5%  #from 5%
+  grid-card-gap: 3.5% #from 5%
   masonry-view-card-margin: 0px
   state-icon-color: "#9da0a2"
   state-icon-active-color: "#3182b7"
@@ -96,23 +96,23 @@ tablet:
   ha-card-header-background-color: rgba(48,52,52,0.8)
   custom-layout-card-padding: 3.3vw
 
-  sidebar-time-font-size: 5.2vw
-  sidebar-time-line-height: 4.3vw
-  sidebar-font-size: min(max(16px, 1.3vw), 1.6vw) #1.42vw 
+  sidebar-time-font-size: 5.0vw #5.2vw
+  sidebar-time-line-height: 4.15vw # 4.3vw
+  sidebar-font-size: min(max(16px, 1.3vw), 1.6vw) #1.42vw
   sidebar-line-height: 2vw
   bar-card-color: "#303435"
 
   #button_card_templates
-  button-card-font-size: 1.35vw
+  button-card-font-size: 1.25vw #1.35vw
   z-axis-adjustment: 0.05vw #tilt compensation
-  button-card-font-weight: 500
+  button-card-font-weight: 400 #500
   button-card-letter-spacing: -0.02vw
   button-card-border-radius: 8% #10%
 
-  footer-card-font-size: 1.22vw
-  footer-card-icon-size: 1.5vw
-  footer-card-padding-v: 0.7vw
-  footer-card-padding-h: 1.1vw
+  footer-card-font-size: 0.9vw #1.22vw
+  footer-card-icon-size: 1.2vw #1.5vw
+  footer-card-padding-v: 0.5vw #0.7vw
+  footer-card-padding-h: 0.7vw #1.1vw
   footer-card-border-radius: 0.65vw
 
   footer-notify-font-size: 0.9vw
@@ -123,7 +123,7 @@ tablet:
   button-card-light-color-temp: hsl(204, 58%, 38%)
 
   #browser_mod.popup
-  dialog-backdrop-filter: blur(2em) brightness(0.75)
+  dialog-backdrop-filter: blur(2em) brightness(0.65) #(0.75)
   popup-background-color: rgba(34,38,39,0.9)
   popup-border-width: 1px
   popup-border-radius: 1em
@@ -137,7 +137,7 @@ tablet:
   tablet-popup-align-dialog: center
   tablet-popup-margin-top: 0px
 
- # WEATHER card
+  # WEATHER card
   weather-icon-clear-night: url("/local/svg/weather/static/clear-night.svg")
   weather-icon-clear-day: url("/local/svg/weather/static/clear-day.svg")
   weather-icon-cloudy: url("/local/svg/weather/static/cloudy.svg")
@@ -152,13 +152,13 @@ tablet:
   weather-icon-snowy-rainy: url("/local/svg/weather/static/sleet.svg")
   weather-icon-sunny: url("/local/svg/weather/static/clear-day.svg")
   weather-icon-windy: url("/local/svg/weather/static/wind.svg")
-  weather-icon-windy-alert: url("/local/svg/weather/static/wind-alert.svg")  
+  weather-icon-windy-alert: url("/local/svg/weather/static/wind-alert.svg")
 
   # Progress Bar
-  progress-bar-color: '#e5a00d'
+  progress-bar-color: "#e5a00d"
   progress-bar-background-color: rgba(0,0,0,0.33)
   progress-bar-height: 2%
-  
+
   ####################################################
   #                                                  #
   #                     CARD-MOD                     #
@@ -194,7 +194,7 @@ tablet:
         $: |
           /* default */
           h1 {
-            font-size: 2.5vw !important;
+            font-size: 2.3vw !important;
             line-height: 0 !important;
             font-weight: 600 !important;
             color: rgba(255, 255, 255, 0.8) !important;

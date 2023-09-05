@@ -1,206 +1,263 @@
-  #################################################
-  #                                               #
-  #                   FORECAST                    #
-  #                                               #
-  #################################################
+#################################################
+#                                               #
+#                   FORECAST                    #
+#                                               #
+#################################################
+# sensor:
+#   - platform: template
+#     sensors:
+#       wind_direction_icon:
+#         friendly_name: "Wind Direction Icon"
+#         value_template: >
+#           {% set wind_bearing = state_attr('weather.pirateweather', 'wind_bearing') | float %}
+#           {% set directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'] %}
+#           {% set direction_index = ((wind_bearing + 11.25) / 22.5) | round %}
+#           {% set icon_suffix = 'up' if direction_index < 16 else 'up-left' %}
+#           {% set icon_prefix = 'mdi:arrow-' %}
+#           {{ icon_prefix + icon_suffix }}
 
-  weather_forecast:
-    variables:
-      temp_min: ''
-      temp_max: ''
-      precip: ''
-      current_weather: ''
-    aspect_ratio: 1/1
-    show_icon: false
-    show_entity_picture: true
-    show_name: true #false
-    show_state: false
-    show_label: true 
-    tap_action:
-      action: more-info
-    styles:
-      grid:
-        - grid-template-areas: |
-            "n"
-            "temp" 
-            "wind"
-            "i"
-            "s"
-            "l"
-        - grid-template-columns: 1fr
-        - grid-template-rows: min-content repeat(3, 1fr) repeat(2, min-content)
-        - gap: 0%
-      card:
-        - border-radius: var(--button-card-border-radius)
-        - border-width: 0
-        - padding: 4.9% 4.9% 3.9% 8.9% 
-        - color: > #rgba(157, 160, 162, 1) #rgba(84, 85, 85, 1) #rgba(85, 86, 86, 1)
-            [[[
-              if (states['sun.sun'].state == 'below_horizon'){
-                return 'rgba(157, 160, 162, 1)';
-              } else
-                return 'rgba(71, 71, 71, 1)';
-            ]]]  
-        - background: > # else linear-gradient(to top, rgba(123,168,197,0.8) 0%, rgba(61,132,176,0.8) 100%)
-            [[[
-              if (states['sun.sun'].state == 'below_horizon'){
-                return 'linear-gradient(to top, rgba(53,59,83,0.8) 0%, rgba(10,14,34,0.8) 100%)';
-              } else
-                return 'linear-gradient(to top, rgb(123 168 197) 0%, rgba(61,132,176,0.8) 100%)';
-            ]]]
-          # return 'linear-gradient(to top, rgb(123 168 197) 0%, #b0c5d3 100%)'; --- rgb(213, 215, 216)
-      name:
-        - place-self: start
-        - text-transform: uppercase
-        - font-weight: 400
-        - margin-top: none
-      img_cell:
-        - justify-content: start
-      icon:
-        - width: 30% #37%
-        - margin-left: none
-      label:
-        - place-self: center
-        - margin-left: -10px 
-      custom_fields:
-        temp:
-          - place-self: start
-          # - margin-top: none
-        wind:
-          - place-self: start
-    label: >   
-      [[[
-        return `
-          <ha-icon icon="mdi:arrow-up-thin" style="width: 1em; height: 1em; margin-right: -0.5em;"></ha-icon>
-          <span> ${states[variables.temp_max].state}°</span>
-          <ha-icon icon="mdi:arrow-down-thin" style="width: 1em; height: 1em; margin-right: -0.5em;"></ha-icon>
-          <span> ${states[variables.temp_min].state}°</span>
-          <ha-icon icon="mdi:water-percent-alert" style="width: 1em; height: 1em; margin-right: -0.2em;"></ha-icon>
-          <span> ${states[variables.precip].state}%</span>
-        `
-      ]]]
+weather_forecast:
+  variables:
+    temp_min: ""
+    temp_max: ""
+    precip: ""
+    current_weather: ""
+  aspect_ratio: 1/1
+  show_icon: false
+  show_entity_picture: true
+  show_name: false
+  show_state: true #false
+  show_label: true
+  tap_action:
+    action: more-info
+  styles:
+    grid:
+      - grid-template-areas: |
+          "n"
+          "temp"
+          "wind"
+          "i"
+          "s"
+          "l"
+      - grid-template-columns: 1fr
+      - grid-template-rows: min-content repeat(3, 1fr) repeat(2, min-content)
+      - gap: 0%
+
+    card:
+      - border-radius: var(--button-card-border-radius)
+      - border-width: 0
+      - padding: 4.9% 4.9% 3.9% 8.9%
+      - color:
+          > #rgba(157, 160, 162, 1) #rgba(84, 85, 85, 1) #rgba(85, 86, 86, 1)
+          [[[
+            if (states['sun.sun'].state == 'below_horizon'){
+              return 'rgba(157, 160, 162, 1)';
+            } else
+              return 'rgba(71, 71, 71, 1)';
+          ]]]
+      - background:
+          > # else linear-gradient(to top, rgba(123,168,197,0.8) 0%, rgba(61,132,176,0.8) 100%)
+          [[[
+            if (states['sun.sun'].state == 'below_horizon'){
+              return 'linear-gradient(to top, rgba(53,59,83,0.8) 0%, rgba(10,14,34,0.8) 100%)';
+            } else
+              return 'linear-gradient(to top, rgb(123 168 197) 0%, rgba(61,132,176,0.8) 100%)';
+          ]]]
+        # return 'linear-gradient(to top, rgb(123 168 197) 0%, #b0c5d3 100%)'; --- rgb(213, 215, 216)
+    state:
+      - text-transform: uppercase
+      - margin-top: 5px
+      - line-height: 100%
+    name:
+      - place-self: start
+      - text-transform: uppercase
+      - font-weight: 400
+      - margin-top: none
+    img_cell:
+      - justify-content: start
+      - overflow: visible
+
+    icon:
+      - width: 30% #37%
+      - margin-left: none
+    label:
+      # - place-self: center
+      # - margin-left: -10px
+      - place-self: center #start
+      # - margin-left: -5px
+      - margin-top: 2% #3%
+      - margin-bottom: -2% #-7%
     custom_fields:
-      temp: >
-        [[[ return entity.attributes.temperature + "°C "; ]]]
-      wind: >  
-        [[[ 
-          if (entity.attributes.wind_speed > 60) 
-            return `<span style="color: red">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>`;
-          else if (entity.attributes.wind_speed > 40) 
-            return `<span style="color: orange">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>`;
-          else if (entity.attributes.wind_speed > 20) 
-            return `<span style="color: yellow">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>`;
-          else 
-            return `${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit}`;
+      temp:
+        - place-self: start
+        - margin-top: none
+      wind:
+        - place-self: start
+  label: >
+    [[[
+      return `
+        <ha-icon icon="mdi:water-percent" style="width: 1em; height: 1em; margin-right: -0.2em;"></ha-icon>
+        <span> ${states[variables.precip].state}%</span>
+        <ha-icon icon="mdi:chevron-up" style="width: 1em; height: 1em; margin-right: -0.5em;"></ha-icon>
+        <span> ${states[variables.temp_max].state}°</span>
+        <ha-icon icon="mdi:chevron-down" style="width: 1em; height: 1em; margin-right: -0.5em;"></ha-icon>
+        <span> ${states[variables.temp_min].state}°</span>
+
+      `
+    ]]]
+  custom_fields:
+    temp: >
+      [[[ return entity.attributes.temperature + "°"; ]]]
+    wind: >
+      [[[ 
+        let wind_speed = entity.attributes.wind_speed;
+        let wind_speed_unit = entity.attributes.wind_speed_unit;
+        let wind_bearing = parseFloat(entity.attributes.wind_bearing);
+        let directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
+        let wind_direction = directions[Math.round((wind_bearing + 11.25) / 22.5)];
+        if (wind_speed > 30) 
+          return `<span style="color: red">${wind_speed}<sup>${wind_speed_unit}</sup></span> ${wind_direction}`;
+        else if (wind_speed > 20) 
+          return `<span style="color: orange">${wind_speed}<sup>${wind_speed_unit}</sup></span> ${wind_direction}`;
+        else if (wind_speed > 15) 
+          return `<span style="color: yellow">${wind_speed}<sup>${wind_speed_unit}</sup></span> ${wind_direction}`;
+        else if (wind_speed > 8)
+          return `<span style="color: rgb(0, 255, 0);">${wind_speed}<sup>${wind_speed_unit}</sup></span> ${wind_direction}`;
+        else 
+          return `${wind_speed}<sup>${wind_speed_unit}</sup> ${wind_direction}`;
         ]]]
+    # wind: >
+    #   [[[
+    #     let wind_speed = entity.attributes.wind_speed;
+    #     let wind_speed_unit = entity.attributes.wind_speed_unit;
+    #     let wind_bearing = parseFloat(entity.attributes.wind_bearing);
+    #     let directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N'];
+    #     let wind_direction = directions[Math.round(wind_bearing / (360 / directions.length))];
+    #     if (wind_speed > 60)
+    #       return `<span style="color: red">${wind_speed} ${wind_speed_unit}</span> ${wind_direction}`;
+    #     else if (wind_speed > 40)
+    #       return `<span style="color: orange">${wind_speed} ${wind_speed_unit}</span> ${wind_direction}`;
+    #     else if (wind_speed > 20)
+    #       return `<span style="color: yellow">${wind_speed} ${wind_speed_unit}</span> ${wind_direction}`;
+    #     else
+    #       return `${wind_speed} ${wind_speed_unit} ${wind_direction}`;
+    #   ]]
+    # wind: >
+    #   [[[
+    #     if (entity.attributes.wind_speed > 60)
+    #       return `<span style="color: red">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>`;
+    #     else if (entity.attributes.wind_speed > 40)
+    #       return `<span style="color: orange">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>`;
+    #     else if (entity.attributes.wind_speed > 20)
+    #       return `<span style="color: yellow">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>`;
+    #     else
+    #       return `${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit}`;
+    #   ]]]
 
   ### OR The other code using ternary operator
-#   [[[ entity.attributes.wind_speed > 60 ?
-#       `<span style="color: red">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>` :
-#     entity.attributes.wind_speed > 40 ?
-#       `<span style="color: orange">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>` :
-#     entity.attributes.wind_speed > 20 ?
-#       `<span style="color: yellow">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>` :
-#     `${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit}`
-# ]]]
-      
-    entity_picture: |
-      [[[
-        let weather = states[variables.current_weather].state.toLowerCase();
-        if ((weather == 'sunny') && (states['sun.sun'].state == 'above_horizon'))
-          return "/local/svg/weather/clear-day.svg";
-          if ((weather == 'sunny') || (weather == 'clear-night') && (states['sun.sun'].state == 'below_horizon'))
-            return "/local/svg/weather/clear-night.svg";
-              if (weather == 'fog')
-                return "/local/svg/weather/fog.svg";
-                  if ((weather == 'partlycloudy') && (states['sun.sun'].state == 'above_horizon'))
-                    return "/local/svg/weather/partly-cloudy-day.svg";
-                      if ((weather == 'partlycloudy') && (states['sun.sun'].state == 'below_horizon'))
-                        return "/local/svg/weather/partly-cloudy-night.svg";
-                          if (weather == 'rainy')
-                            return "/local/svg/weather/rain.svg";
-                              if (weather == 'sleet')
-                                return "/local/svg/weather/sleet.svg";
-                                  if (weather == 'snow')
-                                    return "/local/svg/weather/snow.svg";
-                                      if (weather == 'cloudy')
-                                        return "/local/svg/weather/cloudy.svg";
-        else (weather == 'wind')
-          return "/local/svg/weather/wind.svg";
-      ]]]
-    extra_styles: |
-      [[[
-        return `
+  #   [[[ entity.attributes.wind_speed > 60 ?
+  #       `<span style="color: red">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>` :
+  #     entity.attributes.wind_speed > 40 ?
+  #       `<span style="color: orange">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>` :
+  #     entity.attributes.wind_speed > 20 ?
+  #       `<span style="color: yellow">${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit} </span>` :
+  #     `${entity.attributes.wind_speed} ${entity.attributes.wind_speed_unit}`
+  # ]]]
+
+  entity_picture: |
+    [[[
+      let weather = states[variables.current_weather].state.toLowerCase();
+      if ((weather == 'sunny') && (states['sun.sun'].state == 'above_horizon'))
+        return "/local/svg/weather/clear-day.svg";
+        if ((weather == 'sunny') || (weather == 'clear-night') && (states['sun.sun'].state == 'below_horizon'))
+          return "/local/svg/weather/clear-night.svg";
+            if (weather == 'fog')
+              return "/local/svg/weather/fog.svg";
+                if ((weather == 'partlycloudy') && (states['sun.sun'].state == 'above_horizon'))
+                  return "/local/svg/weather/partly-cloudy-day.svg";
+                    if ((weather == 'partlycloudy') && (states['sun.sun'].state == 'below_horizon'))
+                      return "/local/svg/weather/partly-cloudy-night.svg";
+                        if (weather == 'rainy')
+                          return "/local/svg/weather/rain.svg";
+                            if (weather == 'sleet')
+                              return "/local/svg/weather/sleet.svg";
+                                if (weather == 'snow')
+                                  return "/local/svg/weather/snow.svg";
+                                    if (weather == 'cloudy')
+                                      return "/local/svg/weather/cloudy.svg";
+      else (weather == 'wind')
+        return "/local/svg/weather/wind.svg";
+    ]]]
+  extra_styles: | # -0.1 on each of the below
+    [[[
+      return ` 
+        #name {
+          font-size: 0.8vw;
+        }
+        #temp {
+          font-size: 1vw;
+        }
+        #wind {
+          font-size: 1vw;
+        }
+        #state {
+          font-size: 0.5vw;
+        }  
+        #label {
+          font-size: 0.8vw;
+        }                    
+        /* portrait */
+        @media screen and (max-width: 1200px) {
           #name {
-            font-size: 0.9vw;
+            font-size: 1.2vw !important;
           }
           #temp {
-            font-size: 1.3vw;
+            font-size: 2.8vw !important;
           }
           #wind {
-            font-size: 1.2vw;
+          font-size: 1.3vw; !important;
           }
           #state {
-            font-size: 0.8vw;
+            font-size: 0.7vw !important;
           }  
           #label {
-            font-size: 1.0vw;
-          }                    
-          /* portrait */
-          @media screen and (max-width: 1200px) {
-            #name {
-              font-size: 1.2vw !important;
-            }
-            #temp {
-              font-size: 2.8vw !important;
-            }
-            #wind {
-            font-size: 1.3vw; !important;
-            }
-            #state {
-              font-size: 0.7vw !important;
-            }  
-            #label {
-              font-size: 1.4vw !important;
-            }  
+            font-size: 1.4vw !important;
+          }  
+        }
+        /* phone */
+        @media screen and (max-width: 800px) {
+          #name {
+            font-size: 2vw !important;
+          }              
+          #temp {
+            font-size: 3.0vw !important;
           }
-          /* phone */
-          @media screen and (max-width: 800px) {
-            #name {
-              font-size: 2vw !important;
-            }              
-            #temp {
-              font-size: 3.0vw !important;
-            }
-            #wind {
-            font-size: 2.3vw; !important;
-            }    
-            #state {
-              font-size: 2vw !important;
-            }   
-            #label {
-              font-size: 2.3vw !important;
-            }                        
+          #wind {
+          font-size: 2.3vw; !important;
+          }    
+          #state {
+            font-size: 2vw !important;
+          }   
+          #label {
+            font-size: 2.3vw !important;
+          }                        
+        }
+        @keyframes card_bounce {
+          0% {
+            transform: scale(1);
           }
-          @keyframes card_bounce {
-            0% {
-              transform: scale(1);
-            }
-            15% {
-              transform: scale(0.9);
-            }
-            25% {
-              transform: scale(1);
-            }
-            30% {
-              transform: scale(0.98);
-            }
-            100% {
-              transform: scale(1);
-            }
+          15% {
+            transform: scale(0.9);
           }
-        `
-      ]]]
-
-
-  
+          25% {
+            transform: scale(1);
+          }
+          30% {
+            transform: scale(0.98);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+      `
+    ]]]

@@ -116,12 +116,22 @@
   use_blueprint:
     path: sbyx/wake-up-light-alarm-with-sunrise-effect.yaml
     input:
-      manual_time: 09:00:00
-      timestamp_sensor: sensor.s7_edge_next_alarm
-      check_entity: device_tracker.s7_edge
+      manual_time: 06:25:00
       light_entity: light.philips_1746547p7_huelight
-      sunrise_duration: 5
-      end_brightness: 96
+      end_brightness: 255
+      sunrise_duration: 15
+      post_sunrise_actions:
+      - device_id: 37ed3fa06bd2ae91f3c47d6cdc447356
+        domain: mobile_app
+        type: notify
+        message: Wake up
+      - service: media_player.play_media
+        target: {}
+        data:
+          media_content_id: ''
+          media_content_type: ''
+        metadata: {}
+      min_mired: 155
 - id: '1676695352325'
   alias: System - Plex Recently Added
   description: Sensor attribute backup
@@ -138,19 +148,18 @@
   action:
   - service: input_text.set_value
     data:
-      value: "{% if not states('sensor.plex_recently_added') in ['unavailable','undefined','unknown','none','null','0']\
-        \ %}\n  {% set state = namespace(return='') %}\n  {% set data = state_attr('sensor.plex_recently_added','data')\
-        \ %}\n  {%- for value in data %}\n    {%- if not loop.first and value is defined\
-        \ and state.return == '' %}\n      {%- if not value.number is defined %}\n\
-        \        {% set state.return = \n          \"aired:\" + value.aired + \"|\"\
-        \ +\n          \"title:\" + value.title  + \"|\" +\n          \"fanart:\"\
-        \ + value.fanart + \"|\" +\n          \"poster:\" + value.poster\n       \
-        \ %}\n      {%- else %}\n        {% set state.return = \n          \"aired:\"\
-        \ + value.aired + \"|\" +\n          \"title:\" + value.title  + \"|\" +\n\
-        \          \"number:\" + value.number  + \"|\" +\n          \"fanart:\" +\
-        \ value.fanart + \"|\" +\n          \"poster:\" + value.poster\n        %}\n\
-        \      {%- endif %}\n    {%- endif %}\n  {%- endfor %}\n  {{ state.return\
-        \ }}\n{% endif %}"
+      value: "{% if not states('sensor.plex_recently_added') in ['unavailable','undefined','unknown','none','null','0']
+        %}\n  {% set state = namespace(return='') %}\n  {% set data = state_attr('sensor.plex_recently_added','data')
+        %}\n  {%- for value in data %}\n    {%- if not loop.first and value is defined
+        and state.return == '' %}\n      {%- if not value.number is defined %}\n        {%
+        set state.return = \n          \"aired:\" + value.aired + \"|\" +\n          \"title:\"
+        + value.title  + \"|\" +\n          \"fanart:\" + value.fanart + \"|\" +\n
+        \         \"poster:\" + value.poster\n        %}\n      {%- else %}\n        {%
+        set state.return = \n          \"aired:\" + value.aired + \"|\" +\n          \"title:\"
+        + value.title  + \"|\" +\n          \"number:\" + value.number  + \"|\" +\n
+        \         \"fanart:\" + value.fanart + \"|\" +\n          \"poster:\" + value.poster\n
+        \       %}\n      {%- endif %}\n    {%- endif %}\n  {%- endfor %}\n  {{ state.return
+        }}\n{% endif %}"
     target:
       entity_id: input_text.backup_plex_recently_added
   mode: single
@@ -190,7 +199,6 @@
     data: {}
     target:
       device_id:
-      - ba3f289f4f281ea4902ca90cca0b9f17
       - aec8f1a01101150430bf1d65e8f07486
   - service: media_player.media_stop
     data: {}
@@ -227,10 +235,6 @@
         device_id: aec8f1a01101150430bf1d65e8f07486
         entity_id: switch.radio_switch
         domain: switch
-      - type: turn_on
-        device_id: ba3f289f4f281ea4902ca90cca0b9f17
-        entity_id: switch.subwoofer_switch
-        domain: switch
       - service: media_player.volume_set
         data:
           volume_level: 0.15
@@ -261,7 +265,6 @@
     target:
       device_id:
       - aec8f1a01101150430bf1d65e8f07486
-      - ba3f289f4f281ea4902ca90cca0b9f17
   - service: media_player.volume_set
     data:
       volume_level: 0.2
@@ -319,3 +322,64 @@
       no_motion_wait_night: 30
       light_target:
         device_id: 4c394ec74b5d7fc064416fa60bb6b6ad
+- id: '1681813776518'
+  alias: Camera alert
+  description: ''
+  use_blueprint:
+    path: Stan-Gobien/CriticalCollapseOptionNotHomeMotionCameraSnapshotWithClickAction.yaml
+    input:
+      motion_sensor: binary_sensor.g3_instant_motion
+      camera: camera.g3_instant_high
+      notify_device: 37ed3fa06bd2ae91f3c47d6cdc447356
+- id: '1681813984075'
+  alias: Door Open
+  description: ''
+  trigger:
+  - platform: state
+    entity_id:
+    - binary_sensor.samjin_multi_accelerometer
+    to: 'on'
+  condition: []
+  action:
+  - service: notify.mobile_app_s7_edge
+    data:
+      title: Door is open
+  mode: single
+- id: '1681815049707'
+  alias: Motion camera tanya
+  description: ''
+  use_blueprint:
+    path: Stan-Gobien/CriticalCollapseOptionNotHomeMotionCameraSnapshotWithClickAction.yaml
+    input:
+      motion_sensor: binary_sensor.g3_instant_motion
+      camera: camera.g3_instant_high
+      notify_device: 43c813b68c7f421a12deccff613a91b1
+- id: '1682890701443'
+  alias: '00: Wake up alarm Workdays'
+  description: Alarm Bedroom Sunrise, TTS on G3 and Kitchen Lights
+  use_blueprint:
+    path: sbyx/wake-up-light-alarm-with-sunrise-effect.yaml
+    input:
+      manual_time: 07:30:00
+      light_entity: light.philips_1746547p7_huelight
+      sunrise_duration: 10
+      post_sunrise_actions:
+      - service: notify.mobile_app_s7_edge
+        data:
+          title: Mornin'
+          message: Its time to wake up
+      - service: tts.cloud_say
+        data:
+          cache: false
+          entity_id: media_player.g3_instant_speaker
+          message: Its time to make some coffee
+        enabled: false
+      - type: turn_on
+        device_id: 880cdcb176ca512d24055f43824dbf34
+        entity_id: light.kitchen_led_switch
+        domain: light
+        enabled: false
+      timestamp_sensor: sensor.s7_edge_next_alarm
+      check_entity: person.lulu
+      start_brightness: 5
+      min_mired: 50
