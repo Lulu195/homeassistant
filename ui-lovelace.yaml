@@ -652,12 +652,21 @@ views:
               - type: grid
                 columns: 2
                 cards:
+                  # - type: custom:button-card
+                  #   entity: light.ikea_lamp_light
+                  #   name: Ikea Lamp
+                  #   template:
+                  #     - light
+                  #     - icon_shade
+                  #     #- swiper_title
                   - type: custom:button-card
-                    entity: light.ikea_lamp_light
-                    name: Ikea Lamp
+                    entity: light.office_desk
+                    name: Desk
                     template:
                       - light
-                      - icon_shade
+                      #- icon_side_lamp
+                      #- icon_ai
+                      - icon_hue_play
                       #- swiper_title
 
                   # - type: custom:button-card
@@ -1671,7 +1680,8 @@ views:
                 #double_tap_action: !include popup/sovrum_tv2.yaml
                 template:
                   - base
-                  - icon_sub
+                  #- icon_sub
+                  - icon_recessed
                   - loader
 
               # - type: custom:button-card
