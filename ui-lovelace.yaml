@@ -776,7 +776,7 @@ views:
                       ]]]
 
                   - type: custom:button-card
-                    entity: switch.pihole_control
+                    entity: switch.pi_hole
                     name: Pi-Hole
                     tap_action:
                       action: toggle
@@ -807,12 +807,12 @@ views:
                             extrema: false
                           color_thresholds_transition: hard
                           entities:
-                            - entity: binary_sensor.pi_hole
+                            - entity: binary_sensor.pi_hole_status #binary_sensor.pi_hole
                               # color: "#f205b3"
                       circle: |
                         [[[
                           if (variables.state === 'on') {
-                            const input = states['binary_sensor.pi_hole'].state;
+                            const input = states['binary_sensor.pi_hole_status'].state;
                             const radius = 20.5;
                             const circumference = radius * 2 * Math.PI;
                             return `
@@ -852,7 +852,7 @@ views:
                   #   # tap_action:
                   #   #   !include popup/rs_info.yaml
                   - type: custom:button-card
-                    entity: device_tracker.nr200p #binary_sensor.ping_diskstation
+                    entity: device_tracker.obi_wan_kenobi #device_tracker.nr200p #binary_sensor.ping_diskstation
                     name: Server
                     template:
                       - base
@@ -900,7 +900,7 @@ views:
                         - left: 20px
                         - position: absolute
                       custom_fields:
-                        s7:
+                        a54:
                           - top: 40px
                           - left: "-5px"
                           - width: 110%
@@ -909,7 +909,7 @@ views:
                           - position: absolute
                           - font-size: 16px
                           - text-shadow: 0px 0px 1px black
-                        s7battery:
+                        a54battery:
                           - top: 60px
                           - right: 15px
                           - position: absolute
@@ -957,18 +957,18 @@ views:
                           - position: absolute
                           - font-size: 14px
                     custom_fields:
-                      s7: |
+                      a54: |
                         [[[
                               return `<div align="left"> <ha-icon
                                 icon="mdi:cellphone"
                                 style="width: 20px; height: 20px; color:grey; padding: 10px;">
-                                </ha-icon>S7</div>`
+                                </ha-icon>a54</div>`
                             ]]]
-                      s7battery: |
+                      a54battery: |
                         [[[
-                          if (states["sensor.s7_edge_battery_level"].state > 40) {
-                            let input = states["sensor.s7_edge_battery_level"].state / 3,
-                              state = states["sensor.s7_edge_battery_level"].state,
+                          if (states["sensor.sensor.sm_a54_battery_level"].state > 40) {
+                            let input = states["sensor.sensor.sm_a54_battery_level"].state / 3,
+                              state = states["sensor.sensor.sm_a54_battery_level"].state,
                               color = '#08ff4e';
                             return `
                               <svg width="86" height="24">
@@ -976,9 +976,9 @@ views:
                                 <rect x="43" y="4" rx="3" ry="3" width="${input}" height="12" fill="${color}" stroke-width="0"/>
                                 <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
                             `;
-                          } if (states["sensor.s7_edge_battery_level"].state > 15) {
-                            let input = states["sensor.s7_edge_battery_level"].state / 3,
-                              state = states["sensor.s7_edge_battery_level"].state,
+                          } if (states["sensor.sensor.sm_a54_battery_level"].state > 15) {
+                            let input = states["sensor.sensor.sm_a54_battery_level"].state / 3,
+                              state = states["sensor.sensor.sm_a54_battery_level"].state,
                               color = 'orange';
                             return `
                               <svg width="86" height="24">
@@ -987,7 +987,7 @@ views:
                                 <rect x="82" y="6" rx="2" ry="2" width="2" height="9" fill="grey" stroke-width="0"/>
                             `;
                           } else {
-                            let state = states["sensor.s7_edge_battery_level"].state,
+                            let state = states["sensor.sensor.sm_a54_battery_level"].state,
                               color = 'red';
                             return `
                               <svg width="86" height="24">

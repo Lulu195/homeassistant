@@ -10,12 +10,14 @@
       - service: light.turn_on
         data: {}
         target:
-          device_id: 34f3a2ff40e728c2c518d87ea9de74f2
+          device_id: 14ddd32c9da6f63ca83b15c67893d39c
       action_button_down_short:
       - service: light.turn_off
         data: {}
         target:
-          device_id: 34f3a2ff40e728c2c518d87ea9de74f2
+          device_id:
+          - 14ddd32c9da6f63ca83b15c67893d39c
+          - e0f3a3bb6e76f1202e79a7d8f150ae72
 - id: '1675650842209'
   alias: Remote - Living room
   description: ''
@@ -30,7 +32,7 @@
         data:
           color_temp: 500
         target:
-          entity_id: light.table_group
+          entity_id: light.dinning
       action_button_down_short: []
       helper_last_controller_event: input_text.helper_last_controller_event
 - id: '1675706978863'
@@ -40,7 +42,7 @@
     path: niro1987/zha_ikea_tradfri_5button_remote_color.yaml
     input:
       remote: 2d40199eb308c0b8485a578eb71d0ae6
-      light: light.table_group
+      light: light.dinning
       speed: 700
 - id: '1675712102921'
   alias: Snapthot camera on motion
@@ -49,8 +51,8 @@
     path: Stan-Gobien/CriticalCollapseOptionNotHomeMotionCameraSnapshotWithClickAction.yaml
     input:
       camera: camera.g3_instant_high
-      notify_device: 37ed3fa06bd2ae91f3c47d6cdc447356
-      blocker_entity: zone.home
+      notify_device: 8f9acfe8f9f171021d6a5fdc091c2c2c
+      blocker_entity: device_tracker.sm_a54
       delay: 2
       is_ios: false
       motion_sensor: binary_sensor.g3_instant_motion
@@ -109,7 +111,7 @@
     input:
       person_entity: person.tanya
       zone_entity: zone.home
-      notify_device: 2d5fc0e59ac365b406795e6114b6a24b
+      notify_device: 8f9acfe8f9f171021d6a5fdc091c2c2c
 - id: '1676497123736'
   alias: 01 wake up test
   description: ''
@@ -173,7 +175,7 @@
       light_off: 100
       door: binary_sensor.samjin_multi_iaszone
       tts: true
-      notify_device: 37ed3fa06bd2ae91f3c47d6cdc447356
+      notify_device: 8f9acfe8f9f171021d6a5fdc091c2c2c
       push: true
       text_notify: The Front Door is Open
       notify_tts:
@@ -237,7 +239,23 @@
         domain: switch
       - service: media_player.volume_set
         data:
-          volume_level: 0.15
+          volume_level: 0.5
+        target:
+          entity_id: media_player.node_8adc
+  - choose:
+    - conditions:
+      - condition: state
+        entity_id: media_player.node_8adc
+        attribute: media_content_type
+        state: music
+      sequence:
+      - type: turn_on
+        device_id: aec8f1a01101150430bf1d65e8f07486
+        entity_id: switch.radio_switch
+        domain: switch
+      - service: media_player.volume_set
+        data:
+          volume_level: 0.35
         target:
           entity_id: media_player.node_8adc
   mode: single
@@ -321,7 +339,8 @@
       no_motion_wait_day: 20
       no_motion_wait_night: 30
       light_target:
-        device_id: 4c394ec74b5d7fc064416fa60bb6b6ad
+        device_id: 14ddd32c9da6f63ca83b15c67893d39c
+      night_brightness: 25
 - id: '1681813776518'
   alias: Camera alert
   description: ''
@@ -330,7 +349,9 @@
     input:
       motion_sensor: binary_sensor.g3_instant_motion
       camera: camera.g3_instant_high
-      notify_device: 37ed3fa06bd2ae91f3c47d6cdc447356
+      notify_device: 8f9acfe8f9f171021d6a5fdc091c2c2c
+      delay: 1
+      blocker_entity: person.lulu
 - id: '1681813984075'
   alias: Door Open
   description: ''
@@ -341,9 +362,9 @@
     to: 'on'
   condition: []
   action:
-  - service: notify.mobile_app_s7_edge
+  - service: notify.mobile_app_sm_a54
     data:
-      title: Door is open
+      title: The door was opened
   mode: single
 - id: '1681815049707'
   alias: Motion camera tanya
@@ -360,7 +381,7 @@
   use_blueprint:
     path: sbyx/wake-up-light-alarm-with-sunrise-effect.yaml
     input:
-      manual_time: 07:30:00
+      manual_time: 07:15:00
       light_entity: light.philips_1746547p7_huelight
       sunrise_duration: 10
       post_sunrise_actions:
@@ -368,6 +389,7 @@
         data:
           title: Mornin'
           message: Its time to wake up
+        enabled: false
       - service: tts.cloud_say
         data:
           cache: false
@@ -378,8 +400,7 @@
         device_id: 880cdcb176ca512d24055f43824dbf34
         entity_id: light.kitchen_led_switch
         domain: light
-        enabled: false
-      timestamp_sensor: sensor.s7_edge_next_alarm
-      check_entity: person.lulu
+        enabled: true
+      timestamp_sensor: none
       start_brightness: 5
       min_mired: 50
