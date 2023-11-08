@@ -37,7 +37,7 @@ browser_mod:
               }
           show_state: false
           entities:
-            - entity: binary_sensor.lulus_phone_wifi_state
+            - entity: binary_sensor.sm_a54_wifi_state
               name: Router
               icon: mdi:wifi
               card_mod:
@@ -46,13 +46,13 @@ browser_mod:
                     color: {{ is_state(config.entity, 'home') | iif('#3182b7', '#3c3f3f') }};
                   }
 
-            - entity: binary_sensor.lulus_phone_bluetooth_state
+            - entity: binary_sensor.sm_a54_bluetooth_state
               name: Bluetooth
               icon: mdi:bluetooth
               card_mod:
                 style: *state
 
-            - entity: device_tracker.lulus_phone
+            - entity: device_tracker.sm_a54
               name: Position
               icon: cil:iphone-modern
               card_mod:
@@ -70,12 +70,12 @@ browser_mod:
             type: horizontal-stack
             cards:
               - type: custom:button-card
-                name: Play audio on Phone S7
+                name: Play audio on Samsung
                 icon: mdi:volume-high
                 template: icon_name
                 tap_action:
                   action: call-service
-                  service: notify.mobile_app_sm_g935f #SM-G935F
+                  service: notify.mobile_app_sm_a54 #notify.mobile_app_sm_g935f #SM-G935F
                   service_data:
                     title: Find my Phone
                     message: Here I am
@@ -90,7 +90,7 @@ browser_mod:
           default_zoom: 16
           dark_mode: true
           entities:
-            - device_tracker.lulus_phone
+            - device_tracker.sm_a54
           card_mod:
             style:
               .: |

@@ -56,6 +56,7 @@
             states.media_player.spotify_lulu,
             states.media_player.node_8adc,
             states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
+            states.media_player.chromecast,
             states.switch.radio_switch
           ] %}
 
@@ -160,7 +161,7 @@
           {% endfor %}
 
         door: |
-          {% if is_state('binary_sensor.door_iaszone', 'on') %}
+          {% if is_state('binary_sensor.samjin_multi_opening', 'on') %}
               {{-'\u26A0\uFE0F'}} 🏠 <b><font color='#6a7377'>Door</font></b> is open
           {% endif %}
 

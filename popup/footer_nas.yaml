@@ -72,7 +72,7 @@ browser_mod:
             class: header
           entities:
             - entity: sensor.current_version
-              name: Installed #Installerad
+              name: Version #Installerad
               icon: mdi:home-assistant
 
             # - entity: switch.docker_watchtower
@@ -86,7 +86,7 @@ browser_mod:
             - entity: sensor.watchman_missing_services
               name: Missing services
 
-            # - entity: sensor.databas
+            # - entity: sensor.database
             #   icon: mdi:database
 
             # - entity: sensor.home_assistant_log_size

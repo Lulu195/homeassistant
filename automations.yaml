@@ -224,6 +224,7 @@
       hours: 0
       minutes: 0
       seconds: 0
+    from: idle
   condition: []
   action:
   - choose:
@@ -255,7 +256,7 @@
         domain: switch
       - service: media_player.volume_set
         data:
-          volume_level: 0.35
+          volume_level: 0.25
         target:
           entity_id: media_player.node_8adc
   mode: single
@@ -327,20 +328,20 @@
         domain: light
       action_button_down_release: []
 - id: '1681259486649'
-  alias: Office check mption during day
+  alias: Office check motion during day
   description: ''
   use_blueprint:
     path: Aleks130699/motion_light_brightness.yaml
     input:
       motion_entity: binary_sensor.ikea_of_sweden_tradfri_motion_sensor_motion
-      on_night_time: '23:00:00'
+      on_night_time: '18:00:00'
       off_night_time: 06:00:00
-      day_brightness: 50
+      day_brightness: 0
       no_motion_wait_day: 20
-      no_motion_wait_night: 30
+      no_motion_wait_night: 120
       light_target:
         device_id: 14ddd32c9da6f63ca83b15c67893d39c
-      night_brightness: 25
+      night_brightness: 100
 - id: '1681813776518'
   alias: Camera alert
   description: ''
@@ -404,3 +405,24 @@
       timestamp_sensor: none
       start_brightness: 5
       min_mired: 50
+- id: '1698077798146'
+  alias: '03 Smart toaster '
+  description: ''
+  trigger:
+  - platform: device
+    type: turned_on
+    device_id: f55c47f5d4f9f6f2810e8eeb3a00fa0c
+    entity_id: b0fab07f5cec9d47a39b41b23e45e765
+    domain: switch
+  condition: []
+  action:
+  - delay:
+      hours: 0
+      minutes: 3
+      seconds: 10
+      milliseconds: 0
+  - type: turn_off
+    device_id: f55c47f5d4f9f6f2810e8eeb3a00fa0c
+    entity_id: b0fab07f5cec9d47a39b41b23e45e765
+    domain: switch
+  mode: single
