@@ -17,7 +17,7 @@ template: !include sidebar.yaml
 #secrets: !include secrets.yaml
 
 automation ui: !include automations.yaml
-automation manual: !include_dir_merge_list automations/
+#automation manual: !include_dir_merge_list automations/
 
 
 lovelace:
@@ -40,6 +40,7 @@ lovelace:
       { url: /hacsfiles/light-popup-card/light-popup-card.js,                       type: module },
       { url: /hacsfiles/atomic-calendar-revive/atomic-calendar-revive.js,           type: module },
       { url: /hacsfiles/mini-graph-card/mini-graph-card-bundle.js,                  type: module },
+      { url: /hacsfiles/android-tv-card/android-tv-card.js,                         type: module },
 
       { url: '/local/marked.min.js?v=4.3.0',                                        type: module },
       { url: '/local/vanilla-tilt.min.js?v=1.8.0',                                  type: module },
@@ -84,7 +85,7 @@ sensor:
       - 'date_time_iso'
       - 'time_date'
       - 'time_utc'
-      - 'beat'
+      # - 'beat' // The `beat` Time & Date sensor is being removed. This stops working in version 2024.7.0. Please address before upgrading. Please remove the beat key from the display_options for the time_date entry in your configuration.yaml file and restart Home Assistant to fix this issue.
   
   - platform: unifigateway # /hacs/repository/151580533 #https://github.com/custom-components/sensor.unifigateway
     host: !secret unifi_ip

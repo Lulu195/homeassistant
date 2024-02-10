@@ -52,11 +52,17 @@ browser_mod:
               card_mod:
                 style: *state
 
-            - entity: device_tracker.sm_a54
-              name: Position
-              icon: cil:iphone-modern
+            - entity: sensor.sm_a54_battery_level
+              name: Battery
+              icon: mdi:battery
               card_mod:
                 style: *state
+
+            # - entity: device_tracker.sm_a54
+            #   name: Position
+            #   icon: cil:iphone-modern
+            #   card_mod:
+            #     style: *state
 
         - type: custom:mod-card
           card_mod:

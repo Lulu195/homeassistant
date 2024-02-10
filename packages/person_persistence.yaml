@@ -11,8 +11,8 @@ person:
   - name: Lulu 
     id: lulu
     device_trackers:
-      - device_tracker.s7_edge #device_tracker.mattias_iphone_unifi
-      - device_tracker.galaxy_s7_edge #UNIFY
+      - device_tracker.sm_a54 #device_tracker.s7_edge #device_tracker.mattias_iphone_unifi
+      - device_tracker.constantin_cosmin_s_a54 #device_tracker.galaxy_s7_edge #UNIFY
 
   - name: Tanya
     id: tanya

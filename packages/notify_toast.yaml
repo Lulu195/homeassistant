@@ -23,7 +23,7 @@ homeassistant:
 
 automation:
   - alias: toast
-    id: '3161036041566'
+    id: "3161036041566"
     mode: parallel
     trigger:
       platform: state
@@ -31,8 +31,8 @@ automation:
         - binary_sensor.ikea_of_sweden_tradfri_motion_sensor_motion #Office
         - binary_sensor.samjin_motion_iaszone #Hallway
         - binary_sensor.samjin_multi_accelerometer #Door
-      from: 'off'
-      to: 'on'
+      from: "off"
+      to: "on"
     action:
       service: browser_mod.notification
       data:
@@ -41,7 +41,7 @@ automation:
           Motion detected in {{ trigger.to_state.name }}
 
   - alias: dismiss_lovelace_updated
-    id: '1309195316329'
+    id: "1309195316329"
     mode: restart
     trigger:
       platform: event
@@ -54,7 +54,7 @@ automation:
           - service: browser_mod.notification
             data:
               duration: 1
-              message: ' '
+              message: " "
 
   # - alias: waste_collection
   #   id: '5611101897022'
@@ -79,7 +79,7 @@ automation:
   #         seconds: 5
 
   - alias: ios_notify_hass_update
-    id: '7958228563778'
+    id: "7958228563778"
     trigger:
       platform: state
       entity_id:
@@ -95,7 +95,7 @@ automation:
             - sensor.hass_release_notes_beta
       - delay:
           minutes: 15
-      - service: notify.mobile_app_s7_edge
+      - service: notify.mobile_app_sm_a54
         data:
           title: >
             {{ states('sensor.docker_hub_beta') if version(installed).beta
@@ -108,7 +108,7 @@ automation:
                 title: Update
 
   - alias: ios_notify_hass_update_action
-    id: '0694774018396'
+    id: "0694774018396"
     trigger:
       platform: event
       event_type: mobile_app_notification_action
@@ -182,14 +182,14 @@ automation:
   #           {{ trigger.event.data.id }}
   #     - delay:
   #         minutes: 1
-      # - service: homeassistant.update_entity
-      #   target:
-      #     entity_id: sensor.plex_recently_added
-      # - delay:
-      #     minutes: 10
-      # - service: transmission.remove_torrent
-      #   data:
-      #     entry_id: >
-      #       {{ config_entry_id('sensor.transmission_status') }}
-      #     id: >
-      #       {{ trigger.event.data.id }}
+  # - service: homeassistant.update_entity
+  #   target:
+  #     entity_id: sensor.plex_recently_added
+  # - delay:
+  #     minutes: 10
+  # - service: transmission.remove_torrent
+  #   data:
+  #     entry_id: >
+  #       {{ config_entry_id('sensor.transmission_status') }}
+  #     id: >
+  #       {{ trigger.event.data.id }}

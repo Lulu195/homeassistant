@@ -5,15 +5,15 @@ homeassistant:
     sensor.processor_use_percent:
       icon: mdi:chip
 
-sensor:
-  - platform: systemmonitor
-    resources:
-      - type: disk_use_percent
-        arg: /
-      - type: memory_use_percent
-      - type: processor_use
-      - type: last_boot
-    scan_interval: 120
+# sensor:
+#   - platform: systemmonitor
+#     resources:
+#       - type: disk_use_percent
+#         arg: /
+#       - type: memory_use_percent
+#       - type: processor_use
+#       - type: last_boot
+#     scan_interval: 120
 
   # # https://github.com/NemesisRE/sensor.plex_recently_added
   # - platform: plex_recently_added
@@ -78,20 +78,20 @@ monitor_docker:
     scan_interval: 900
 
 automation:
-  - alias: purge_log_filesize
-    id: '3331821824310'
-    trigger:
-      platform: numeric_state
-      entity_id: sensor.home_assistant_log_size
-      above: 50
-    action:
-      service: shell_command.purge_log
+  # - alias: purge_log_filesize
+  #   id: '3331821824310'
+  #   trigger:
+  #     platform: numeric_state
+  #     entity_id: sensor.home_assistant_log_size
+  #     above: 50
+  #   action:
+  #     service: shell_command.purge_log
 
-  - alias: backup_ha_monthly
-    trigger:
-      platform: time
-      at: 04:00:00
-    condition: >
-      {{ now().day == 1 }}
-    action:
-      service: backup.create
+  # - alias: backup_ha_monthly
+  #   trigger:
+  #     platform: time
+  #     at: 04:00:00
+  #   condition: >
+  #     {{ now().day == 1 }}
+  #   action:
+  #     service: backup.create

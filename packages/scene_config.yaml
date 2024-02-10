@@ -35,21 +35,12 @@ script:
         target:
           entity_id:
             - light.all_group_exclude_hall
-            - media_player.bedroom_tv
-            - media_player.samsung_55
-            - switch.bedroom_switch
-            - switch.balcony_switch
-            - switch.subwoofer_switch
-            - switch.radio_switch
-            - light.mushroom
-            - switch.balcony_switch,
-            - light.couch,
-            - light.ambient_kitchen,
-            - light.dinning,
-            - light.kitchen_led_switch,
-            - light.philips_1746547p7_huelight,
-            - light.ikea_lamp_light,
-            - switch.led_strip_switch
+            - light.all_lights_group
+            - switch.all_devices_besides_nas
+      - service: notify.mobile_app_sm_a54 # Replace with your preferred notification service
+        data:
+          message: 'All lights have been turned off.'
+
       - delay:
           seconds: 4
 
@@ -63,7 +54,7 @@ script:
             {% set media_player_entities = expand('group.all') | selectattr('entity_id', 'match', '.*media_player.*') %}            
             {% set included_switches = [
               'switch.bedroom_switch',
-              'switch.balcony_switch',
+              'light.balcony_switch',
               'switch.subwoofer_switch',
               'switch.radio_switch',
               'switch.led_strip_switch']

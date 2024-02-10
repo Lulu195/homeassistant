@@ -197,7 +197,7 @@ template:
         {% set media_players = [
             states.media_player.samsung_55,
             states.media_player.plex_plex_for_samsung_tv_2018,
-            states.media_player.bedroom_tv,
+            states.media_player.chromecast,
             states.media_player.node_8adc,
             states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
             states.media_player.spotify_lulu
@@ -208,7 +208,7 @@ template:
           {% set media_players = [
             states.media_player.samsung_55,
             states.media_player.plex_plex_for_samsung_tv_2018,
-            states.media_player.bedroom_tv,
+            states.media_player.chromecast,
             states.media_player.node_8adc,
             states.media_player.plex_plex_htpc_for_windows_desktop_cd40kgt,
             states.media_player.spotify_lulu

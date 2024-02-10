@@ -123,10 +123,10 @@
       end_brightness: 255
       sunrise_duration: 15
       post_sunrise_actions:
-      - device_id: 37ed3fa06bd2ae91f3c47d6cdc447356
+      - device_id: 8f9acfe8f9f171021d6a5fdc091c2c2c
         domain: mobile_app
         type: notify
-        message: Wake up
+        message: 'Wake up :) '
       - service: media_player.play_media
         target: {}
         data:
@@ -134,6 +134,7 @@
           media_content_type: ''
         metadata: {}
       min_mired: 155
+      check_entity: device_tracker.sm_a54
 - id: '1676695352325'
   alias: System - Plex Recently Added
   description: Sensor attribute backup
@@ -173,16 +174,15 @@
     input:
       light: light.table_front_light
       light_off: 100
-      door: binary_sensor.samjin_multi_iaszone
+      door: binary_sensor.samjin_multi_accelerometer
       tts: true
       notify_device: 8f9acfe8f9f171021d6a5fdc091c2c2c
       push: true
       text_notify: The Front Door is Open
-      notify_tts:
-      - media_player.g3_instant_speaker
+      notify_tts: []
       alexa: false
       notify_alexa: []
-      time_door: 60
+      time_door: 120
 - id: '1676928639326'
   alias: 02 MEDIA - Node off on paused for x Min
   description: ''
@@ -284,6 +284,7 @@
     target:
       device_id:
       - aec8f1a01101150430bf1d65e8f07486
+    enabled: false
   - service: media_player.volume_set
     data:
       volume_level: 0.2
@@ -334,11 +335,11 @@
     path: Aleks130699/motion_light_brightness.yaml
     input:
       motion_entity: binary_sensor.ikea_of_sweden_tradfri_motion_sensor_motion
-      on_night_time: '18:00:00'
+      on_night_time: '16:00:00'
       off_night_time: 06:00:00
       day_brightness: 0
       no_motion_wait_day: 20
-      no_motion_wait_night: 120
+      no_motion_wait_night: 180
       light_target:
         device_id: 14ddd32c9da6f63ca83b15c67893d39c
       night_brightness: 100
@@ -365,7 +366,7 @@
   action:
   - service: notify.mobile_app_sm_a54
     data:
-      title: The door was opened
+      title: 'The door was opened '
   mode: single
 - id: '1681815049707'
   alias: Motion camera tanya
@@ -382,15 +383,12 @@
   use_blueprint:
     path: sbyx/wake-up-light-alarm-with-sunrise-effect.yaml
     input:
-      manual_time: 07:15:00
+      manual_time: 07:10:00
       light_entity: light.philips_1746547p7_huelight
       sunrise_duration: 10
       post_sunrise_actions:
-      - service: notify.mobile_app_s7_edge
-        data:
-          title: Mornin'
-          message: Its time to wake up
-        enabled: false
+      - service: notify.mobile_app_sm_a54
+        data: {}
       - service: tts.cloud_say
         data:
           cache: false
@@ -404,7 +402,7 @@
         enabled: true
       timestamp_sensor: none
       start_brightness: 5
-      min_mired: 50
+      min_mired: 0
 - id: '1698077798146'
   alias: '03 Smart toaster '
   description: ''

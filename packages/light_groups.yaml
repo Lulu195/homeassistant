@@ -4,44 +4,70 @@ light:
     entities:
       - light.table_front_light
       - light.table_back_light
-      - light.mushroom
+      - light.coffee
       - light.couch
       - light.kitchen_led_switch
-
-#   - platform: group
-#     name: studio_group
-#     entities:
-#       - light.studio_spot_1
-#       - light.studio_spot_2
-
-#   - platform: group
-#     name: sovrum_group
-#     entities:
-#       - light.sovrum_tv
-#       - light.sovrum_mattias
-#       - light.sovrum_sanja
-
-#   - platform: group
-#     name: badrum_group
-#     entities:
-#       - light.badrum_vask_1
-#       - light.badrum_vask_2
-
-#   - platform: group
-#     name: hall_group
-#     entities:
-#       - light.hall_spot_1
-#       - light.hall_spot_2
-#       - light.hall_spot_3
 
   - platform: group
-    name: all_group_exclude_hall
+    name: studio_group
     entities:
-      - light.table_front_light
-      - light.table_back_light
-      - light.mushroom
-      - light.couch
-      - light.kitchen_led_switch
+      - light.office_desk
+      - light.studio_light_switch
+
+  - platform: group
+    name: bedroom_group
+    entities:
+      - light.philips_1746547p7_huelight
+
+  - platform: group
+    name: others_group
+    entities:
+      - light.coffee
+      - light.balcony_switch
+
+  #   - platform: group
+  #     name: badrum_group
+  #     entities:
+  #       - light.badrum_vask_1
+  #       - light.badrum_vask_2
+
+  #   - platform: group
+  #     name: hall_group
+  #     entities:
+  #       - light.hall_spot_1
+  #       - light.hall_spot_2
+  #       - light.hall_spot_3
+
+  # - platform: group
+  #   name: all_group_exclude_hall
+  #   entities:
+  #     - light.table_front_light
+  #     - light.table_back_light
+  #     - light.coffee
+  #     - light.couch
+  #     - light.kitchen_led_switch
+
+  - platform: group
+    name: all_lights_group
+    entities:
+      - light.living_room_group
+      - light.studio_group
+      - light.bedroom_group
+      - light.others_group
+
+switch:
+  - platform: group
+    name: all_devices_besides_nas
+    entities:
+      - switch.led_strip_switch
+      - switch.radio_switch
+# media:
+#   - platform: group
+#     name: all_media_players
+#     entities:
+#       - media_player.chromecast
+#       - media_player.living_room_tv
+#       - media_player.samsung_55
 
 homeassistant:
   customize:

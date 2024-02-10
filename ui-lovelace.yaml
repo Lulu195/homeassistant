@@ -121,7 +121,7 @@ views:
               - icon_ceiling_dining
 
           - type: custom:button-card
-            entity: light.mushroom
+            entity: light.coffee
             name: Ambient
             template:
               - light
@@ -790,21 +790,21 @@ views:
                       icon: |
                         <ha-icon icon='mdi:pi-hole'></ha-icon>
                       graph: |
-                            <ha-card>
-                              <mini-graph-card
-                                entities:
-                                  - sensor.pi_hole_ads_blocked_today
-                                line_color: '#3182b7'
-                                line_width: 4
-                                font_size: 75
-                                show:
-                                  name: false
-                                  icon: false
-                                  state: false
-                                  legend: false
-                                  labels: false
-                              </mini-graph-card>
-                            </ha-card>
+                        <ha-card>
+                          <mini-graph-card
+                            entities:
+                              - sensor.pi_hole_ads_blocked_today
+                            line_color: '#3182b7'
+                            line_width: 4
+                            font_size: 75
+                            show:
+                              name: false
+                              icon: false
+                              state: false
+                              legend: false
+                              labels: false
+                          </mini-graph-card>
+                        </ha-card>
                       circle: |
                         [[[
                           if (variables.state === 'on') {
@@ -1539,7 +1539,7 @@ views:
                       - icon_tv
 
                   - type: custom:button-card
-                    entity: media_player.chromecast  #media_player.bedroom_tv
+                    entity: media_player.chromecast #media_player.bedroom_tv
                     triggers_update: media_player.chromecast #media_player.bedroom_tv #sensor.youtube_watching
                     name: Bedroom
                     template:
@@ -1653,13 +1653,13 @@ views:
 
               - type: custom:button-card
                 entity: switch.radio_switch #sensor.w11_audio_audio_sessions #switch.gosund_monitors_switch
-                name: Speakers #📺
+                name: Couch² #Speakers #📺
                 #tap_action: toggle button.w11_mediaplaypause
                 double_tap_action: !include popup/studio_monitorer_radio.yaml
                 template:
                   #- media
                   - base
-                  - icon_monitors
+                  - icon_shade
                   #- circle
                   - loader
                 # variables: ### let volume = states['sensor.w11_currentvolume'];
@@ -1673,7 +1673,7 @@ views:
                 # ]]]
 
               - type: custom:button-card
-                entity: switch.studiolight_switch
+                entity: light.studio_light_switch
                 name: "Studio Light"
                 #double_tap_action: !include popup/sovrum_tv2.yaml
                 template:
@@ -1693,7 +1693,7 @@ views:
               #     - loader
 
               - type: custom:button-card
-                entity: switch.balcony_switch
+                entity: light.balcony_switch
                 name: Outdoor
                 template:
                   - base

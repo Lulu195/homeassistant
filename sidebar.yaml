@@ -40,8 +40,8 @@
         active: >
           <b>
           {% set lights = [
-            states.light.mushroom,
-            states.switch.balcony_switch,
+            states.light.coffee,
+            states.light.balcony_switch,
             states.light.couch,
             states.light.ambient_kitchen,
             states.light.dinning,

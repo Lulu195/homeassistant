@@ -4,3 +4,35 @@ notify_mobile_app_devices:
     path: Grumblezz/notify_devices.yaml
   icon: mdi:bell-ring
   mode: single
+'1697573357816':
+  alias: "\U0001F514 Notifications"
+  use_blueprint:
+    path: samuelthng/notifications.yaml
+    input:
+      notify_device: 8f9acfe8f9f171021d6a5fdc091c2c2c
+      persist: true
+      attachment_type: camera_entity
+      attachment_camera_entity: camera.g3_instant_high
+      importance: high
+      visibility: public
+      message: Hi.
+'1697573549926':
+  alias: New Script
+  use_blueprint:
+    path: samuelthng/notifications.yaml
+    input:
+      notify_device: 8f9acfe8f9f171021d6a5fdc091c2c2c
+      enable_icon_color: false
+      clear_on_timeout: true
+      persist: true
+      attachment_type: camera_entity
+      attachment_camera_entity: camera.g3_instant_high
+      importance: high
+      visibility: public
+      message: Hi.
+notifyme:
+  alias: "\U0001F514 Notifications"
+  use_blueprint:
+    path: samuelthng/notifications.yaml
+    input:
+      message: Hi

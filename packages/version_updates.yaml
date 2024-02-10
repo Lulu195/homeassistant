@@ -37,9 +37,9 @@ template:
           friendly_name: >
             {% set release = state_attr('calendar.home_assistant_devs','message') %}
             {% if release == 'Home Assistant Core Beta Release' %}
-              Nästa beta
+              Next beta
             {% elif release == 'Home Assistant Core Release' %}
-              Nästa release
+              Next release
             {% else %}
               {{ release }}
             {% endif %}
