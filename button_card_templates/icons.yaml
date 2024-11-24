@@ -3,7 +3,54 @@
 #                     ICONS                     #
 #                                               #
 #################################################
-
+icon_fish3:
+  styles:
+    custom_fields:
+      icon:
+        - width: 65%
+        - margin-left: 0%
+        - margin-top: 0%
+  custom_fields:
+    icon: >
+      [[[ 
+        let fish = ` 
+          <!-- Fish Body with Gradient -->
+          <defs>
+            <linearGradient id="fish-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#ff6f61;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#f1c40f;stop-opacity:1" />
+            </linearGradient>
+          </defs>
+          <path fill="url(#fish-gradient)" d="M23,5C13.1,5,5.7,12.1,2.5,22.1c-0.2,0.7-0.2,1.4,0,2.1c3.2,10,11.6,17.1,21.5,17.1c9.6,0,18.4-6.2,21.3-14.9 c0.3-1.1,0.3-2.3,0-3.4C41.3,11.7,32.5,5,23,5z"/>
+          <path fill="#f39c12" d="M44,25c-3,4-7,6.5-11,7.5c2-1,5-3.5,7-7.5c-2-4-5-6.5-7-7.5C37,18.5,41,21,44,25z"/>
+          <circle cx="28" cy="15" r="2.5" fill="#2980b9"/>
+          <!-- Tail with Color -->
+          <path fill="#1abc9c" d="M5,25l-12-8v16l12-8z"/>
+        `,
+        baseStyle = ` 
+          <svg viewBox="0 0 50 50">
+            <style>
+              .fish-body { transition: fill 0.3s ease-in-out; }
+              .fish-fin { transform-origin: center; transition: transform 0.5s ease; }
+              .fish-eye { fill: #2980b9; transition: transform 0.3s ease-in-out; }
+              .on { fill: #5daeea; }
+              .off { fill: #9da0a2; }
+              .swim {
+                animation: swim 2s linear infinite;
+              }
+              @keyframes swim {
+                0% { transform: translateX(0); }
+                50% { transform: translateX(3px); }
+                100% { transform: translateX(0); }
+              }
+            </style>
+        `;
+        if (variables.state_on) {
+          return `${baseStyle}<g class="fish-body on swim">${fish}</g></svg>`;
+        } else {
+          return `${baseStyle}<g class="fish-body off">${fish}</g></svg>`;
+        }
+      ]]] 
 
 
 
